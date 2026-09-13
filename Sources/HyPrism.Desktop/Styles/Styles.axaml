@@ -2894,6 +2894,79 @@ SPDX-License-Identifier: GPL-3.0-only
     <Setter Property="BorderBrush" Value="{DynamicResource StrokeStrongBrush}" />
   </Style>
 
+  <Style Selector="instances|InstancesView TextBox.instanceSearch.catalogSearch">
+    <Setter Property="Padding" Value="12,0,48,0" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+
+  <Style Selector="instances|InstancesView TextBox.instanceSearch.catalogSearch:focus">
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Button.modCatalogSearchAction">
+    <Setter Property="Width" Value="34" />
+    <Setter Property="Height" Value="34" />
+    <Setter Property="Margin" Value="0,0,4,0" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Opacity" Value="0" />
+    <Setter Property="IsHitTestVisible" Value="False" />
+    <Setter Property="RenderTransform" Value="scale(0.82)" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.18">
+          <DoubleTransition.Easing><easing:CubicEaseOut /></DoubleTransition.Easing>
+        </DoubleTransition>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.18">
+          <TransformOperationsTransition.Easing><easing:CubicEaseOut /></TransformOperationsTransition.Easing>
+        </TransformOperationsTransition>
+        <BrushTransition Property="Background" Duration="0:0:0.16" />
+        <BrushTransition Property="Foreground" Duration="0:0:0.16" />
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="instances|InstancesView Button.modCatalogSearchAction.visible">
+    <Setter Property="Opacity" Value="1" />
+    <Setter Property="IsHitTestVisible" Value="True" />
+    <Setter Property="RenderTransform" Value="scale(1)" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Button.modCatalogSearchAction.hidden">
+    <Setter Property="Opacity" Value="0" />
+    <Setter Property="IsHitTestVisible" Value="False" />
+    <Setter Property="RenderTransform" Value="scale(0.82)" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Button.modCatalogSearchAction:pointerover">
+    <Setter Property="Background" Value="{DynamicResource ItemHoverBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+    <Setter Property="RenderTransform" Value="scale(1.06)" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Button.modCatalogSearchAction:pressed">
+    <Setter Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
+    <Setter Property="RenderTransform" Value="scale(0.96)" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Path.modCatalogSearchSpinner">
+    <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Path.modCatalogSearchSpinner.loading">
+    <Style.Animations>
+      <Animation Duration="0:0:0.8" IterationCount="Infinite">
+        <KeyFrame Cue="0%">
+          <Setter Property="RotateTransform.Angle" Value="0" />
+        </KeyFrame>
+        <KeyFrame Cue="100%">
+          <Setter Property="RotateTransform.Angle" Value="360" />
+        </KeyFrame>
+      </Animation>
+    </Style.Animations>
+  </Style>
+
   <Style Selector="instances|InstancesView Button.instanceToolbarAction">
     <Setter Property="Height" Value="40" />
     <Setter Property="Padding" Value="14,0" />
@@ -3488,6 +3561,22 @@ SPDX-License-Identifier: GPL-3.0-only
     <Setter Property="ShoulderMargin" Value="12,0,12,0" />
   </Style>
 
+  <Style Selector="instances|InstancesView controls|OverlayModal.modCatalogInstallModal">
+    <Setter Property="SheetMaxWidth" Value="620" />
+    <Setter Property="SheetMaxHeight" Value="560" />
+    <Setter Property="SheetMargin" Value="20,20,20,0" />
+    <Setter Property="ShoulderMaxWidth" Value="674" />
+    <Setter Property="ShoulderMargin" Value="20,0,20,0" />
+  </Style>
+
+  <Style Selector="instances|InstancesView.compact controls|OverlayModal.modCatalogInstallModal">
+    <Setter Property="SheetMaxWidth" Value="560" />
+    <Setter Property="SheetMaxHeight" Value="520" />
+    <Setter Property="SheetMargin" Value="12,36,12,0" />
+    <Setter Property="ShoulderMaxWidth" Value="608" />
+    <Setter Property="ShoulderMargin" Value="12,0,12,0" />
+  </Style>
+
   <Style Selector="instances|InstancesView Border.instanceModPreviewContent">
     <Setter Property="Padding" Value="20" />
     <Setter Property="Background" Value="{DynamicResource AppBackgroundBrush}" />
@@ -3498,6 +3587,68 @@ SPDX-License-Identifier: GPL-3.0-only
   <Style Selector="instances|InstancesView.compact Border.instanceModPreviewContent">
     <Setter Property="Padding" Value="16" />
     <Setter Property="CornerRadius" Value="16,16,0,0" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Border.modCatalogInstallTable">
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Border.modCatalogInstallTableRow">
+    <Setter Property="Padding" Value="18,11" />
+    <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource SurfaceBrush}" />
+    <Setter Property="BorderThickness" Value="0,0,0,3" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Border.modCatalogInstallIcon">
+    <Setter Property="Width" Value="38" />
+    <Setter Property="Height" Value="38" />
+    <Setter Property="CornerRadius" Value="9" />
+    <Setter Property="Background" Value="{DynamicResource ControlSurfaceBrush}" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Border.modCatalogInstallIcon TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Button.modCatalogInstallConfirmAction">
+    <Setter Property="Height" Value="42" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+    <Setter Property="Foreground" Value="#111111" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.18" />
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="instances|InstancesView Button.modCatalogInstallConfirmAction:pointerover">
+    <Setter Property="Background" Value="{DynamicResource ControlKnobHoverBrush}" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Button.modCatalogInstallResetAction">
+    <Setter Property="Width" Value="36" />
+    <Setter Property="Height" Value="36" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Cursor" Value="Hand" />
   </Style>
 
   <Style Selector="instances|InstancesView Border.instanceModPreviewBodyOutline">
@@ -3843,6 +3994,8 @@ SPDX-License-Identifier: GPL-3.0-only
 
   <Style Selector="instances|InstancesView Button.instanceInstall.preview.splitMain">
     <Setter Property="Height" Value="42" />
+    <Setter Property="MinWidth" Value="150" />
+    <Setter Property="Padding" Value="14,0" />
     <Setter Property="CornerRadius" Value="0" />
     <Setter Property="HorizontalAlignment" Value="Stretch" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -3863,8 +4016,8 @@ SPDX-License-Identifier: GPL-3.0-only
           <ContentPresenter Content="{TemplateBinding Content}"
                             ContentTemplate="{TemplateBinding ContentTemplate}"
                             Foreground="{TemplateBinding Foreground}"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center" />
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
         </Border>
       </ControlTemplate>
     </Setter>

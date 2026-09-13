@@ -2804,6 +2804,8 @@ public sealed class MainWindowRenderTests
         var instanceSectionTitle = instanceSection.GetVisualDescendants()
             .OfType<TextBlock>()
             .Single(textBlock => textBlock.Classes.Contains("articleToolbarTitle"));
+        var installedModsSection = instancesView.FindControl<Grid>("InstalledModsSection");
+        Assert.NotNull(installedModsSection);
         Assert.Equal("Installed mods", instanceSectionTitle.Text);
 
         var sectionPreviewPath = Environment.GetEnvironmentVariable("HYPRISM_INSTANCES_SECTION_RENDER_OUTPUT");
@@ -2816,6 +2818,7 @@ public sealed class MainWindowRenderTests
         viewModel.CloseInstanceSectionCommand.Execute(null);
         Assert.Equal(usesCompactInstancesLayout, instanceHub.IsVisible);
         Assert.True(instanceSection.IsVisible);
+        Assert.True(installedModsSection!.IsVisible);
         Assert.Equal("Installed mods", instanceSectionTitle.Text);
         await WaitForConditionAsync(
             () => !instanceSection.IsVisible && instanceHub.IsVisible,
@@ -2823,6 +2826,7 @@ public sealed class MainWindowRenderTests
         Dispatcher.UIThread.RunJobs();
         Assert.True(instanceHub.IsVisible);
         Assert.False(instanceSection.IsVisible);
+        Assert.False(installedModsSection.IsVisible);
 
         var instancesPreviewPath = Environment.GetEnvironmentVariable("HYPRISM_INSTANCES_RENDER_OUTPUT");
         if (!string.IsNullOrWhiteSpace(instancesPreviewPath) && width == 1280)

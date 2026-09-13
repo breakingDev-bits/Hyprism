@@ -948,6 +948,9 @@ SPDX-License-Identifier: GPL-3.0-only
   <data name="modManager.installSelected" xml:space="preserve">
     <value>선택 항목 설치</value>
   </data>
+  <data name="modManager.installPreview" xml:space="preserve">
+    <value>미리 보기</value>
+  </data>
   <data name="modManager.installed" xml:space="preserve">
     <value>설치된 모드</value>
   </data>
@@ -2944,7 +2947,16 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Update</value>
   </data>
   <data name="instances.browse.categoryAll" xml:space="preserve">
-    <value>All categories</value>
+    <value>모든 카테고리</value>
+  </data>
+  <data name="instances.browse.categoryWorldGeneration" xml:space="preserve">
+    <value>월드 생성</value>
+  </data>
+  <data name="instances.browse.categoryMagic" xml:space="preserve">
+    <value>마법</value>
+  </data>
+  <data name="instances.browse.categoryTechnology" xml:space="preserve">
+    <value>기술</value>
   </data>
   <data name="instances.browse.category" xml:space="preserve">
     <value>Category</value>

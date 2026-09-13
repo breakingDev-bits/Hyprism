@@ -24,7 +24,9 @@ public sealed partial class InstancesView : UserControl
     private static readonly TimeSpan CompactSectionSlideDuration = MotionDurations.CompactSectionSlide;
     private static readonly TimeSpan WideSectionSlideDuration = MotionDurations.ContentFade;
     private static readonly TimeSpan VersionLoadingFadeDuration = MotionDurations.VersionLoadingFade;
+    private static readonly TimeSpan ModCatalogSearchFadeDuration = MotionDurations.ContentFade;
     private readonly WizardHost _creatorWizard;
+    private readonly WizardScreenTransition _modCatalogInstallTransition;
     private readonly AdaptiveMasterDetailHost _layoutHost;
     private readonly ReorderableListController _instanceReorder;
     private INotifyPropertyChanged? _viewModel;
@@ -32,11 +34,15 @@ public sealed partial class InstancesView : UserControl
     private int _creatorNavigationRevision;
     private CancellationTokenSource? _sectionAnimationCancellation;
     private CancellationTokenSource? _versionLoadingCancellation;
+    private CancellationTokenSource? _modCatalogLoadingCancellation;
     private bool _modDropActive;
 
     public InstancesView()
     {
         InitializeComponent();
+        _modCatalogInstallTransition = new WizardScreenTransition(
+            ModCatalogBrowseContent,
+            ModCatalogInstallScreen);
         _creatorWizard = new WizardHost(
             InstancesOverview,
             InstanceCreatorScreen,
@@ -81,6 +87,8 @@ public sealed partial class InstancesView : UserControl
         UpdateLayout(Bounds.Width);
         UpdateBranchIndicator(animate: false);
         ApplyVersionLoadingStateImmediately();
+        ApplyModCatalogLoadingStateImmediately();
+        ApplyModCatalogInstallStateImmediately();
         ApplySectionStateImmediately();
         ApplyModCatalogModalBackground();
 
@@ -114,6 +122,22 @@ public sealed partial class InstancesView : UserControl
                 _ = HideVersionLoadingAsync();
         }
 
+        if (args.PropertyName is nameof(InstancesViewModel.IsModCatalogLoading))
+        {
+            if (DataContext is InstancesViewModel { IsModCatalogLoading: true })
+                ShowModCatalogLoading();
+            else
+                _ = HideModCatalogLoadingAsync();
+        }
+
+        if (args.PropertyName is nameof(InstancesViewModel.IsInstallingSelectedCatalogMods))
+        {
+            if (DataContext is InstancesViewModel { IsInstallingSelectedCatalogMods: true })
+                _ = PlayModCatalogInstallOpenAnimationAsync();
+            else
+                _ = PlayModCatalogInstallCloseAnimationAsync();
+        }
+
         if (args.PropertyName is nameof(InstancesViewModel.ConsoleRevision))
             ScrollConsoleToBottom();
 
@@ -125,27 +149,37 @@ public sealed partial class InstancesView : UserControl
                 _ = PlayCreatorCloseAnimationAsync();
         }
 
-        if (args.PropertyName is nameof(InstancesViewModel.HasModCatalogPreview))
+        if (args.PropertyName is nameof(InstancesViewModel.HasModCatalogPreview) or
+            nameof(InstancesViewModel.HasModCatalogInstallConfirmation))
             ApplyModCatalogModalBackground();
     }
 
     private void ApplyModCatalogModalBackground()
     {
-        var isOpen = DataContext is InstancesViewModel { HasModCatalogPreview: true };
+        var isOpen = DataContext is InstancesViewModel viewModel &&
+            (viewModel.HasModCatalogPreview || viewModel.HasModCatalogInstallConfirmation);
         InstancesLayout.IsHitTestVisible = !isOpen;
         ((BlurEffect)InstancesLayout.Effect!).Radius = isOpen ? 6 : 0;
     }
 
     private void OnModCatalogModalClosed(object? sender, EventArgs args)
     {
-        InstancesLayout.IsHitTestVisible = true;
         if (DataContext is InstancesViewModel viewModel)
             viewModel.CompleteModCatalogPreviewClose();
+        ApplyModCatalogModalBackground();
+    }
+
+    private void OnModCatalogInstallModalClosed(object? sender, EventArgs args)
+    {
+        if (DataContext is InstancesViewModel viewModel)
+            viewModel.CompleteModCatalogInstallConfirmationClose();
+        ApplyModCatalogModalBackground();
     }
 
     private void OnInstancesKeyDown(object? sender, KeyEventArgs args)
     {
-        if (args.Key is not Key.Escape || !TryCloseModCatalogPreview())
+        if (args.Key is not Key.Escape ||
+            (!TryCloseModCatalogPreview() && !TryCloseModCatalogInstallConfirmation()))
             return;
 
         args.Handled = true;
@@ -157,6 +191,15 @@ public sealed partial class InstancesView : UserControl
             return false;
 
         viewModel.CloseModCatalogPreviewCommand.Execute(null);
+        return true;
+    }
+
+    public bool TryCloseModCatalogInstallConfirmation()
+    {
+        if (DataContext is not InstancesViewModel { HasModCatalogInstallConfirmation: true } viewModel)
+            return false;
+
+        viewModel.CloseModCatalogInstallConfirmationCommand.Execute(null);
         return true;
     }
 
@@ -310,7 +353,7 @@ public sealed partial class InstancesView : UserControl
 
     public bool TryNavigateBack()
     {
-        if (TryCloseModCatalogPreview())
+        if (TryCloseModCatalogPreview() || TryCloseModCatalogInstallConfirmation())
             return true;
 
         if (DataContext is InstancesViewModel { IsInstanceOverviewSection: false } viewModel)
@@ -393,6 +436,27 @@ public sealed partial class InstancesView : UserControl
             _creatorWizard.ShowNavigationPane(animate: false);
         }
     }
+
+    private void ApplyModCatalogInstallStateImmediately()
+    {
+        if (DataContext is InstancesViewModel { IsInstallingSelectedCatalogMods: true })
+            _modCatalogInstallTransition.ShowWizardImmediately();
+        else
+            _modCatalogInstallTransition.ShowOverviewImmediately();
+    }
+
+    private Task PlayModCatalogInstallOpenAnimationAsync()
+        => _modCatalogInstallTransition.OpenAsync(
+            () => DataContext is InstancesViewModel { IsInstallingSelectedCatalogMods: true });
+
+    private Task PlayModCatalogInstallCloseAnimationAsync()
+        => _modCatalogInstallTransition.CloseAsync(
+            () => DataContext is InstancesViewModel { IsInstallingSelectedCatalogMods: false },
+            () =>
+            {
+                if (DataContext is InstancesViewModel viewModel)
+                    viewModel.CompleteModCatalogInstallation();
+            });
 
     private async Task PlaySectionOpenAnimationAsync()
     {
@@ -477,6 +541,8 @@ public sealed partial class InstancesView : UserControl
             }
 
             InstanceSectionScreen.IsVisible = false;
+            if (DataContext is InstancesViewModel viewModel)
+                viewModel.CompleteInstanceSectionClose();
             var hubTranslation = (TranslateTransform)InstanceHubScreen.RenderTransform!;
             PrepareHubForEntry(hubTranslation);
             await Dispatcher.UIThread.InvokeAsync(static () => { }, DispatcherPriority.Loaded);
@@ -503,6 +569,10 @@ public sealed partial class InstancesView : UserControl
         var sectionTransitions = InstanceSectionScreen.Transitions;
         var hubTranslationTransitions = hubTranslation.Transitions;
         var sectionTranslationTransitions = sectionTranslation.Transitions;
+        if (showHub && DataContext is InstancesViewModel viewModel)
+            viewModel.CompleteInstanceSectionClose();
+        else if (!showHub && DataContext is InstancesViewModel sectionViewModel)
+            sectionViewModel.SynchronizeDisplayedInstanceSection();
         InstanceHubScreen.Transitions = null;
         InstanceSectionScreen.Transitions = null;
         hubTranslation.Transitions = null;
@@ -579,6 +649,8 @@ public sealed partial class InstancesView : UserControl
 
             InstanceSectionScreen.IsVisible = false;
             InstanceSectionScreen.Opacity = 0;
+            if (DataContext is InstancesViewModel viewModel)
+                viewModel.CompleteInstanceSectionClose();
             InstanceHubScreen.IsHitTestVisible = true;
         }
         catch (OperationCanceledException)
@@ -721,6 +793,85 @@ public sealed partial class InstancesView : UserControl
         _versionLoadingCancellation?.Cancel();
         _versionLoadingCancellation?.Dispose();
         _versionLoadingCancellation = null;
+    }
+
+    private void ApplyModCatalogLoadingStateImmediately()
+    {
+        CancelModCatalogLoadingAnimation();
+        var isLoading = DataContext is InstancesViewModel { IsModCatalogLoading: true };
+        var listTransitions = ModCatalogList.Transitions;
+        var spinnerTransitions = ModCatalogSearchSpinner.Transitions;
+        ModCatalogList.Transitions = null;
+        ModCatalogSearchSpinner.Transitions = null;
+        ModCatalogList.Opacity = isLoading ? 0 : 1;
+        ModCatalogList.IsHitTestVisible = !isLoading;
+        ModCatalogSearchSpinner.IsVisible = isLoading;
+        ModCatalogSearchSpinner.Opacity = isLoading ? 1 : 0;
+        ModCatalogList.Transitions = listTransitions;
+        ModCatalogSearchSpinner.Transitions = spinnerTransitions;
+    }
+
+    private void ShowModCatalogLoading()
+    {
+        CancelModCatalogLoadingAnimation();
+        ModCatalogList.IsHitTestVisible = false;
+        ModCatalogList.Opacity = 0;
+        ModCatalogSearchSpinner.IsVisible = true;
+        ModCatalogSearchSpinner.Opacity = 0;
+        _modCatalogLoadingCancellation = new CancellationTokenSource();
+        _ = FadeInModCatalogSpinnerAsync(_modCatalogLoadingCancellation.Token);
+    }
+
+    private async Task FadeInModCatalogSpinnerAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await Task.Delay(ModCatalogSearchFadeDuration, cancellationToken);
+            if (cancellationToken.IsCancellationRequested ||
+                DataContext is not InstancesViewModel { IsModCatalogLoading: true })
+            {
+                return;
+            }
+
+            ModCatalogSearchSpinner.Opacity = 1;
+        }
+        catch (OperationCanceledException)
+        {
+            // A completed search or a new search replaces the pending reveal
+        }
+    }
+
+    private async Task HideModCatalogLoadingAsync()
+    {
+        CancelModCatalogLoadingAnimation();
+        _modCatalogLoadingCancellation = new CancellationTokenSource();
+        var cancellationToken = _modCatalogLoadingCancellation.Token;
+        ModCatalogSearchSpinner.Opacity = 0;
+
+        try
+        {
+            await Task.Delay(ModCatalogSearchFadeDuration, cancellationToken);
+            if (cancellationToken.IsCancellationRequested ||
+                DataContext is InstancesViewModel { IsModCatalogLoading: true })
+            {
+                return;
+            }
+
+            ModCatalogSearchSpinner.IsVisible = false;
+            ModCatalogList.IsHitTestVisible = true;
+            ModCatalogList.Opacity = 1;
+        }
+        catch (OperationCanceledException)
+        {
+            // A new search replaces the pending hide
+        }
+    }
+
+    private void CancelModCatalogLoadingAnimation()
+    {
+        _modCatalogLoadingCancellation?.Cancel();
+        _modCatalogLoadingCancellation?.Dispose();
+        _modCatalogLoadingCancellation = null;
     }
 
     private static bool IsModArchiveName(string? fileName)

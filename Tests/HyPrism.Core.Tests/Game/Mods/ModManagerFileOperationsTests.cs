@@ -107,6 +107,31 @@ public class ModManagerFileOperationsTests : IDisposable
     }
 
     [Fact]
+    public async Task GetModCategoriesAsync_ReturnsAllFallbackCategoriesWithoutAnApiKey()
+    {
+        var categories = await _manager.GetModCategoriesAsync();
+
+        Assert.Equal(
+            [
+                "all",
+                "blocks",
+                "cosmetics-armor",
+                "food-farming",
+                "furniture",
+                "gameplay",
+                "library",
+                "miscellaneous",
+                "mobs-characters",
+                "prefab",
+                "quality-of-life",
+                "resource-packs",
+                "utility",
+                "world-gen"
+            ],
+            categories.Select(category => category.Slug));
+    }
+
+    [Fact]
     public async Task RemoveInstalledModAsync_DeletesFileAndManifestEntry()
     {
         await WriteInstalledModAsync("doomed-mod", "doomed-mod-1.0.jar");

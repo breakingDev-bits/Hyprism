@@ -21,7 +21,8 @@ public sealed partial class ModCatalogItemViewModel(
     string recommendedFileId = "",
     ModCompatibilityStatus compatibility = ModCompatibilityStatus.Unknown,
     string compatibilityLabel = "",
-    string authorAvatarUrl = "") : ObservableObject, IDisposable
+    string authorAvatarUrl = "",
+    string recommendedVersionLabel = "") : ObservableObject, IDisposable
 {
     public string Id { get; } = id;
     public string Name { get; } = name;
@@ -34,6 +35,9 @@ public sealed partial class ModCatalogItemViewModel(
     public int DownloadCount { get; } = downloadCount;
     public IReadOnlyList<string> ScreenshotUrls { get; } = screenshotUrls ?? [];
     public string RecommendedFileId { get; } = recommendedFileId;
+    public string RecommendedVersionLabel { get; } = string.IsNullOrWhiteSpace(recommendedVersionLabel)
+        ? latestFileId
+        : recommendedVersionLabel;
     public ModCompatibilityStatus Compatibility { get; } = compatibility;
     public string CompatibilityLabel { get; } = compatibilityLabel;
     public bool IsCompatible => Compatibility is ModCompatibilityStatus.Compatible;

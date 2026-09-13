@@ -948,6 +948,9 @@ Bei Laufwerkswechsel muss das Spiel möglicherweise neu installiert werden.</val
   <data name="modManager.installSelected" xml:space="preserve">
     <value>Ausgewählte installieren</value>
   </data>
+  <data name="modManager.installPreview" xml:space="preserve">
+    <value>Vorschau</value>
+  </data>
   <data name="modManager.installed" xml:space="preserve">
     <value>Installierte Mods</value>
   </data>
@@ -2944,7 +2947,16 @@ Bei Laufwerkswechsel muss das Spiel möglicherweise neu installiert werden.</val
     <value>Update</value>
   </data>
   <data name="instances.browse.categoryAll" xml:space="preserve">
-    <value>All categories</value>
+    <value>Alle Kategorien</value>
+  </data>
+  <data name="instances.browse.categoryWorldGeneration" xml:space="preserve">
+    <value>Weltgenerierung</value>
+  </data>
+  <data name="instances.browse.categoryMagic" xml:space="preserve">
+    <value>Magie</value>
+  </data>
+  <data name="instances.browse.categoryTechnology" xml:space="preserve">
+    <value>Technologie</value>
   </data>
   <data name="instances.browse.category" xml:space="preserve">
     <value>Category</value>

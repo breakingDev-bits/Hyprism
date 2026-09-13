@@ -291,6 +291,11 @@ public sealed partial class MainWindowViewModel
         get => Instances.IsInstallingSelectedCatalogMods;
         set => Instances.IsInstallingSelectedCatalogMods = value;
     }
+    public bool IsModCatalogInstallConfirmationOpen
+    {
+        get => Instances.IsModCatalogInstallConfirmationOpen;
+        set => Instances.IsModCatalogInstallConfirmationOpen = value;
+    }
     public int ModCatalogPreviewScreenshotIndex
     {
         get => Instances.ModCatalogPreviewScreenshotIndex;
@@ -363,6 +368,9 @@ public sealed partial class MainWindowViewModel
     public string ModCatalogFileNameColumn => Instances.ModCatalogFileNameColumn;
     public string ModCatalogFileGameVersionsColumn => Instances.ModCatalogFileGameVersionsColumn;
     public string ModCatalogInstallSelectedLabel => Instances.ModCatalogInstallSelectedLabel;
+    public string ModCatalogInstallTitle => Instances.ModCatalogInstallTitle;
+    public string ModCatalogInstallPreviewTitle => Instances.ModCatalogInstallPreviewTitle;
+    public string ModCatalogInstallVersionColumn => Instances.ModCatalogInstallVersionColumn;
     public string ModCatalogGameVersionLabel => Instances.ModCatalogGameVersionLabel;
     public string ConsoleAutoScrollLabel => Instances.ConsoleAutoScrollLabel;
     public string ConsoleClearLabel => Instances.ConsoleClearLabel;
@@ -385,6 +393,11 @@ public sealed partial class MainWindowViewModel
     public int SelectedCatalogModCount => Instances.SelectedCatalogModCount;
     public bool HasSelectedCatalogMods => Instances.HasSelectedCatalogMods;
     public bool CanInstallSelectedCatalogMods => Instances.CanInstallSelectedCatalogMods;
+    public bool CanOpenModCatalogInstallConfirmation => Instances.CanOpenModCatalogInstallConfirmation;
+    public bool HasModCatalogInstallConfirmation => Instances.HasModCatalogInstallConfirmation;
+    public double ModCatalogInstallProgress => Instances.ModCatalogInstallProgress;
+    public int ModCatalogInstallCompletedCount => Instances.ModCatalogInstallCompletedCount;
+    public string ModCatalogInstallProgressText => Instances.ModCatalogInstallProgressText;
     public string SelectedModCountText => Instances.SelectedModCountText;
     public string ModUpdateCountText => Instances.ModUpdateCountText;
     public string InstanceModsUpdatesAvailableText => Instances.InstanceModsUpdatesAvailableText;
@@ -452,6 +465,7 @@ public sealed partial class MainWindowViewModel
     public ObservableCollection<InstanceModItemViewModel> VisibleInstalledMods => Instances.VisibleInstalledMods;
     public ObservableCollection<ModCatalogItemViewModel> ModCatalogItems => Instances.ModCatalogItems;
     public ObservableCollection<ModCatalogFileItemViewModel> ModCatalogPreviewFiles => Instances.ModCatalogPreviewFiles;
+    public ObservableCollection<ModCatalogInstallItemViewModel> ModCatalogInstallItems => Instances.ModCatalogInstallItems;
     public ObservableCollection<InstanceWorldItemViewModel> InstanceWorlds => Instances.InstanceWorlds;
     public ObservableCollection<ConsoleLineViewModel> ConsoleLines => Instances.ConsoleLines;
     public ObservableCollection<InstanceListOptionViewModel> ModCatalogCategories => Instances.ModCatalogCategories;
@@ -469,6 +483,9 @@ public sealed partial class MainWindowViewModel
     public IAsyncRelayCommand SearchModCatalogCommand => Instances.SearchModCatalogCommand;
     public IAsyncRelayCommand LoadMoreModCatalogCommand => Instances.LoadMoreModCatalogCommand;
     public IRelayCommand ToggleModCatalogSelectionCommand => Instances.ToggleModCatalogSelectionCommand;
+    public IRelayCommand ClearModCatalogSelectionCommand => Instances.ClearModCatalogSelectionCommand;
+    public IRelayCommand OpenModCatalogInstallConfirmationCommand => Instances.OpenModCatalogInstallConfirmationCommand;
+    public IRelayCommand CloseModCatalogInstallConfirmationCommand => Instances.CloseModCatalogInstallConfirmationCommand;
     public IAsyncRelayCommand InstallSelectedCatalogModsCommand => Instances.InstallSelectedCatalogModsCommand;
     public IAsyncRelayCommand SelectModCatalogPreviewCommand => Instances.SelectModCatalogPreviewCommand;
     public IRelayCommand CloseModCatalogPreviewCommand => Instances.CloseModCatalogPreviewCommand;

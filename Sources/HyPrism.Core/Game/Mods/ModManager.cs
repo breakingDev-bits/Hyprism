@@ -205,9 +205,22 @@ public partial class ModManager : IModManager
         return
         [
             new() { Id = 0, Name = "All Mods", Slug = "all" },
-            new() { Id = 2, Name = "World Gen", Slug = "world-gen" },
-            new() { Id = 3, Name = "Magic", Slug = "magic" },
-            new() { Id = 4, Name = "Tech", Slug = "tech" }
+            // Negative identifiers keep fallback categories visible without pretending
+            // that their CurseForge IDs are known. Search ignores these values until
+            // the categories endpoint supplies the real identifiers.
+            new() { Id = -1, Name = "Blocks", Slug = "blocks" },
+            new() { Id = -2, Name = "Cosmetics/Armor", Slug = "cosmetics-armor" },
+            new() { Id = -3, Name = "Food/Farming", Slug = "food-farming" },
+            new() { Id = -4, Name = "Furniture", Slug = "furniture" },
+            new() { Id = -5, Name = "Gameplay", Slug = "gameplay" },
+            new() { Id = -6, Name = "Library", Slug = "library" },
+            new() { Id = -7, Name = "Miscellaneous", Slug = "miscellaneous" },
+            new() { Id = -8, Name = "Mobs/Characters", Slug = "mobs-characters" },
+            new() { Id = -9, Name = "Prefab", Slug = "prefab" },
+            new() { Id = -10, Name = "Quality of Life", Slug = "quality-of-life" },
+            new() { Id = -11, Name = "Resource Packs", Slug = "resource-packs" },
+            new() { Id = -12, Name = "Utility", Slug = "utility" },
+            new() { Id = -13, Name = "World Gen", Slug = "world-gen" }
         ];
     }
 

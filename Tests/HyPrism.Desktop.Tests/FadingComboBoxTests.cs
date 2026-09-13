@@ -7,6 +7,7 @@ using Avalonia.Headless;
 using Avalonia.Headless.XUnit;
 using Avalonia.Input;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using HyPrism.Desktop.Controls;
 using Xunit;
 
@@ -20,8 +21,9 @@ public sealed class FadingComboBoxTests
         var comboBox = new FadingComboBox
         {
             Width = 220,
-            ItemsSource = new[] { "Alpha", "Beta", "Gamma" }
+            ItemsSource = new[] { "Alpha", "A category with a deliberately long name", "Gamma" }
         };
+        comboBox.Classes.Add("uiComboBox");
         comboBox.SelectedIndex = 0;
         var window = new Window
         {
@@ -50,6 +52,8 @@ public sealed class FadingComboBoxTests
 
         comboBox.IsDropDownOpen = true;
         Dispatcher.UIThread.RunJobs();
+        var popup = Assert.Single(comboBox.GetVisualDescendants().OfType<FadingPopup>());
+        Assert.Equal(comboBox.Bounds.Width, popup.Width);
         window.MouseWheel(center, new Vector(0, -1), RawInputModifiers.None);
         Dispatcher.UIThread.RunJobs();
         Assert.Equal(0, comboBox.SelectedIndex);
