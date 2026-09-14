@@ -922,7 +922,7 @@ SPDX-License-Identifier: GPL-3.0-only
 
               <Grid x:Name="ModCatalogSection"
                     IsVisible="{Binding IsDisplayedInstanceBrowseSection}"
-                    MaxWidth="{x:Static controls:AdaptiveMasterDetailHost.DefaultContentMaxWidth}"
+                    MaxWidth="{x:Static instances:InstancesView.ModCatalogContentMaxWidth}"
                     HorizontalAlignment="Stretch"
                     RowDefinitions="Auto,*"
                     RowSpacing="10">

@@ -576,7 +576,7 @@ public sealed class InstanceSectionRenderTests
         Assert.Equal(0, Assert.IsType<BlurEffect>(instancesLayout?.Effect).Radius);
 
         Assert.Equal(720, view.FindControl<Grid>("InstalledModsSection")?.MaxWidth);
-        Assert.Equal(720, view.FindControl<Grid>("ModCatalogSection")?.MaxWidth);
+        Assert.Equal(820, view.FindControl<Grid>("ModCatalogSection")?.MaxWidth);
         Assert.Equal(720, view.FindControl<Grid>("InstanceConsoleSection")?.MaxWidth);
 
         viewModel.SelectInstanceSectionCommand.Execute("console");

@@ -20,6 +20,8 @@ namespace HyPrism.Desktop.Features.Instances;
 
 public sealed partial class InstancesView : UserControl
 {
+    public const double ModCatalogContentMaxWidth = 820;
+
     private static readonly TimeSpan CompactContentTransitionDuration = MotionDurations.CompactPageSlide;
     private static readonly TimeSpan CompactSectionSlideDuration = MotionDurations.CompactSectionSlide;
     private static readonly TimeSpan WideSectionSlideDuration = MotionDurations.ContentFade;
@@ -261,7 +263,9 @@ public sealed partial class InstancesView : UserControl
             ? double.PositiveInfinity
             : AdaptiveMasterDetailHost.DefaultContentMaxWidth;
         InstalledModsSection.MaxWidth = maxWidth;
-        ModCatalogSection.MaxWidth = maxWidth;
+        ModCatalogSection.MaxWidth = _layoutHost.IsCompact
+            ? double.PositiveInfinity
+            : ModCatalogContentMaxWidth;
         InstanceConsoleSection.MaxWidth = maxWidth;
     }
 
