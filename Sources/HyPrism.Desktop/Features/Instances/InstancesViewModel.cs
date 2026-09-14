@@ -18,6 +18,7 @@ using HyPrism.Core.Game.Launch;
 using HyPrism.Core.Game.Mods;
 using HyPrism.Core.Game.Sources;
 using HyPrism.Core.Game.Versions;
+using HyPrism.Core.Infrastructure;
 using HyPrism.Core.Models;
 
 namespace HyPrism.Desktop.Features.Instances;
@@ -78,6 +79,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     private List<ModCategory> _loadedModCategories = [];
     private int _modCatalogPage;
     private CancellationTokenSource _modIconsCancellation = new();
+    private CancellationTokenSource _modDependencyIconsCancellation = new();
     private CancellationTokenSource _modPreviewImageCancellation = new();
     private CancellationTokenSource _modPreviewImageTransitionCancellation = new();
     private CancellationTokenSource _modPreviewRevealCancellation = new();
@@ -489,6 +491,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     public string ModCatalogInstallPreviewTitle => _localizer["modManager.installPreview"];
     public string ModCatalogInstallDependencyHint => _localizer["modManager.installDependencyHint"];
     public string ModCatalogInstallVersionColumn => VersionLabel;
+    public string ModCatalogInstallDependenciesColumn => _localizer["modManager.dependencies"];
     public string ModCatalogGameVersionLabel => string.IsNullOrWhiteSpace(_modCatalogGameVersion)
         ? _localizer["instances.mods.compatibility.versionUnknown"]
         : _localizer.Format("instances.mods.compatibility.gameVersion", _modCatalogGameVersion);
@@ -868,7 +871,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     }
 
     [RelayCommand]
-    private void OpenModCatalogInstallConfirmation()
+    private async Task OpenModCatalogInstallConfirmation()
     {
         if (!CanOpenModCatalogInstallConfirmation)
             return;
@@ -878,6 +881,33 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
         ModCatalogInstallCompletedCount = 0;
         ModCatalogInstallProgress = 0;
         IsModCatalogInstallConfirmationOpen = true;
+
+        await LoadModCatalogInstallDependenciesAsync(_modCatalogInstallItems.ToArray());
+    }
+
+    private async Task LoadModCatalogInstallDependenciesAsync(
+        IReadOnlyList<ModCatalogInstallItemViewModel> items)
+    {
+        if (_modManager is null || items.Count == 0)
+            return;
+
+        var dependencyTasks = items.Select(async item =>
+        {
+            var task = _modManager.GetModDependenciesAsync(item.Id, item.CatalogItem.RecommendedFileId);
+            return await (task ?? Task.FromResult<List<ModDependency>>([]));
+        });
+        var dependencies = await Task.WhenAll(dependencyTasks);
+
+        for (var index = 0; index < items.Count; index++)
+        {
+            var item = items[index];
+            if (!_modCatalogInstallItems.Contains(item))
+                continue;
+
+            item.CatalogItem.SetDependencies(dependencies[index]);
+        }
+
+        FetchCatalogDependencyIcons(items);
     }
 
     [RelayCommand]
@@ -1582,6 +1612,67 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
                 }
                 catch
                 {
+                }
+            });
+    }
+
+    private void FetchCatalogDependencyIcons(
+        IEnumerable<ModCatalogInstallItemViewModel> items)
+    {
+        if (_remoteImageCache is null)
+            return;
+
+        var token = _modDependencyIconsCancellation.Token;
+        var targets = items
+            .SelectMany(item => item.DependencyItems)
+            .Where(item => item.Icon is null && !string.IsNullOrWhiteSpace(item.IconUrl))
+            .ToList();
+        if (targets.Count == 0)
+            return;
+
+        _ = Parallel.ForEachAsync(
+            targets,
+            new ParallelOptions
+            {
+                CancellationToken = token,
+                MaxDegreeOfParallelism = 4
+            },
+            async (item, cancellationToken) =>
+            {
+                try
+                {
+                    var icon = await RemoteBitmapLoader.LoadAsync(
+                            item.IconUrl,
+                            64,
+                            _httpClient,
+                            cancellationToken,
+                            _remoteImageCache,
+                            "mod-dependencies")
+                        .ConfigureAwait(false);
+                    if (icon is null || cancellationToken.IsCancellationRequested)
+                    {
+                        icon?.Dispose();
+                        return;
+                    }
+
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            icon.Dispose();
+                            return;
+                        }
+
+                        item.Icon = icon;
+                    });
+                }
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Debug("InstancesViewModel", $"Could not load dependency icon: {ex.Message}");
                 }
             });
     }
@@ -2493,7 +2584,8 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
                         ? string.IsNullOrWhiteSpace(recommendedFile.DisplayName)
                             ? recommendedFile.FileName
                             : recommendedFile.DisplayName
-                        : mod.LatestFileId)
+                        : mod.LatestFileId,
+                    dependencies: recommendedFile?.Dependencies)
                 {
                     IsInstalled = installedMod is not null
                 };
@@ -2639,12 +2731,19 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     private void PrepareModCatalogInstallItems()
     {
         DisposeModCatalogInstallItems();
+        RestartModDependencyIconFetch();
         foreach (var item in ModCatalogItems.Where(item => item.IsSelected && item.CanSelect))
-            _modCatalogInstallItems.Add(new ModCatalogInstallItemViewModel(item));
+        {
+            _modCatalogInstallItems.Add(new ModCatalogInstallItemViewModel(
+                item,
+                count => _localizer.Format("modManager.dependsOnMods", count),
+                _localizer["common.unknown"]));
+        }
     }
 
     private void DisposeModCatalogInstallItems()
     {
+        _modDependencyIconsCancellation.Cancel();
         foreach (var installItem in _modCatalogInstallItems)
         {
             installItem.Dispose();
@@ -2653,6 +2752,13 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
         }
 
         _modCatalogInstallItems.Clear();
+    }
+
+    private void RestartModDependencyIconFetch()
+    {
+        _modDependencyIconsCancellation.Cancel();
+        _modDependencyIconsCancellation.Dispose();
+        _modDependencyIconsCancellation = new CancellationTokenSource();
     }
 
     private static InstalledMod? FindInstalledCatalogMod(
@@ -3158,6 +3264,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
         DisposeModCatalogPreviewBitmaps();
         CancelInstanceVersionLoading();
         DisposeModCatalogInstallItems();
+        _modDependencyIconsCancellation.Dispose();
         foreach (var item in ModCatalogItems)
             item.Dispose();
         Interlocked.Exchange(ref _pendingProgressUpdate, null);

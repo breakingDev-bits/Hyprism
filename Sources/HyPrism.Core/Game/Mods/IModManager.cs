@@ -70,6 +70,14 @@ public interface IModManager
     Task<ModFilesResult> GetModFilesAsync(string modId, int page, int pageSize);
 
     /// <summary>
+    /// Resolves the required dependencies declared by a specific mod file for catalog display
+    /// </summary>
+    /// <param name="modId">The CurseForge mod ID</param>
+    /// <param name="fileId">The CurseForge file ID, or empty to resolve the best available file</param>
+    /// <returns>Required dependencies with best-effort names, versions, and icon URLs</returns>
+    Task<List<ModDependency>> GetModDependenciesAsync(string modId, string fileId);
+
+    /// <summary>
     /// Gets a single mod's metadata from CurseForge by id or slug.
     /// Used to backfill missing slug/icon/description for installed mods
     /// </summary>

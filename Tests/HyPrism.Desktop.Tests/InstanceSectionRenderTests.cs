@@ -169,6 +169,17 @@ public sealed class InstanceSectionRenderTests
                 ],
                 TotalCount = 3
             });
+        modManager.Setup(service => service.GetModDependenciesAsync("10", "900"))
+            .ReturnsAsync(
+            [
+                new ModDependency
+                {
+                    ModId = "20",
+                    Name = "Dependency Mod",
+                    Version = "Dependency 1.2",
+                    RelationType = CurseForgeDependencyRelationType.RequiredDependency
+                }
+            ]);
         modManager.Setup(service => service.InstallModFileToInstanceAsync(
                 "10", "900", instancePath, It.IsAny<Action<string, string>?>()))
             .Returns((string _, string _, string _, Action<string, string>? progressCallback) =>
@@ -379,7 +390,11 @@ public sealed class InstanceSectionRenderTests
         Assert.Contains(
             installModal!.GetVisualDescendants().OfType<TextBlock>(),
             textBlock => textBlock.Text == viewModel.ModCatalogInstallPreviewTitle);
+        Assert.Contains(
+            installModal.GetVisualDescendants().OfType<TextBlock>(),
+            textBlock => textBlock.Text == viewModel.ModCatalogInstallDependenciesColumn);
         Assert.Equal("Catalog Mod 1.0", viewModel.ModCatalogInstallItems[0].Version);
+        await WaitUntilAsync(() => viewModel.ModCatalogInstallItems[0].DependencyCount == 1);
         Assert.Single(
             installTable!.GetVisualDescendants().OfType<Border>(),
             border => border.Classes.Contains("modCatalogInstallTableRow"));
@@ -392,6 +407,21 @@ public sealed class InstanceSectionRenderTests
         Assert.Contains(
             installRow.GetVisualDescendants().OfType<TextBlock>(),
             textBlock => textBlock.Text == viewModel.ModCatalogInstallItems[0].Version);
+        Assert.Contains(
+            installRow.GetVisualDescendants().OfType<TextBlock>(),
+            textBlock => textBlock.Text == "Depends on 1 mods");
+        var dependencyBadge = Assert.Single(
+            installRow.GetVisualDescendants().OfType<Border>(),
+            border => border.Classes.Contains("modCatalogDependencyBadge"));
+        var dependencyPopup = Assert.Single(
+            installRow.GetVisualDescendants().OfType<FadingPopup>());
+        Assert.Equal("Top", dependencyPopup.Placement.ToString());
+        Assert.Equal(-8d, dependencyPopup.VerticalOffset);
+        Assert.True(dependencyPopup.IsHoverEnabled);
+        Assert.IsType<Border>(dependencyPopup.Child);
+        Assert.Equal(
+            "(Dependency 1.2)",
+            viewModel.ModCatalogInstallItems[0].DependencyItems[0].VersionInParentheses);
         var installConfirmButton = view.FindControl<Button>("ModCatalogInstallConfirmButton");
         Assert.NotNull(installConfirmButton);
         Assert.Same(viewModel.InstallSelectedCatalogModsCommand, installConfirmButton!.Command);

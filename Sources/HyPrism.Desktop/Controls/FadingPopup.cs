@@ -18,10 +18,15 @@ public sealed class FadingPopup : Popup
     public static readonly StyledProperty<bool> IsRequestedOpenProperty =
         AvaloniaProperty.Register<FadingPopup, bool>(nameof(IsRequestedOpen));
 
+    public static readonly StyledProperty<bool> IsHoverEnabledProperty =
+        AvaloniaProperty.Register<FadingPopup, bool>(nameof(IsHoverEnabled));
+
     private CancellationTokenSource? _animationCancellation;
     private TopLevel? _subscribedTopLevel;
     private Window? _subscribedWindow;
     private readonly List<ScrollViewer> _subscribedScrollViewers = [];
+    private Control? _hoverTarget;
+    private Control? _hoverChild;
 
     public FadingPopup()
     {
@@ -38,12 +43,24 @@ public sealed class FadingPopup : Popup
         set => SetValue(IsRequestedOpenProperty, value);
     }
 
+    public bool IsHoverEnabled
+    {
+        get => GetValue(IsHoverEnabledProperty);
+        set => SetValue(IsHoverEnabledProperty, value);
+    }
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
 
         if (change.Property != IsRequestedOpenProperty)
+        {
+            if (change.Property == PlacementTargetProperty ||
+                change.Property == ChildProperty ||
+                change.Property == IsHoverEnabledProperty)
+                RefreshHoverSubscriptions();
             return;
+        }
 
         if (change.GetNewValue<bool>())
             ShowPopup();
@@ -51,14 +68,98 @@ public sealed class FadingPopup : Popup
             BeginHidePopup();
     }
 
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        RefreshHoverSubscriptions();
+    }
+
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
+        ClearHoverSubscriptions();
         CancelPendingAnimation();
         UnsubscribeFromTopLevel();
         SetCurrentValue(IsOpenProperty, false);
         if (Child is not null)
             Child.Opacity = 1;
         base.OnDetachedFromVisualTree(e);
+    }
+
+    private void RefreshHoverSubscriptions()
+    {
+        if (!IsHoverEnabled)
+        {
+            ClearHoverSubscriptions();
+            return;
+        }
+
+        var target = PlacementTarget as Control;
+        if (!ReferenceEquals(target, _hoverTarget))
+        {
+            if (_hoverTarget is not null)
+            {
+                _hoverTarget.PointerEntered -= OnHoverPointerEntered;
+                _hoverTarget.PointerExited -= OnHoverPointerExited;
+            }
+
+            _hoverTarget = target;
+            if (_hoverTarget is not null)
+            {
+                _hoverTarget.PointerEntered += OnHoverPointerEntered;
+                _hoverTarget.PointerExited += OnHoverPointerExited;
+            }
+        }
+
+        var child = Child;
+        if (!ReferenceEquals(child, _hoverChild))
+        {
+            if (_hoverChild is not null)
+            {
+                _hoverChild.PointerEntered -= OnHoverPointerEntered;
+                _hoverChild.PointerExited -= OnHoverPointerExited;
+            }
+
+            _hoverChild = child;
+            if (_hoverChild is not null)
+            {
+                _hoverChild.PointerEntered += OnHoverPointerEntered;
+                _hoverChild.PointerExited += OnHoverPointerExited;
+            }
+        }
+    }
+
+    private void ClearHoverSubscriptions()
+    {
+        if (_hoverTarget is not null)
+        {
+            _hoverTarget.PointerEntered -= OnHoverPointerEntered;
+            _hoverTarget.PointerExited -= OnHoverPointerExited;
+        }
+
+        if (_hoverChild is not null)
+        {
+            _hoverChild.PointerEntered -= OnHoverPointerEntered;
+            _hoverChild.PointerExited -= OnHoverPointerExited;
+        }
+
+        _hoverTarget = null;
+        _hoverChild = null;
+    }
+
+    private void OnHoverPointerEntered(object? sender, PointerEventArgs args)
+        => SetCurrentValue(IsRequestedOpenProperty, true);
+
+    private void OnHoverPointerExited(object? sender, PointerEventArgs args)
+        => Dispatcher.UIThread.Post(UpdateHoverState, DispatcherPriority.Input);
+
+    private void UpdateHoverState()
+    {
+        if (!IsHoverEnabled)
+            return;
+
+        var isPointerOverHoverSurface = _hoverTarget?.IsPointerOver == true ||
+                                        _hoverChild?.IsPointerOver == true;
+        SetCurrentValue(IsRequestedOpenProperty, isPointerOverHoverSurface);
     }
 
     internal bool IsInteractionSource(Visual source)

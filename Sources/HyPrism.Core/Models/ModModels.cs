@@ -111,6 +111,12 @@ public class ModDependency
     public string FileId { get; set; } = "";
     /// <summary>Relation kind.</summary>
     public CurseForgeDependencyRelationType RelationType { get; set; }
+    /// <summary>Resolved display name of the related mod.</summary>
+    public string Name { get; set; } = "";
+    /// <summary>Resolved display version of the related mod file.</summary>
+    public string Version { get; set; } = "";
+    /// <summary>Resolved icon URL of the related mod.</summary>
+    public string IconUrl { get; set; } = "";
 }
 
 /// <summary>A dependency declared by a Hytale <c>manifest.json</c>.</summary>

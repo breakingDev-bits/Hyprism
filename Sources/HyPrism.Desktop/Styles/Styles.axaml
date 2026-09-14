@@ -3617,6 +3617,48 @@ SPDX-License-Identifier: GPL-3.0-only
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
 
+  <Style Selector="instances|InstancesView Border.modCatalogDependencyBadge">
+    <Setter Property="MaxWidth" Value="170" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Border.modCatalogDependencyPopup">
+    <Setter Property="Width" Value="280" />
+    <Setter Property="Padding" Value="12" />
+    <Setter Property="Background" Value="{DynamicResource TooltipBrush}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.18" Easing="CubicEaseOut" />
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="instances|InstancesView TextBlock.modCatalogDependencyDetails">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="LineHeight" Value="15" />
+    <Setter Property="FontWeight" Value="Normal" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Border.modCatalogDependencyIcon">
+    <Setter Property="Width" Value="32" />
+    <Setter Property="Height" Value="32" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Background" Value="{DynamicResource ControlSurfaceBrush}" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+
+  <Style Selector="instances|InstancesView Border.modCatalogDependencyIcon TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
   <Style Selector="instances|InstancesView Button.modCatalogInstallConfirmAction">
     <Setter Property="Height" Value="42" />
     <Setter Property="HorizontalAlignment" Value="Stretch" />

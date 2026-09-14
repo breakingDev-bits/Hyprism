@@ -372,6 +372,7 @@ public sealed partial class MainWindowViewModel
     public string ModCatalogInstallPreviewTitle => Instances.ModCatalogInstallPreviewTitle;
     public string ModCatalogInstallDependencyHint => Instances.ModCatalogInstallDependencyHint;
     public string ModCatalogInstallVersionColumn => Instances.ModCatalogInstallVersionColumn;
+    public string ModCatalogInstallDependenciesColumn => Instances.ModCatalogInstallDependenciesColumn;
     public string ModCatalogGameVersionLabel => Instances.ModCatalogGameVersionLabel;
     public string ConsoleAutoScrollLabel => Instances.ConsoleAutoScrollLabel;
     public string ConsoleClearLabel => Instances.ConsoleClearLabel;

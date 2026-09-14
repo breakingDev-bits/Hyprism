@@ -1038,6 +1038,12 @@ SPDX-License-Identifier: GPL-3.0-only
   <data name="modManager.installDependencyHint" xml:space="preserve">
     <value>Необходимые зависимости будут установлены автоматически перед выбранными модами</value>
   </data>
+  <data name="modManager.dependencies" xml:space="preserve">
+    <value>Зависимости</value>
+  </data>
+  <data name="modManager.dependsOnMods" xml:space="preserve">
+    <value>Зависит от {0} мод(ов)</value>
+  </data>
   <data name="modManager.installed" xml:space="preserve">
     <value>Установленные моды</value>
   </data>

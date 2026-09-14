@@ -4,6 +4,7 @@
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HyPrism.Core.Game.Mods;
+using HyPrism.Core.Models;
 
 namespace HyPrism.Desktop.Features.Instances;
 
@@ -22,7 +23,8 @@ public sealed partial class ModCatalogItemViewModel(
     ModCompatibilityStatus compatibility = ModCompatibilityStatus.Unknown,
     string compatibilityLabel = "",
     string authorAvatarUrl = "",
-    string recommendedVersionLabel = "") : ObservableObject, IDisposable
+    string recommendedVersionLabel = "",
+    IReadOnlyList<ModDependency>? dependencies = null) : ObservableObject, IDisposable
 {
     public string Id { get; } = id;
     public string Name { get; } = name;
@@ -40,6 +42,7 @@ public sealed partial class ModCatalogItemViewModel(
         : recommendedVersionLabel;
     public ModCompatibilityStatus Compatibility { get; } = compatibility;
     public string CompatibilityLabel { get; } = compatibilityLabel;
+    public IReadOnlyList<ModDependency> Dependencies { get; private set; } = dependencies ?? [];
     public bool IsCompatible => Compatibility is ModCompatibilityStatus.Compatible;
     public bool IsIncompatible => Compatibility is ModCompatibilityStatus.Incompatible;
     public bool IsCompatibilityUnknown => Compatibility is ModCompatibilityStatus.Unknown;
@@ -86,6 +89,12 @@ public sealed partial class ModCatalogItemViewModel(
 
     public bool ShowsIcon => Icon is not null;
     public bool ShowsAuthorAvatar => AuthorAvatar is not null;
+
+    public void SetDependencies(IReadOnlyList<ModDependency> dependencies)
+    {
+        Dependencies = dependencies ?? [];
+        OnPropertyChanged(nameof(Dependencies));
+    }
 
     partial void OnIconChanged(Bitmap? value)
         => OnPropertyChanged(nameof(ShowsIcon));

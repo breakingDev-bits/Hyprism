@@ -832,6 +832,65 @@ public partial class ModManager : IModManager
     }
 
     /// <inheritdoc/>
+    public async Task<List<ModDependency>> GetModDependenciesAsync(string modId, string fileId)
+    {
+        if (!_cfClient.HasApiKey() || string.IsNullOrWhiteSpace(modId))
+            return [];
+
+        try
+        {
+            var sourceFile = await _cfClient.ResolveFileAsync(modId, fileId);
+            var dependencies = MapDependencies(sourceFile?.Dependencies)
+                .Where(dependency => dependency.RelationType == CurseForgeDependencyRelationType.RequiredDependency)
+                .GroupBy(dependency => dependency.ModId, StringComparer.OrdinalIgnoreCase)
+                .Select(group => group.First())
+                .ToList();
+
+            await Parallel.ForEachAsync(
+                dependencies,
+                new ParallelOptions { MaxDegreeOfParallelism = 4 },
+                async (dependency, _) =>
+                {
+                    try
+                    {
+                        var modTask = GetModAsync(dependency.ModId);
+                        var fileTask = string.IsNullOrWhiteSpace(dependency.FileId)
+                            ? Task.FromResult<CurseForgeFile?>(null)
+                            : _cfClient.ResolveFileAsync(dependency.ModId, dependency.FileId);
+                        await Task.WhenAll(modTask, fileTask);
+
+                        var mod = await modTask;
+                        var dependencyFile = await fileTask;
+                        var fallbackFile = mod?.LatestFiles?.FirstOrDefault();
+                        dependency.Name = string.IsNullOrWhiteSpace(mod?.Name)
+                            ? dependency.ModId
+                            : mod.Name;
+                        dependency.IconUrl = mod?.IconUrl ?? string.Empty;
+                        dependency.Version = dependencyFile is not null
+                            ? ExtractVersion(dependencyFile.DisplayName, dependencyFile.FileName)
+                            : ExtractVersion(fallbackFile?.DisplayName, fallbackFile?.FileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Debug(
+                            "ModManager",
+                            $"Could not resolve dependency metadata for {dependency.ModId}: {ex.Message}");
+                        dependency.Name = string.IsNullOrWhiteSpace(dependency.Name)
+                            ? dependency.ModId
+                            : dependency.Name;
+                    }
+                });
+
+            return dependencies;
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning("ModManager", $"Get mod dependencies failed for '{modId}': {ex.Message}");
+            return [];
+        }
+    }
+
+    /// <inheritdoc/>
     public async Task<ModInfo?> GetModAsync(string modIdOrSlug)
     {
         if (!_cfClient.HasApiKey() || string.IsNullOrWhiteSpace(modIdOrSlug))
