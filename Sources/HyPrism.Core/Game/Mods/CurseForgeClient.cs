@@ -78,7 +78,10 @@ internal sealed class CurseForgeClient
     /// if not found (deleted/expired) the method falls back to the latest uploaded file.
     /// </summary>
     /// <returns>A task that completes with the resolved file, or null when unavailable</returns>
-    public async Task<CurseForgeFile?> ResolveFileAsync(string modId, string? fileId)
+    public async Task<CurseForgeFile?> ResolveFileAsync(
+        string modId,
+        string? fileId,
+        string? preferredGameVersion = null)
     {
         if (!string.IsNullOrWhiteSpace(fileId))
         {
@@ -98,7 +101,7 @@ internal sealed class CurseForgeClient
                 $"Get file info returned {fileResponse.StatusCode} for mod {modId} file {fileId}, falling back to latest file");
         }
 
-        var filesEndpoint = $"/v1/mods/{modId}/files?pageSize=1";
+        var filesEndpoint = $"/v1/mods/{modId}/files?pageSize=50";
         using var filesRequest = CreateRequest(HttpMethod.Get, filesEndpoint);
         using var filesResponse = await _http.SendAsync(filesRequest);
 
@@ -110,7 +113,10 @@ internal sealed class CurseForgeClient
 
         var filesJson = await filesResponse.Content.ReadAsStringAsync();
         var filesResp = JsonSerializer.Deserialize<CurseForgeFilesResponse>(filesJson, JsonOptions);
-        var latest = filesResp?.Data?.FirstOrDefault();
+        var files = filesResp?.Data ?? [];
+        var latest = files.FirstOrDefault(file =>
+            ModCompatibilityEvaluator.Evaluate(preferredGameVersion, file.GameVersions ?? []) ==
+            ModCompatibilityStatus.Compatible) ?? files.FirstOrDefault();
         if (latest != null && !string.IsNullOrWhiteSpace(fileId))
         {
             Logger.Info("CurseForgeClient",

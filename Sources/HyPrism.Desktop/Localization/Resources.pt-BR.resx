@@ -951,6 +951,9 @@ Você pode precisar reinstalar o jogo se trocar de unidade.</value>
   <data name="modManager.installPreview" xml:space="preserve">
     <value>Pré-visualização</value>
   </data>
+  <data name="modManager.installDependencyHint" xml:space="preserve">
+    <value>Required dependencies are installed automatically before the selected mods</value>
+  </data>
   <data name="modManager.installed" xml:space="preserve">
     <value>Mods instalados</value>
   </data>

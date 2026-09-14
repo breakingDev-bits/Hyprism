@@ -138,6 +138,19 @@ public class CurseForgeFile
     public int DownloadCount { get; set; }
     /// <summary>Game versions declared as compatible with the file</summary>
     public List<string>? GameVersions { get; set; }
+    /// <summary>Other CurseForge projects related to this file</summary>
+    public List<CurseForgeFileDependency>? Dependencies { get; set; }
+}
+
+/// <summary>A dependency or compatibility relation declared by a CurseForge file.</summary>
+public class CurseForgeFileDependency
+{
+    /// <summary>Related CurseForge project identifier</summary>
+    public int ModId { get; set; }
+    /// <summary>Related CurseForge file identifier, when the relation targets one file</summary>
+    public int FileId { get; set; }
+    /// <summary>CurseForge relation type</summary>
+    public CurseForgeDependencyRelationType RelationType { get; set; }
 }
 
 /// <summary>Categories list response from the CurseForge API.</summary>

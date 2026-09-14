@@ -1865,9 +1865,13 @@ SPDX-License-Identifier: GPL-3.0-only
               <controls:SmoothScrollViewer Grid.Row="1"
                                            HorizontalScrollBarVisibility="Disabled"
                                            VerticalScrollBarVisibility="Auto">
-                <Border x:Name="ModCatalogInstallTable"
-                        Classes="instancePreviewVersionTable modCatalogInstallTable">
-                  <StackPanel>
+                <StackPanel Spacing="10">
+                  <TextBlock Text="{Binding ModCatalogInstallDependencyHint}"
+                             Classes="sourceTableValue"
+                             TextWrapping="Wrap" />
+                  <Border x:Name="ModCatalogInstallTable"
+                          Classes="instancePreviewVersionTable modCatalogInstallTable">
+                    <StackPanel>
                     <Border Classes="sourceTableHeader">
                       <Grid ColumnDefinitions="*,1.4*" ColumnSpacing="16">
                         <TextBlock Text="{Binding ModCatalogFileNameColumn}" />
@@ -1909,8 +1913,9 @@ SPDX-License-Identifier: GPL-3.0-only
                         </DataTemplate>
                       </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                  </StackPanel>
-                </Border>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
               </controls:SmoothScrollViewer>
 
               <Grid Grid.Row="2" ColumnDefinitions="Auto,*" ColumnSpacing="8">

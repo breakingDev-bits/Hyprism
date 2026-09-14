@@ -1035,6 +1035,9 @@ SPDX-License-Identifier: GPL-3.0-only
   <data name="modManager.installPreview" xml:space="preserve">
     <value>Предварительный просмотр</value>
   </data>
+  <data name="modManager.installDependencyHint" xml:space="preserve">
+    <value>Необходимые зависимости будут установлены автоматически перед выбранными модами</value>
+  </data>
   <data name="modManager.installed" xml:space="preserve">
     <value>Установленные моды</value>
   </data>

@@ -44,6 +44,8 @@ News parsing and GitHub metadata belong to Desktop because they support presenta
 
 `ModManager` stores files under the target instance's `UserData/Mods`. Disabling a file adds the `.disabled` suffix, and enabling it restores the normal filename. Managed metadata connects installed files to CurseForge project and file identifiers
 
+CurseForge file relations are normalized into the instance manifest. Required relations are resolved as a depth-first graph before installation; cycles and unresolved required nodes fail the operation, optional relations are recorded but not installed automatically, and incompatible relations are checked against the current installed set. JAR and ZIP archives are also inspected for a root `manifest.json`; its plugin identifier, version, and dependency ranges are persisted for validation and removal protection
+
 `ModCompatibilityEvaluator` reads the installed server version and compares it with the game versions attached to catalog files. The UI disables files classified as incompatible, while an unknown version remains a distinct state
 
 See [Core contracts](/docs/reference/services) for integration examples and [Data and cache](/docs/architecture/data-and-cache) for persistence rules

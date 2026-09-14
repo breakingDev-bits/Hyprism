@@ -487,6 +487,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     public string ModCatalogInstallSelectedLabel => InstallLabel;
     public string ModCatalogInstallTitle => _localizer["modManager.installSelected"];
     public string ModCatalogInstallPreviewTitle => _localizer["modManager.installPreview"];
+    public string ModCatalogInstallDependencyHint => _localizer["modManager.installDependencyHint"];
     public string ModCatalogInstallVersionColumn => VersionLabel;
     public string ModCatalogGameVersionLabel => string.IsNullOrWhiteSpace(_modCatalogGameVersion)
         ? _localizer["instances.mods.compatibility.versionUnknown"]

@@ -951,6 +951,9 @@ Vous devrez peut-être réinstaller le jeu si vous changez de lecteur.</value>
   <data name="modManager.installPreview" xml:space="preserve">
     <value>Aperçu</value>
   </data>
+  <data name="modManager.installDependencyHint" xml:space="preserve">
+    <value>Required dependencies are installed automatically before the selected mods</value>
+  </data>
   <data name="modManager.installed" xml:space="preserve">
     <value>Mods installés</value>
   </data>

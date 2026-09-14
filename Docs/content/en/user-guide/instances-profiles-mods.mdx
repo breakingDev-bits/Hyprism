@@ -63,6 +63,14 @@ The catalog hides mods that are already installed in the selected instance. Duri
 
 To install several mods together, select the compatible catalog entries and select **Install** in the top bar. Review each mod, its icon, and the version that will be installed in the **Preview** sheet. Use the reset icon to clear the selection, or select **Install** at the bottom. The sheet closes and the catalog shows installation progress until the selected mods finish
 
+## Mod dependencies
+
+HyPrism reads dependency relations from CurseForge mod files. Required dependencies are resolved recursively and installed before the selected mod. Optional dependencies are not installed automatically, while an incompatible mod relation stops installation when the conflicting mod is already installed
+
+The **Preview** sheet warns that required dependencies may add extra downloads. Dependencies installed by the launcher appear in **Installed mods** with their own version and file metadata
+
+HyPrism also reads the Hytale `manifest.json` inside JAR and ZIP mods. It keeps the declared plugin identifier and version ranges in the instance manifest and prevents removing a mod while another installed mod declares it as a required dependency. If a local archive declares a dependency, install that dependency separately before using the local mod
+
 ## Console and logs {/* #console-and-logs */}
 
 The console keeps a separate in-memory buffer for every instance while the launcher is open. You can filter text, pause automatic scrolling by scrolling away from the bottom, toggle line wrapping, and clear the visible buffer
