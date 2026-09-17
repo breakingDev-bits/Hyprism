@@ -3,6 +3,7 @@
 
 using Avalonia;
 using Avalonia.Skia;
+using Avalonia.X11;
 using Hyprism.Desktop.Integrations.GitHub;
 using Hyprism.Desktop.Features.News;
 using Hyprism.Desktop.Features.Settings;
@@ -57,6 +58,10 @@ internal static class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
+            .With(new X11PlatformOptions
+            {
+                EnableDrawnDecorations = true
+            })
             .With(DesktopRenderOptions.CreateWin32Options())
             .With(new SkiaOptions
             {
