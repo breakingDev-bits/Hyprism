@@ -152,7 +152,7 @@ def main() -> int:
 
     missing = [path for path in project_files() if not process(path, args.write)]
     if missing:
-        print("Files without the required HyPrism SPDX header:", file=sys.stderr)
+        print("Files without the required Hyprism SPDX header:", file=sys.stderr)
         for path in missing:
             print(f"  {path.relative_to(ROOT)}", file=sys.stderr)
         return 1
