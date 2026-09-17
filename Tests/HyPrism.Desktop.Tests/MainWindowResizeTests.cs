@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Chrome;
 using Avalonia.Headless.XUnit;
 using Avalonia.Input;
+using Avalonia.Styling;
 using HyPrism.Desktop.Shell;
 using Xunit;
 
@@ -25,6 +26,7 @@ public sealed class MainWindowResizeTests
                 ? WindowDecorations.Full
                 : WindowDecorations.None;
             Assert.Equal(expectedDecorations, window.WindowDecorations);
+            Assert.IsType<ControlTheme>(window.FindResource(typeof(WindowDrawnDecorations)));
 
             AssertElementRole(window, "ResizeNorth", WindowDecorationsElementRole.ResizeN);
             AssertElementRole(window, "ResizeSouth", WindowDecorationsElementRole.ResizeS);
