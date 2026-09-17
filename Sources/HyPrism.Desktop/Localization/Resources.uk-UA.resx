@@ -29,13 +29,13 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Сегментний контрол</value>
   </data>
   <data name="app.downloadedUpdate" xml:space="preserve">
-    <value>Останню версію HyPrism завантажено у вашу папку "Завантаження".</value>
+    <value>Останню версію Hyprism завантажено у вашу папку "Завантаження".</value>
   </data>
   <data name="app.downloadedUpdateHint" xml:space="preserve">
     <value>Ми спробували відкрити файл, щоб ви могли його встановити. Якщо він не відкрився, перейдіть до "Завантаження" та запустіть файл вручну.</value>
   </data>
   <data name="app.enterInstancePath" xml:space="preserve">
-    <value>Введіть повний шлях, де ви хочете зберігати екземпляри HyPrism:</value>
+    <value>Введіть повний шлях, де ви хочете зберігати екземпляри Hyprism:</value>
   </data>
   <data name="app.failedChangeDir" xml:space="preserve">
     <value>Не вдалося змінити каталог екземплярів</value>
@@ -73,10 +73,10 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Шлях не вдалося використати. Перевірте, чи існує він, і чи маєте ви права на запис.</value>
   </data>
   <data name="app.title" xml:space="preserve">
-    <value>HyPrism</value>
+    <value>Hyprism</value>
   </data>
   <data name="app.version" xml:space="preserve">
-    <value>HyPrism {0}</value>
+    <value>Hyprism {0}</value>
   </data>
   <data name="common.all" xml:space="preserve">
     <value>Усі</value>
@@ -1207,7 +1207,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Розгорнути</value>
   </data>
   <data name="news.hyprism" xml:space="preserve">
-    <value>HyPrism</value>
+    <value>Hyprism</value>
   </data>
   <data name="news.hytale" xml:space="preserve">
     <value>Hytale</value>
@@ -1234,7 +1234,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Про програму</value>
   </data>
   <data name="onboarding.aboutHyPrism" xml:space="preserve">
-    <value>Про HyPrism</value>
+    <value>Про Hyprism</value>
   </data>
   <data name="onboarding.allSet" xml:space="preserve">
     <value>Все готово! Ось деяка інформація про лаунчер</value>
@@ -1291,7 +1291,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Налаштуйте зовнішній вигляд</value>
   </data>
   <data name="onboarding.disclaimer" xml:space="preserve">
-    <value>HyPrism — це неофіційний лаунчер для Hytale. Цей проект не пов'язаний з Hypixel Studios.</value>
+    <value>Hyprism — це неофіційний лаунчер для Hytale. Цей проект не пов'язаний з Hypixel Studios.</value>
   </data>
   <data name="onboarding.enterLauncher" xml:space="preserve">
     <value>Увійти в лаунчер</value>
@@ -1390,7 +1390,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Візуал</value>
   </data>
   <data name="onboarding.welcome" xml:space="preserve">
-    <value>Ласкаво просимо до HyPrism</value>
+    <value>Ласкаво просимо до Hyprism</value>
   </data>
   <data name="onboarding.welcomeBack" xml:space="preserve">
     <value>З поверненням, {{name}}!</value>
@@ -1615,7 +1615,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Основна команда</value>
   </data>
   <data name="settings.aboutSettings.coreTeamDescription" xml:space="preserve">
-    <value>Люди, що стоять за розробкою HyPrism</value>
+    <value>Люди, що стоять за розробкою Hyprism</value>
   </data>
   <data name="settings.aboutSettings.creatorRole" xml:space="preserve">
     <value>Творець проєкту</value>
@@ -1624,7 +1624,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Сучасний лаунчер для Hytale</value>
   </data>
   <data name="settings.aboutSettings.disclaimer" xml:space="preserve">
-    <value>HyPrism — не офіційний лаунчер Hytale і не продукт, розроблений Hypixel Studios</value>
+    <value>Hyprism — не офіційний лаунчер Hytale і не продукт, розроблений Hypixel Studios</value>
   </data>
   <data name="settings.aboutSettings.builtWith" xml:space="preserve">
     <value>Створено за допомогою</value>
@@ -1645,7 +1645,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Головний тестувальник</value>
   </data>
   <data name="settings.aboutSettings.title" xml:space="preserve">
-    <value>Лаунчер HyPrism</value>
+    <value>Лаунчер Hyprism</value>
   </data>
   <data name="settings.aboutSettings.unofficial" xml:space="preserve">
     <value>Неофіційний лаунчер Hytale</value>
@@ -1777,7 +1777,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Як працюють завантаження</value>
   </data>
   <data name="settings.downloads.howDownloadsWorkDescription" xml:space="preserve">
-    <value>HyPrism автоматично вибирає найшвидше доступне джерело для завантаження файлів гри. Натисніть «Тест швидкості», щоб перевірити з'єднання.</value>
+    <value>Hyprism автоматично вибирає найшвидше доступне джерело для завантаження файлів гри. Натисніть «Тест швидкості», щоб перевірити з'єднання.</value>
   </data>
   <data name="settings.downloads.mirrorUrlHint" xml:space="preserve">
     <value>Введіть базову URL дзеркала Hytale. Лаунчер спробує автоматично визначити конфігурацію.</value>
@@ -2068,7 +2068,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Використовувати вбудовану Java</value>
   </data>
   <data name="settings.javaSettings.useBundledJavaHint" xml:space="preserve">
-    <value>Рекомендовано: використовується Java, що постачається з HyPrism</value>
+    <value>Рекомендовано: використовується Java, що постачається з Hyprism</value>
   </data>
   <data name="settings.javaSettings.useCustomJava" xml:space="preserve">
     <value>Використовувати власну Java</value>
@@ -2149,7 +2149,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Мережевий режим</value>
   </data>
   <data name="settings.networkSettings.onlineModeHint" xml:space="preserve">
-    <value>Використовувати сервіс автентифікації та дані облікового запису; після вимкнення HyPrism створює локальну OmniAuth-сесію</value>
+    <value>Використовувати сервіс автентифікації та дані облікового запису; після вимкнення Hyprism створює локальну OmniAuth-сесію</value>
   </data>
   <data name="settings.profile.avatar" xml:space="preserve">
     <value>Аватар</value>
@@ -2341,7 +2341,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Перевірити оновлення</value>
   </data>
   <data name="wrapper.description" xml:space="preserve">
-    <value>Режим обгортки — завантажте та запустіть повну версію HyPrism</value>
+    <value>Режим обгортки — завантажте та запустіть повну версію Hyprism</value>
   </data>
   <data name="wrapper.downloadInstall" xml:space="preserve">
     <value>Завантажити та встановити</value>
@@ -2359,7 +2359,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Запустити</value>
   </data>
   <data name="wrapper.launchFailed" xml:space="preserve">
-    <value>Не вдалося запустити HyPrism</value>
+    <value>Не вдалося запустити Hyprism</value>
   </data>
   <data name="wrapper.loadingNews" xml:space="preserve">
     <value>Завантаження новин…</value>
@@ -2377,7 +2377,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Авторизацію завершено</value>
   </data>
   <data name="oauth.callback.successMessage" xml:space="preserve">
-    <value>Ваш офіційний обліковий запис Hytale підключено до HyPrism</value>
+    <value>Ваш офіційний обліковий запис Hytale підключено до Hyprism</value>
   </data>
   <data name="oauth.callback.closeHint" xml:space="preserve">
     <value>Ви можете закрити це вікно й повернутися до лаунчера</value>
@@ -2425,7 +2425,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Створіть екземпляр, щоб вибрати версію Hytale, завантажити її файли та розпочати вашу наступну пригоду</value>
   </data>
   <data name="home.welcomeTitle" xml:space="preserve">
-    <value>Ласкаво просимо до HyPrism</value>
+    <value>Ласкаво просимо до Hyprism</value>
   </data>
   <data name="instances.newInstance" xml:space="preserve">
     <value>Новий екземпляр</value>
@@ -2545,7 +2545,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Ліцензія</value>
   </data>
   <data name="settings.aboutSettings.licenseHint" xml:space="preserve">
-    <value>Вихідний код HyPrism розповсюджується під ліцензією GPL-3.0-only</value>
+    <value>Вихідний код Hyprism розповсюджується під ліцензією GPL-3.0-only</value>
   </data>
   <data name="settings.aboutSettings.credits" xml:space="preserve">
     <value>Візуальні матеріали</value>
@@ -2629,7 +2629,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Підключіть джерело для завантаження</value>
   </data>
   <data name="settings.downloads.addSourceHint" xml:space="preserve">
-    <value>Введіть його публічну адресу, і HyPrism виявить підтримуваний формат дзеркала</value>
+    <value>Введіть його публічну адресу, і Hyprism виявить підтримуваний формат дзеркала</value>
   </data>
   <data name="settings.downloads.sourceUrlPlaceholder" xml:space="preserve">
     <value>https://mirror.example.com</value>
@@ -2653,7 +2653,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Перевірка сумісності джерела</value>
   </data>
   <data name="settings.downloads.sourceDetectionFailed" xml:space="preserve">
-    <value>HyPrism не зміг виявити сумісне дзеркало за цією адресою</value>
+    <value>Hyprism не зміг виявити сумісне дзеркало за цією адресою</value>
   </data>
   <data name="settings.downloads.sourceSaveFailed" xml:space="preserve">
     <value>Джерело завантажень не вдалося зберегти</value>
@@ -2857,13 +2857,13 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Активне</value>
   </data>
   <data name="settings.downloads.addSourceMethodHint" xml:space="preserve">
-    <value>Виберіть, як HyPrism має налаштувати джерело</value>
+    <value>Виберіть, як Hyprism має налаштувати джерело</value>
   </data>
   <data name="settings.downloads.addSourceAutomatic" xml:space="preserve">
     <value>Визначити автоматично</value>
   </data>
   <data name="settings.downloads.addSourceAutomaticHint" xml:space="preserve">
-    <value>Введіть адресу, і HyPrism визначить формат джерела</value>
+    <value>Введіть адресу, і Hyprism визначить формат джерела</value>
   </data>
   <data name="settings.downloads.addSourceManual" xml:space="preserve">
     <value>Ввести JSON вручну</value>
@@ -2875,7 +2875,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Додати джерело з JSON</value>
   </data>
   <data name="settings.downloads.manualSourceHint" xml:space="preserve">
-    <value>Вставте опис .mirror.json. HyPrism перевірить його перед збереженням</value>
+    <value>Вставте опис .mirror.json. Hyprism перевірить його перед збереженням</value>
   </data>
   <data name="settings.downloads.manualSourceJson" xml:space="preserve">
     <value>Опис джерела</value>

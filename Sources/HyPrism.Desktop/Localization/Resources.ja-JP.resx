@@ -29,13 +29,13 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>セグメントコントロール</value>
   </data>
   <data name="app.downloadedUpdate" xml:space="preserve">
-    <value>最新のHyPrismをダウンロードフォルダにダウンロードしました。</value>
+    <value>最新のHyprismをダウンロードフォルダにダウンロードしました。</value>
   </data>
   <data name="app.downloadedUpdateHint" xml:space="preserve">
     <value>インストールできるようにファイルを開こうとしました。開かない場合は、ダウンロードフォルダに移動して手動でファイルを実行してください。</value>
   </data>
   <data name="app.enterInstancePath" xml:space="preserve">
-    <value>HyPrismインスタンスを保存する場所のフルパスを入力してください：</value>
+    <value>Hyprismインスタンスを保存する場所のフルパスを入力してください：</value>
   </data>
   <data name="app.failedChangeDir" xml:space="preserve">
     <value>インスタンスディレクトリの変更に失敗しました</value>
@@ -73,10 +73,10 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>パスを使用できませんでした。パスが存在し、書き込み権限があることを確認してください。</value>
   </data>
   <data name="app.title" xml:space="preserve">
-    <value>HyPrism</value>
+    <value>Hyprism</value>
   </data>
   <data name="app.version" xml:space="preserve">
-    <value>HyPrism {0}</value>
+    <value>Hyprism {0}</value>
   </data>
   <data name="common.all" xml:space="preserve">
     <value>すべて</value>
@@ -1207,7 +1207,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>展開</value>
   </data>
   <data name="news.hyprism" xml:space="preserve">
-    <value>HyPrism</value>
+    <value>Hyprism</value>
   </data>
   <data name="news.hytale" xml:space="preserve">
     <value>Hytale</value>
@@ -1234,7 +1234,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>情報</value>
   </data>
   <data name="onboarding.aboutHyPrism" xml:space="preserve">
-    <value>HyPrismについて</value>
+    <value>Hyprismについて</value>
   </data>
   <data name="onboarding.allSet" xml:space="preserve">
     <value>準備完了です！ランチャーについての情報をご覧ください</value>
@@ -1291,7 +1291,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>外観をカスタマイズ</value>
   </data>
   <data name="onboarding.disclaimer" xml:space="preserve">
-    <value>HyPrismは非公式ランチャーです。Hypixel Studiosとは提携していません。</value>
+    <value>Hyprismは非公式ランチャーです。Hypixel Studiosとは提携していません。</value>
   </data>
   <data name="onboarding.enterLauncher" xml:space="preserve">
     <value>ランチャーを開始</value>
@@ -1390,7 +1390,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>外観</value>
   </data>
   <data name="onboarding.welcome" xml:space="preserve">
-    <value>HyPrismへようこそ</value>
+    <value>Hyprismへようこそ</value>
   </data>
   <data name="onboarding.welcomeBack" xml:space="preserve">
     <value>お帰りなさい、{{name}}さん！</value>
@@ -1615,7 +1615,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>コアチーム</value>
   </data>
   <data name="settings.aboutSettings.coreTeamDescription" xml:space="preserve">
-    <value>HyPrism開発の中心メンバー</value>
+    <value>Hyprism開発の中心メンバー</value>
   </data>
   <data name="settings.aboutSettings.creatorRole" xml:space="preserve">
     <value>プロジェクト作成者</value>
@@ -1624,7 +1624,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Hytaleのためのモダンなランチャー</value>
   </data>
   <data name="settings.aboutSettings.disclaimer" xml:space="preserve">
-    <value>HyPrismは公式のHytaleランチャーではなく、Hypixel Studiosによって開発された製品ではありません</value>
+    <value>Hyprismは公式のHytaleランチャーではなく、Hypixel Studiosによって開発された製品ではありません</value>
   </data>
   <data name="settings.aboutSettings.builtWith" xml:space="preserve">
     <value>使用技術</value>
@@ -1645,7 +1645,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>リードテスター</value>
   </data>
   <data name="settings.aboutSettings.title" xml:space="preserve">
-    <value>HyPrism ランチャー</value>
+    <value>Hyprism ランチャー</value>
   </data>
   <data name="settings.aboutSettings.unofficial" xml:space="preserve">
     <value>非公式Hytaleランチャー</value>
@@ -1777,7 +1777,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>ダウンロードの仕組み</value>
   </data>
   <data name="settings.downloads.howDownloadsWorkDescription" xml:space="preserve">
-    <value>HyPrismはゲームファイルをダウンロードするために最速のソースを自動的に選択します。「速度テスト」を押して接続を確認してください。</value>
+    <value>Hyprismはゲームファイルをダウンロードするために最速のソースを自動的に選択します。「速度テスト」を押して接続を確認してください。</value>
   </data>
   <data name="settings.downloads.mirrorUrlHint" xml:space="preserve">
     <value>HytaleミラーのベースURLを入力してください。ランチャーが設定を自動検出します。</value>
@@ -2068,7 +2068,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>バンドルされたJavaを使用</value>
   </data>
   <data name="settings.javaSettings.useBundledJavaHint" xml:space="preserve">
-    <value>推奨：HyPrismに同梱されているJavaを使用します</value>
+    <value>推奨：Hyprismに同梱されているJavaを使用します</value>
   </data>
   <data name="settings.javaSettings.useCustomJava" xml:space="preserve">
     <value>カスタムJavaを使用</value>
@@ -2149,7 +2149,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>オンラインモード</value>
   </data>
   <data name="settings.networkSettings.onlineModeHint" xml:space="preserve">
-    <value>認証サービスとアカウントデータを使用します。無効にすると HyPrism がローカル OmniAuth セッションを作成します</value>
+    <value>認証サービスとアカウントデータを使用します。無効にすると Hyprism がローカル OmniAuth セッションを作成します</value>
   </data>
   <data name="settings.profile.avatar" xml:space="preserve">
     <value>アバター</value>
@@ -2332,7 +2332,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>インストール中</value>
   </data>
   <data name="updateOverlay.message" xml:space="preserve">
-    <value>HyPrismの最新バージョンをダウンロードしてインストールしています。お待ちください。</value>
+    <value>Hyprismの最新バージョンをダウンロードしてインストールしています。お待ちください。</value>
   </data>
   <data name="updateOverlay.title" xml:space="preserve">
     <value>ランチャーを更新中</value>
@@ -2341,7 +2341,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>更新を確認</value>
   </data>
   <data name="wrapper.description" xml:space="preserve">
-    <value>ラッパーモード — HyPrismのフルバージョンをダウンロードして起動</value>
+    <value>ラッパーモード — Hyprismのフルバージョンをダウンロードして起動</value>
   </data>
   <data name="wrapper.downloadInstall" xml:space="preserve">
     <value>ダウンロードしてインストール</value>
@@ -2359,7 +2359,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>起動</value>
   </data>
   <data name="wrapper.launchFailed" xml:space="preserve">
-    <value>HyPrismの起動に失敗しました</value>
+    <value>Hyprismの起動に失敗しました</value>
   </data>
   <data name="wrapper.loadingNews" xml:space="preserve">
     <value>ニュースを読み込み中…</value>
@@ -2377,7 +2377,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>認証に成功しました</value>
   </data>
   <data name="oauth.callback.successMessage" xml:space="preserve">
-    <value>Hytale公式アカウントがHyPrismに接続されました</value>
+    <value>Hytale公式アカウントがHyprismに接続されました</value>
   </data>
   <data name="oauth.callback.closeHint" xml:space="preserve">
     <value>このウィンドウを閉じてランチャーに戻ることができます</value>
@@ -2425,7 +2425,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Hytaleのバージョンを選択し、そのファイルをダウンロードして、次の冒険を始めるためのインスタンスを作成します</value>
   </data>
   <data name="home.welcomeTitle" xml:space="preserve">
-    <value>HyPrismへようこそ</value>
+    <value>Hyprismへようこそ</value>
   </data>
   <data name="instances.newInstance" xml:space="preserve">
     <value>新しいインスタンス</value>
@@ -2545,7 +2545,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>ライセンス</value>
   </data>
   <data name="settings.aboutSettings.licenseHint" xml:space="preserve">
-    <value>HyPrismのソースコードはGPL-3.0-onlyの下で配布されています</value>
+    <value>HyprismのソースコードはGPL-3.0-onlyの下で配布されています</value>
   </data>
   <data name="settings.aboutSettings.credits" xml:space="preserve">
     <value>ビジュアル素材</value>
@@ -2629,7 +2629,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>ダウンロードソースを接続</value>
   </data>
   <data name="settings.downloads.addSourceHint" xml:space="preserve">
-    <value>公開アドレスを入力すると、HyPrismが対応するミラーフォーマットを検出します</value>
+    <value>公開アドレスを入力すると、Hyprismが対応するミラーフォーマットを検出します</value>
   </data>
   <data name="settings.downloads.sourceUrlPlaceholder" xml:space="preserve">
     <value>https://mirror.example.com</value>
@@ -2653,7 +2653,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>ソースの互換性を確認中</value>
   </data>
   <data name="settings.downloads.sourceDetectionFailed" xml:space="preserve">
-    <value>HyPrism はこのアドレスで互換性のあるミラーを検出できませんでした</value>
+    <value>Hyprism はこのアドレスで互換性のあるミラーを検出できませんでした</value>
   </data>
   <data name="settings.downloads.sourceSaveFailed" xml:space="preserve">
     <value>ダウンロードソースを保存できませんでした</value>
@@ -2857,13 +2857,13 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>有効</value>
   </data>
   <data name="settings.downloads.addSourceMethodHint" xml:space="preserve">
-    <value>HyPrismでのソース設定方法を選択してください</value>
+    <value>Hyprismでのソース設定方法を選択してください</value>
   </data>
   <data name="settings.downloads.addSourceAutomatic" xml:space="preserve">
     <value>自動検出</value>
   </data>
   <data name="settings.downloads.addSourceAutomaticHint" xml:space="preserve">
-    <value>アドレスを入力すると、HyPrismがソース形式を検出します</value>
+    <value>アドレスを入力すると、Hyprismがソース形式を検出します</value>
   </data>
   <data name="settings.downloads.addSourceManual" xml:space="preserve">
     <value>JSONを手動入力</value>
@@ -2875,7 +2875,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>JSONからソースを追加</value>
   </data>
   <data name="settings.downloads.manualSourceHint" xml:space="preserve">
-    <value>.mirror.json定義を貼り付けてください。保存前にHyPrismが検証します</value>
+    <value>.mirror.json定義を貼り付けてください。保存前にHyprismが検証します</value>
   </data>
   <data name="settings.downloads.manualSourceJson" xml:space="preserve">
     <value>ソース定義</value>

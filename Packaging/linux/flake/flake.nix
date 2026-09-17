@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 {
-  description = "HyPrism, a native Hytale launcher";
+  description = "Hyprism, a native Hytale launcher";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -69,8 +69,8 @@
               ln -s HyPrism.Desktop "$out/bin/hyprism"
               install -Dm644 Packaging/linux/io.github.hyprismteam.HyPrism.desktop \
                 "$out/share/applications/io.github.hyprismteam.HyPrism.desktop"
-              install -Dm644 Sources/HyPrism.Desktop/Assets/Images/appicon_512.png \
-                "$out/share/icons/hicolor/512x512/apps/io.github.hyprismteam.HyPrism.png"
+              install -Dm644 Sources/HyPrism.Desktop/Assets/Images/logo.svg \
+                "$out/share/icons/hicolor/scalable/apps/io.github.hyprismteam.HyPrism.svg"
             '';
 
             meta = {

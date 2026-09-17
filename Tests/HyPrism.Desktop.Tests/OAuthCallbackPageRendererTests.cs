@@ -19,11 +19,11 @@ public sealed class OAuthCallbackPageRendererTests
 
         var html = renderer.Render(
             success: true,
-            "Your official Hytale account is connected to HyPrism");
+            "Your official Hytale account is connected to Hyprism");
 
         Assert.Contains("<!doctype html>", html, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("#08090a", html, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("data:image/png;base64,", html, StringComparison.Ordinal);
+        Assert.Contains("data:image/svg+xml;base64,", html, StringComparison.Ordinal);
         Assert.Contains("Authorization successful", html, StringComparison.Ordinal);
         Assert.Contains("official Hytale account", html, StringComparison.Ordinal);
         Assert.Contains("You can close this window", html, StringComparison.Ordinal);

@@ -30,7 +30,7 @@ public sealed class LocalNodeHost : ILocalNodeService, IAsyncDisposable
     private bool _disposed;
 
     /// <summary>
-    /// Creates a Local Node below the HyPrism application data directory
+    /// Creates a Local Node below the Hyprism application data directory
     /// </summary>
     public LocalNodeHost(AppPathConfiguration appPath)
         : this(new LocalNodeOptions(

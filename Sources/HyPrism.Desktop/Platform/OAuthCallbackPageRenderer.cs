@@ -13,7 +13,7 @@ namespace HyPrism.Desktop.Platform;
 internal sealed class OAuthCallbackPageRenderer : IOAuthCallbackPageRenderer
 {
     private static readonly Uri LogoUri = new(
-        "avares://HyPrism.Desktop/Assets/Images/preview_logo.png");
+        "avares://HyPrism.Desktop/Assets/Images/logo.svg");
 
     private static readonly Lazy<string> LogoMarkup = new(BuildLogoMarkup);
     private readonly IDesktopSettingsStore _settings;
@@ -55,7 +55,7 @@ internal sealed class OAuthCallbackPageRenderer : IOAuthCallbackPageRenderer
               <meta name="color-scheme" content="dark">
               <meta name="referrer" content="no-referrer">
               <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
-              <title>HyPrism | {{encodedTitle}}</title>
+              <title>Hyprism | {{encodedTitle}}</title>
               <style>
                 :root {
                   color-scheme: dark;
@@ -238,12 +238,12 @@ internal sealed class OAuthCallbackPageRenderer : IOAuthCallbackPageRenderer
             using var buffer = new MemoryStream();
             stream.CopyTo(buffer);
             var base64 = Convert.ToBase64String(buffer.ToArray());
-            return $"<img src=\"data:image/png;base64,{base64}\" alt=\"HyPrism Launcher\">";
+            return $"<img src=\"data:image/svg+xml;base64,{base64}\" alt=\"Hyprism Launcher\">";
         }
         catch (Exception exception)
         {
             Logger.Warning("OAuthCallback", $"Could not load callback logo: {exception.Message}");
-            return "<div class=\"brand-fallback\">HyPrism<small>Launcher</small></div>";
+            return "<div class=\"brand-fallback\">Hyprism<small>Launcher</small></div>";
         }
     }
 }

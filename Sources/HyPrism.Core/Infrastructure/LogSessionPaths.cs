@@ -7,7 +7,7 @@ using System.Text;
 namespace HyPrism.Core.Infrastructure;
 
 /// <summary>
-/// Resolves all diagnostic files produced during one HyPrism process lifetime.
+/// Resolves all diagnostic files produced during one Hyprism process lifetime.
 /// </summary>
 public sealed class LogSessionPaths
 {

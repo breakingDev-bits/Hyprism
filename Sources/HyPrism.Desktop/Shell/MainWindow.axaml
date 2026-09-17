@@ -16,7 +16,7 @@ SPDX-License-Identifier: GPL-3.0-only
         xmlns:lottie="clr-namespace:Avalonia.Labs.Lottie;assembly=Avalonia.Labs.Lottie"
         x:Class="HyPrism.Desktop.Shell.MainWindow"
         x:DataType="shell:MainWindowViewModel"
-        Title="HyPrism"
+        Title="Hyprism"
         Width="1280"
         Height="800"
         MinWidth="1024"
@@ -73,10 +73,10 @@ SPDX-License-Identifier: GPL-3.0-only
         <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="10,12,10,30">
           <Image Width="48"
                  Height="48"
-                 Source="avares://HyPrism.Desktop/Assets/Images/logo.png"
+                 Source="{StaticResource HyprismBrandLogo}"
                  Stretch="Uniform" />
           <StackPanel VerticalAlignment="Center" Spacing="-3">
-            <TextBlock Text="HyPrism" FontSize="25" FontWeight="Bold" />
+            <TextBlock Text="Hyprism" FontSize="25" FontWeight="Bold" />
             <TextBlock Text="LAUNCHER"
                        Foreground="{DynamicResource TextSecondaryBrush}"
                        FontSize="10"
@@ -343,7 +343,7 @@ SPDX-License-Identifier: GPL-3.0-only
              Margin="0,32,0,0"
              HorizontalAlignment="Center"
              Opacity="0"
-             Source="avares://HyPrism.Desktop/Assets/Images/preview_logo.png"
+             Source="{StaticResource HyprismBrandLogo}"
              Stretch="Uniform">
         <Image.Transitions>
           <Transitions>

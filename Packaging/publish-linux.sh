@@ -14,7 +14,8 @@ PROJECT_FILE="$PROJECT_ROOT/Sources/HyPrism.Desktop/HyPrism.Desktop.csproj"
 ASSETS_DIR="$PACKAGING_DIR/linux"
 FLAKE_DIR="$ASSETS_DIR/flake"
 APP_ID="io.github.hyprismteam.HyPrism"
-APP_NAME="HyPrism"
+APP_NAME="Hyprism"
+ICON_ASSET="$PROJECT_ROOT/Sources/HyPrism.Desktop/Assets/Images/logo.svg"
 RUNTIME="linux-x64"
 FLATPAK_BRANCH="stable"
 TARGETS=()
@@ -190,8 +191,8 @@ install_desktop_assets() {
     local root="$1"
     install -Dm644 "$ASSETS_DIR/$APP_ID.desktop" \
         "$root/usr/share/applications/$APP_ID.desktop"
-    install -Dm644 "$PROJECT_ROOT/Sources/HyPrism.Desktop/Assets/Images/appicon_512.png" \
-        "$root/usr/share/icons/hicolor/512x512/apps/$APP_ID.png"
+    install -Dm644 "$ICON_ASSET" \
+        "$root/usr/share/icons/hicolor/scalable/apps/$APP_ID.svg"
 }
 
 create_system_payload() {
@@ -203,7 +204,7 @@ create_system_payload() {
 }
 
 build_tar() {
-    tar -C "$PUBLISH_DIR" -cJf "$OUTPUT_DIR/HyPrism-linux-x64-$VERSION.tar.xz" .
+    tar -C "$PUBLISH_DIR" -cJf "$OUTPUT_DIR/Hyprism-linux-x64-$VERSION.tar.xz" .
 }
 
 build_nix() {
@@ -222,10 +223,10 @@ Version: $DEB_VERSION
 Section: games
 Priority: optional
 Architecture: amd64
-Maintainer: HyPrism Team
+Maintainer: Hyprism Team
 Description: Native Avalonia launcher for Hytale
 EOF
-    dpkg-deb --root-owner-group --build "$root" "$OUTPUT_DIR/HyPrism-linux-x64-$VERSION.deb"
+    dpkg-deb --root-owner-group --build "$root" "$OUTPUT_DIR/Hyprism-linux-x64-$VERSION.deb"
 }
 
 build_rpm() {
@@ -257,18 +258,18 @@ cp -a . %{buildroot}/
 /opt/hyprism
 /usr/bin/hyprism
 /usr/share/applications/$APP_ID.desktop
-/usr/share/icons/hicolor/512x512/apps/$APP_ID.png
+/usr/share/icons/hicolor/scalable/apps/$APP_ID.svg
 EOF
     rpmbuild --define "_topdir $topdir" -bb "$topdir/SPECS/hyprism.spec"
-    cp "$topdir/RPMS/x86_64/"*.rpm "$OUTPUT_DIR/HyPrism-linux-x64-$VERSION.rpm"
+    cp "$topdir/RPMS/x86_64/"*.rpm "$OUTPUT_DIR/Hyprism-linux-x64-$VERSION.rpm"
 }
 
 build_appimage() {
     local app_dir="$BUILD_ROOT/HyPrism.AppDir"
-    install -d "$app_dir/usr/lib/hyprism" "$app_dir/usr/share/applications" "$app_dir/usr/share/icons/hicolor/512x512/apps"
+    install -d "$app_dir/usr/lib/hyprism" "$app_dir/usr/share/applications" "$app_dir/usr/share/icons/hicolor/scalable/apps"
     cp -a "$PUBLISH_DIR/." "$app_dir/usr/lib/hyprism/"
     install -Dm644 "$ASSETS_DIR/$APP_ID.desktop" "$app_dir/$APP_ID.desktop"
-    install -Dm644 "$PROJECT_ROOT/Sources/HyPrism.Desktop/Assets/Images/appicon_512.png" "$app_dir/$APP_ID.png"
+    install -Dm644 "$ICON_ASSET" "$app_dir/$APP_ID.svg"
     cat >"$app_dir/AppRun" <<'EOF'
 #!/usr/bin/env bash
 set -euo pipefail
@@ -276,7 +277,7 @@ exec "$(dirname "$0")/usr/lib/hyprism/HyPrism.Desktop" "$@"
 EOF
     chmod +x "$app_dir/AppRun"
     ARCH=x86_64 APPIMAGE_EXTRACT_AND_RUN="${APPIMAGE_EXTRACT_AND_RUN:-1}" \
-        "$APPIMAGETOOL_BIN" "$app_dir" "$OUTPUT_DIR/HyPrism-linux-x64-$VERSION.AppImage"
+        "$APPIMAGETOOL_BIN" "$app_dir" "$OUTPUT_DIR/Hyprism-linux-x64-$VERSION.AppImage"
 }
 
 build_flatpak() {
@@ -285,7 +286,7 @@ build_flatpak() {
     install -d "$root/repo" "$root/source"
     cp -a "$PUBLISH_DIR" "$root/source/publish"
     cp "$ASSETS_DIR/$APP_ID.desktop" "$root/source/$APP_ID.desktop"
-    cp "$PROJECT_ROOT/Sources/HyPrism.Desktop/Assets/Images/appicon_512.png" "$root/source/$APP_ID.png"
+    cp "$ICON_ASSET" "$root/source/$APP_ID.svg"
     cp "$manifest" "$root/source/manifest.yml"
     (
         cd "$root/source"
@@ -295,7 +296,7 @@ build_flatpak() {
             build manifest.yml
     )
     flatpak build-bundle "$root/repo" \
-        "$OUTPUT_DIR/HyPrism-linux-x64-$VERSION.flatpak" \
+        "$OUTPUT_DIR/Hyprism-linux-x64-$VERSION.flatpak" \
         "$APP_ID" "$FLATPAK_BRANCH"
 }
 

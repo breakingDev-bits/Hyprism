@@ -53,7 +53,7 @@ public sealed class GitHubUser
 public sealed record GitHubCommit(string Sha, string Message, string HtmlUrl);
 
 /// <summary>
-/// Loads and caches public metadata for the HyPrism GitHub repository
+/// Loads and caches public metadata for the Hyprism GitHub repository
 /// </summary>
 public sealed class GitHubClient : IGitHubClient
 {

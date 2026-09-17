@@ -10,7 +10,7 @@ namespace HyPrism.Desktop.Integrations.Discord;
 
 /// <summary>
 /// Silent logger for Discord RPC that suppresses connection error spam.
-/// Only logs critical errors to HyPrism's logger when they are not expected connection failures.
+/// Only logs critical errors to Hyprism's logger when they are not expected connection failures.
 /// </summary>
 internal class SilentDiscordLogger : ILogger
 {
@@ -138,9 +138,9 @@ public sealed class DiscordPresence : IDiscordPresence
                 Assets = new Assets
                 {
                     LargeImageKey = "hyprism_logo",
-                    LargeImageText = "HyPrism Launcher",
+                    LargeImageText = "Hyprism Launcher",
                     SmallImageKey = "hyprism_logo",
-                    SmallImageText = "HyPrism"
+                    SmallImageText = "Hyprism"
                 }
             };
 
@@ -193,9 +193,9 @@ public sealed class DiscordPresence : IDiscordPresence
             if (presence.Assets != null)
             {
                 presence.Assets.LargeImageKey ??= "hyprism_logo";
-                presence.Assets.LargeImageText ??= "HyPrism Launcher";
+                presence.Assets.LargeImageText ??= "Hyprism Launcher";
                 presence.Assets.SmallImageKey ??= "hyprism_logo";
-                presence.Assets.SmallImageText ??= "HyPrism";
+                presence.Assets.SmallImageText ??= "Hyprism";
             }
 
             _client.SetPresence(presence);

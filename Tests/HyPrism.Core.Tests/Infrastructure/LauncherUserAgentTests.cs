@@ -8,9 +8,9 @@ namespace HyPrism.Core.Tests.Core.Infrastructure;
 public sealed class LauncherUserAgentTests
 {
     [Theory]
-    [InlineData("4.0.0", "HyPrism/4.0.0")]
-    [InlineData("4.1.0-beta.2", "HyPrism/4.1.0-beta.2")]
-    [InlineData("4.0.0+abcdef", "HyPrism/4.0.0")]
+    [InlineData("4.0.0", "Hyprism/4.0.0")]
+    [InlineData("4.1.0-beta.2", "Hyprism/4.1.0-beta.2")]
+    [InlineData("4.0.0+abcdef", "Hyprism/4.0.0")]
     public void Create_UsesProductVersionWithoutBuildMetadata(string version, string expected)
     {
         Assert.Equal(expected, LauncherUserAgent.Create(version));

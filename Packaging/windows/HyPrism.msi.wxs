@@ -5,16 +5,16 @@
 -->
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <Package
-      Name="HyPrism"
-      Manufacturer="HyPrism Team"
+      Name="Hyprism"
+      Manufacturer="Hyprism Team"
       Version="$(var.ProductVersion)"
       UpgradeCode="1918E4D4-0781-45A5-A1B8-1A79C9A5D77C"
       Scope="perMachine">
-    <MajorUpgrade DowngradeErrorMessage="A newer version of HyPrism is already installed" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of Hyprism is already installed" />
     <MediaTemplate EmbedCab="yes" />
 
     <StandardDirectory Id="ProgramFiles6432Folder">
-      <Directory Id="INSTALLFOLDER" Name="HyPrism">
+      <Directory Id="INSTALLFOLDER" Name="Hyprism">
         <Files Include="$(var.PublishDir)\**" />
       </Directory>
     </StandardDirectory>

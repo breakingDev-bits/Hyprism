@@ -82,13 +82,13 @@ export default function LocalizedDocPage({ en, ru, pageKey }: LocalizedDocPagePr
   const { locale } = useDocsLocale()
   const dictionary = dictionaries[locale]
   const Content = locale === 'ru' ? ru : en
-  const title = Content.metadata.title || Content.frontMatter.title || Content.contentTitle || 'HyPrism'
+  const title = Content.metadata.title || Content.frontMatter.title || Content.contentTitle || 'Hyprism'
   const description = Content.metadata.description || Content.frontMatter.description
   const sourcePath = pageKey ? `${pageKey}.mdx` : 'index.mdx'
   const editUrl = `https://github.com/hyprismteam/HyPrism/edit/main/Docs/content/${locale}/${sourcePath}`
 
   useEffect(() => {
-    document.title = `${title} | HyPrism`
+    document.title = `${title} | Hyprism`
   }, [title])
 
   return (

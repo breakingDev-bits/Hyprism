@@ -21,8 +21,8 @@ const localeBootstrapScript = `try {
 } catch {}`
 
 const config: Config = {
-  title: 'HyPrism Documentation',
-  tagline: 'User and developer documentation for HyPrism Launcher',
+  title: 'Hyprism Documentation',
+  tagline: 'User and developer documentation for Hyprism Launcher',
   url: 'https://hyprismteam.github.io',
   baseUrl,
   organizationName: 'hyprismteam',
@@ -104,7 +104,7 @@ const config: Config = {
       respectPrefersColorScheme: true
     },
     navbar: {
-      title: 'HyPrism',
+      title: 'Hyprism',
       items: [
         {
           type: 'html',
@@ -131,7 +131,7 @@ const config: Config = {
     },
     footer: {
       style: 'dark',
-      copyright: 'HyPrism Launcher documentation · GPL-3.0-only'
+      copyright: 'Hyprism Launcher documentation · GPL-3.0-only'
     },
     prism: {
       theme: prismThemes.github,

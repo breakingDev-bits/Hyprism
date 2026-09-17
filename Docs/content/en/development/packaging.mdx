@@ -30,7 +30,7 @@ AppImage tooling can be selected with `--appimagetool` or `APPIMAGETOOL`. Flatpa
 
 ## NixOS
 
-The repository contains a flake for the native `x86_64-linux` package. Install Nix with flakes enabled, then build or run HyPrism from the repository root
+The repository contains a flake for the native `x86_64-linux` package. Install Nix with flakes enabled, then build or run Hyprism from the repository root
 
 ```bash
 nix build ./Packaging/linux/flake#hyprism
@@ -61,7 +61,7 @@ It verifies both `HyPrism.Desktop.exe` and `HyPrism.LocalNode.exe` before produc
 
 ## macOS
 
-The publisher uses the system `sips`, `iconutil`, `plutil`, `hdiutil`, `codesign`, and `file` tools
+The publishers use `logo.svg` as the Linux application icon and derive the macOS icon set from the same logo asset. The macOS publisher uses the system `sips`, `iconutil`, `plutil`, `hdiutil`, `codesign`, and `file` tools
 
 ```bash
 ./Packaging/publish-macos.sh dmg --output dist

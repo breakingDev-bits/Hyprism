@@ -42,7 +42,7 @@ public interface IDiscordPresence : IDisposable
     void SetPresence(PresenceState state, string? details = null, int? progress = null);
 
     /// <summary>
-    /// Clears the current Discord Rich Presence, removing HyPrism from the user's status
+    /// Clears the current Discord Rich Presence, removing Hyprism from the user's status
     /// </summary>
     void ClearPresence();
 }

@@ -90,7 +90,7 @@ try {
     if ($targets.Contains('zip')) {
         Compress-Archive `
             -Path (Join-Path $publishDirectory '*') `
-            -DestinationPath (Join-Path $outputDirectory "HyPrism-win-x64-$artifactVersion.zip") `
+            -DestinationPath (Join-Path $outputDirectory "Hyprism-win-x64-$artifactVersion.zip") `
             -Force
     }
 
@@ -101,7 +101,7 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Could not install the WiX bootstrapper extension' }
 
         $msiPath = if ($targets.Contains('msi')) {
-            Join-Path $outputDirectory "HyPrism-win-x64-$artifactVersion.msi"
+            Join-Path $outputDirectory "Hyprism-win-x64-$artifactVersion.msi"
         } else {
             Join-Path $buildRoot 'HyPrism.msi'
         }
@@ -118,7 +118,7 @@ try {
                 -ext WixToolset.BootstrapperApplications.wixext `
                 -d "MsiPath=$msiPath" `
                 -d "ProductVersion=$installerVersion" `
-                -o (Join-Path $outputDirectory "HyPrism-win-x64-$artifactVersion-setup.exe")
+                -o (Join-Path $outputDirectory "Hyprism-win-x64-$artifactVersion-setup.exe")
             if ($LASTEXITCODE -ne 0) { throw 'WiX could not build the EXE installer' }
         }
     }

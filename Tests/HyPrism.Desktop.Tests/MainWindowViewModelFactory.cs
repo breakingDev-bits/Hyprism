@@ -132,11 +132,11 @@ internal static class MainWindowViewModelFactory
                 {
                     Title = sampleTitle,
                     Excerpt = russian
-                        ? "Демонстрационная статья для документации HyPrism"
-                        : "A demonstration article for the HyPrism documentation",
+                        ? "Демонстрационная статья для документации Hyprism"
+                        : "A demonstration article for the Hyprism documentation",
                     Url = "https://example.org/news/reading",
                     Date = "2026-01-01",
-                    Author = "HyPrism Docs"
+                    Author = "Hyprism Docs"
                 },
                 new NewsItemResponse
                 {
@@ -146,7 +146,7 @@ internal static class MainWindowViewModelFactory
                         : "Select a post to open it inside the launcher",
                     Url = "https://example.org/news/sample",
                     Date = "2025-12-31",
-                    Author = "HyPrism Docs"
+                    Author = "Hyprism Docs"
                 }
             ]);
         news.Setup(service => service.GetNewsArticleAsync(It.IsAny<string>()))
@@ -155,7 +155,7 @@ internal static class MainWindowViewModelFactory
                 Title = sampleTitle,
                 Url = "https://example.org/news/reading",
                 PublishedAt = "2026-01-01",
-                Author = "HyPrism Docs",
+                Author = "Hyprism Docs",
                 Content =
                 [
                     new NewsContentNode

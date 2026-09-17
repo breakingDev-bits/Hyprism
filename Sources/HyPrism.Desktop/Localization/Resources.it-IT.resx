@@ -29,13 +29,13 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Controllo segmentato</value>
   </data>
   <data name="app.downloadedUpdate" xml:space="preserve">
-    <value>Scaricata l’ultima versione di HyPrism nella cartella Download.</value>
+    <value>Scaricata l’ultima versione di Hyprism nella cartella Download.</value>
   </data>
   <data name="app.downloadedUpdateHint" xml:space="preserve">
     <value>Abbiamo tentato di aprire il file per consentirti di installarlo. Se non si apre, vai nella cartella Download ed esegui il file manualmente.</value>
   </data>
   <data name="app.enterInstancePath" xml:space="preserve">
-    <value>Inserisci il percorso completo in cui vuoi salvare le istanze di HyPrism:</value>
+    <value>Inserisci il percorso completo in cui vuoi salvare le istanze di Hyprism:</value>
   </data>
   <data name="app.failedChangeDir" xml:space="preserve">
     <value>Impossibile cambiare la directory delle istanze</value>
@@ -73,10 +73,10 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Il percorso non può essere utilizzato. Verifica che esista e che tu abbia i permessi di scrittura.</value>
   </data>
   <data name="app.title" xml:space="preserve">
-    <value>HyPrism</value>
+    <value>Hyprism</value>
   </data>
   <data name="app.version" xml:space="preserve">
-    <value>HyPrism {0}</value>
+    <value>Hyprism {0}</value>
   </data>
   <data name="common.all" xml:space="preserve">
     <value>Tutti</value>
@@ -1207,7 +1207,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Espandi</value>
   </data>
   <data name="news.hyprism" xml:space="preserve">
-    <value>HyPrism</value>
+    <value>Hyprism</value>
   </data>
   <data name="news.hytale" xml:space="preserve">
     <value>Hytale</value>
@@ -1234,7 +1234,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Informazioni</value>
   </data>
   <data name="onboarding.aboutHyPrism" xml:space="preserve">
-    <value>Informazioni su HyPrism</value>
+    <value>Informazioni su Hyprism</value>
   </data>
   <data name="onboarding.allSet" xml:space="preserve">
     <value>Tutto pronto! Ecco alcune informazioni sul launcher</value>
@@ -1291,7 +1291,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Personalizza l'aspetto</value>
   </data>
   <data name="onboarding.disclaimer" xml:space="preserve">
-    <value>HyPrism è un launcher non ufficiale per Hytale. Questo progetto non è affiliato con Hypixel Studios.</value>
+    <value>Hyprism è un launcher non ufficiale per Hytale. Questo progetto non è affiliato con Hypixel Studios.</value>
   </data>
   <data name="onboarding.enterLauncher" xml:space="preserve">
     <value>Entra nel launcher</value>
@@ -1390,7 +1390,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Aspetto</value>
   </data>
   <data name="onboarding.welcome" xml:space="preserve">
-    <value>Benvenuto in HyPrism</value>
+    <value>Benvenuto in Hyprism</value>
   </data>
   <data name="onboarding.welcomeBack" xml:space="preserve">
     <value>Bentornato, {{name}}!</value>
@@ -1615,7 +1615,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Team Principale</value>
   </data>
   <data name="settings.aboutSettings.coreTeamDescription" xml:space="preserve">
-    <value>Le persone dietro lo sviluppo di HyPrism</value>
+    <value>Le persone dietro lo sviluppo di Hyprism</value>
   </data>
   <data name="settings.aboutSettings.creatorRole" xml:space="preserve">
     <value>Creatore del Progetto</value>
@@ -1624,7 +1624,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Launcher e gestore di mod tutto in uno per Hytale</value>
   </data>
   <data name="settings.aboutSettings.disclaimer" xml:space="preserve">
-    <value>HyPrism è un launcher non ufficiale per Hytale. Questo progetto non è affiliato con Hypixel Studios.</value>
+    <value>Hyprism è un launcher non ufficiale per Hytale. Questo progetto non è affiliato con Hypixel Studios.</value>
   </data>
   <data name="settings.aboutSettings.builtWith" xml:space="preserve">
     <value>Creato con</value>
@@ -1645,7 +1645,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Tester Principale</value>
   </data>
   <data name="settings.aboutSettings.title" xml:space="preserve">
-    <value>HyPrism Launcher</value>
+    <value>Hyprism Launcher</value>
   </data>
   <data name="settings.aboutSettings.unofficial" xml:space="preserve">
     <value>Launcher non ufficiale per Hytale</value>
@@ -1777,7 +1777,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Come funzionano i download</value>
   </data>
   <data name="settings.downloads.howDownloadsWorkDescription" xml:space="preserve">
-    <value>HyPrism seleziona automaticamente la fonte più veloce disponibile per scaricare i file di gioco. Premi "Test Velocità" per verificare la tua connessione.</value>
+    <value>Hyprism seleziona automaticamente la fonte più veloce disponibile per scaricare i file di gioco. Premi "Test Velocità" per verificare la tua connessione.</value>
   </data>
   <data name="settings.downloads.mirrorUrlHint" xml:space="preserve">
     <value>Inserisci l'URL base di un mirror Hytale. Il launcher tenterà di rilevare automaticamente la configurazione.</value>
@@ -2071,7 +2071,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Usa Java incluso</value>
   </data>
   <data name="settings.javaSettings.useBundledJavaHint" xml:space="preserve">
-    <value>Consigliato: utilizza Java fornito con HyPrism.</value>
+    <value>Consigliato: utilizza Java fornito con Hyprism.</value>
   </data>
   <data name="settings.javaSettings.useCustomJava" xml:space="preserve">
     <value>Usa Java personalizzato</value>
@@ -2152,7 +2152,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Modalità online</value>
   </data>
   <data name="settings.networkSettings.onlineModeHint" xml:space="preserve">
-    <value>Usa il servizio di autenticazione e i dati dell'account; se disattivato, HyPrism crea una sessione OmniAuth locale</value>
+    <value>Usa il servizio di autenticazione e i dati dell'account; se disattivato, Hyprism crea una sessione OmniAuth locale</value>
   </data>
   <data name="settings.profile.avatar" xml:space="preserve">
     <value>Avatar</value>
@@ -2335,7 +2335,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Installazione</value>
   </data>
   <data name="updateOverlay.message" xml:space="preserve">
-    <value>Attendere mentre scarichiamo e installiamo l'ultima versione di HyPrism.</value>
+    <value>Attendere mentre scarichiamo e installiamo l'ultima versione di Hyprism.</value>
   </data>
   <data name="updateOverlay.title" xml:space="preserve">
     <value>AGGIORNAMENTO DEL LAUNCHER</value>
@@ -2344,7 +2344,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Verifica aggiornamenti</value>
   </data>
   <data name="wrapper.description" xml:space="preserve">
-    <value>Modalità wrapper — scarica e avvia la versione completa di HyPrism</value>
+    <value>Modalità wrapper — scarica e avvia la versione completa di Hyprism</value>
   </data>
   <data name="wrapper.downloadInstall" xml:space="preserve">
     <value>Scarica e Installa</value>
@@ -2362,7 +2362,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Avvia</value>
   </data>
   <data name="wrapper.launchFailed" xml:space="preserve">
-    <value>Avvio di HyPrism fallito</value>
+    <value>Avvio di Hyprism fallito</value>
   </data>
   <data name="wrapper.loadingNews" xml:space="preserve">
     <value>Caricamento notizie…</value>
@@ -2380,7 +2380,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Autorizzazione completata</value>
   </data>
   <data name="oauth.callback.successMessage" xml:space="preserve">
-    <value>Il tuo account Hytale ufficiale è collegato a HyPrism</value>
+    <value>Il tuo account Hytale ufficiale è collegato a Hyprism</value>
   </data>
   <data name="oauth.callback.closeHint" xml:space="preserve">
     <value>Puoi chiudere questa finestra e tornare al launcher</value>
@@ -2428,7 +2428,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Crea un'istanza per scegliere una versione di Hytale, scaricare i suoi file e iniziare la tua prossima avventura</value>
   </data>
   <data name="home.welcomeTitle" xml:space="preserve">
-    <value>Benvenuto in HyPrism</value>
+    <value>Benvenuto in Hyprism</value>
   </data>
   <data name="instances.newInstance" xml:space="preserve">
     <value>Nuova istanza</value>
@@ -2548,7 +2548,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Licenza</value>
   </data>
   <data name="settings.aboutSettings.licenseHint" xml:space="preserve">
-    <value>Il codice sorgente di HyPrism è distribuito sotto GPL-3.0-only</value>
+    <value>Il codice sorgente di Hyprism è distribuito sotto GPL-3.0-only</value>
   </data>
   <data name="settings.aboutSettings.credits" xml:space="preserve">
     <value>Contenuti visivi</value>
@@ -2632,7 +2632,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Connetti una fonte di download</value>
   </data>
   <data name="settings.downloads.addSourceHint" xml:space="preserve">
-    <value>Inserisci il suo indirizzo pubblico e HyPrism rileverà il formato mirror supportato</value>
+    <value>Inserisci il suo indirizzo pubblico e Hyprism rileverà il formato mirror supportato</value>
   </data>
   <data name="settings.downloads.sourceUrlPlaceholder" xml:space="preserve">
     <value>https://mirror.example.com</value>
@@ -2656,7 +2656,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Verifica della compatibilità della sorgente</value>
   </data>
   <data name="settings.downloads.sourceDetectionFailed" xml:space="preserve">
-    <value>HyPrism non ha rilevato un mirror compatibile a questo indirizzo</value>
+    <value>Hyprism non ha rilevato un mirror compatibile a questo indirizzo</value>
   </data>
   <data name="settings.downloads.sourceSaveFailed" xml:space="preserve">
     <value>La fonte di download non può essere salvata</value>
@@ -2857,13 +2857,13 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Abilitata</value>
   </data>
   <data name="settings.downloads.addSourceMethodHint" xml:space="preserve">
-    <value>Scegli come HyPrism deve configurare la fonte</value>
+    <value>Scegli come Hyprism deve configurare la fonte</value>
   </data>
   <data name="settings.downloads.addSourceAutomatic" xml:space="preserve">
     <value>Rileva automaticamente</value>
   </data>
   <data name="settings.downloads.addSourceAutomaticHint" xml:space="preserve">
-    <value>Inserisci un indirizzo e lascia che HyPrism rilevi il formato della fonte</value>
+    <value>Inserisci un indirizzo e lascia che Hyprism rilevi il formato della fonte</value>
   </data>
   <data name="settings.downloads.addSourceManual" xml:space="preserve">
     <value>Inserisci JSON manualmente</value>
@@ -2875,7 +2875,7 @@ Potrebbe essere necessario reinstallare il gioco se si cambia drive.</value>
     <value>Aggiungi fonte da JSON</value>
   </data>
   <data name="settings.downloads.manualSourceHint" xml:space="preserve">
-    <value>Incolla una definizione .mirror.json. HyPrism la convaliderà prima di salvarla</value>
+    <value>Incolla una definizione .mirror.json. Hyprism la convaliderà prima di salvarla</value>
   </data>
   <data name="settings.downloads.manualSourceJson" xml:space="preserve">
     <value>Definizione della fonte</value>

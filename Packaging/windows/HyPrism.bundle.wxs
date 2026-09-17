@@ -7,8 +7,8 @@
     xmlns="http://wixtoolset.org/schemas/v4/wxs"
     xmlns:bal="http://wixtoolset.org/schemas/v4/wxs/bal">
   <Bundle
-      Name="HyPrism"
-      Manufacturer="HyPrism Team"
+      Name="Hyprism"
+      Manufacturer="Hyprism Team"
       Version="$(var.ProductVersion)"
       UpgradeCode="5B9C81F5-083C-45B3-8AC9-C6DAE2DEB61F">
     <BootstrapperApplication>

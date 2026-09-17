@@ -58,7 +58,7 @@ public static class LauncherUserAgent
         if (productVersion.Length == 0 || productVersion.Any(char.IsWhiteSpace))
             throw new ArgumentException("The launcher version must be a valid HTTP product token", nameof(version));
 
-        return $"HyPrism/{productVersion}";
+        return $"Hyprism/{productVersion}";
     }
 
     /// <summary>

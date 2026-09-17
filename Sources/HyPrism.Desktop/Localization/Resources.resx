@@ -32,13 +32,13 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Segmented control</value>
   </data>
   <data name="app.downloadedUpdate" xml:space="preserve">
-    <value>Downloaded the latest HyPrism to your Downloads folder.</value>
+    <value>Downloaded the latest Hyprism to your Downloads folder.</value>
   </data>
   <data name="app.downloadedUpdateHint" xml:space="preserve">
     <value>We attempted to open the file so you can install it. If it did not open, go to Downloads and run the file manually.</value>
   </data>
   <data name="app.enterInstancePath" xml:space="preserve">
-    <value>Enter the full path where you want HyPrism instances stored:</value>
+    <value>Enter the full path where you want Hyprism instances stored:</value>
   </data>
   <data name="app.failedChangeDir" xml:space="preserve">
     <value>Failed to change instance directory</value>
@@ -76,10 +76,10 @@ You may need to reinstall the game if switching drives.</value>
     <value>The path could not be used. Please check it exists and you have write permissions.</value>
   </data>
   <data name="app.title" xml:space="preserve">
-    <value>HyPrism</value>
+    <value>Hyprism</value>
   </data>
   <data name="app.version" xml:space="preserve">
-    <value>HyPrism {0}</value>
+    <value>Hyprism {0}</value>
   </data>
   <data name="common.all" xml:space="preserve">
     <value>All</value>
@@ -319,7 +319,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>Create an instance to choose a Hytale version, download its files, and begin your next adventure</value>
   </data>
   <data name="home.welcomeTitle" xml:space="preserve">
-    <value>Welcome to HyPrism</value>
+    <value>Welcome to Hyprism</value>
   </data>
   <data name="error.copyError" xml:space="preserve">
     <value>Copy Error</value>
@@ -1306,7 +1306,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>Expand</value>
   </data>
   <data name="news.hyprism" xml:space="preserve">
-    <value>HyPrism</value>
+    <value>Hyprism</value>
   </data>
   <data name="news.hytale" xml:space="preserve">
     <value>Hytale</value>
@@ -1339,7 +1339,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>About</value>
   </data>
   <data name="onboarding.aboutHyPrism" xml:space="preserve">
-    <value>About HyPrism</value>
+    <value>About Hyprism</value>
   </data>
   <data name="onboarding.allSet" xml:space="preserve">
     <value>You're all set! Here's some info about the launcher</value>
@@ -1396,7 +1396,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>Customize appearance</value>
   </data>
   <data name="onboarding.disclaimer" xml:space="preserve">
-    <value>HyPrism is an unofficial launcher for Hytale. This project is not affiliated with Hypixel Studios.</value>
+    <value>Hyprism is an unofficial launcher for Hytale. This project is not affiliated with Hypixel Studios.</value>
   </data>
   <data name="onboarding.enterLauncher" xml:space="preserve">
     <value>Enter Launcher</value>
@@ -1513,7 +1513,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>No Download Sources</value>
   </data>
   <data name="onboarding.welcome" xml:space="preserve">
-    <value>Welcome to HyPrism</value>
+    <value>Welcome to Hyprism</value>
   </data>
   <data name="onboarding.welcomeBack" xml:space="preserve">
     <value>Welcome back, {{name}}!</value>
@@ -1744,7 +1744,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>Core Team</value>
   </data>
   <data name="settings.aboutSettings.coreTeamDescription" xml:space="preserve">
-    <value>The people behind HyPrism development</value>
+    <value>The people behind Hyprism development</value>
   </data>
   <data name="settings.aboutSettings.creatorRole" xml:space="preserve">
     <value>Project Creator</value>
@@ -1753,7 +1753,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>All in one launcher and mod manager for Hytale</value>
   </data>
   <data name="settings.aboutSettings.disclaimer" xml:space="preserve">
-    <value>HyPrism is an unofficial launcher for Hytale. This project is not affiliated with Hypixel Studios.</value>
+    <value>Hyprism is an unofficial launcher for Hytale. This project is not affiliated with Hypixel Studios.</value>
   </data>
   <data name="settings.aboutSettings.builtWith" xml:space="preserve">
     <value>Built with</value>
@@ -1777,7 +1777,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>Lead QA/Tester/Misc</value>
   </data>
   <data name="settings.aboutSettings.title" xml:space="preserve">
-    <value>HyPrism Launcher</value>
+    <value>Hyprism Launcher</value>
   </data>
   <data name="settings.aboutSettings.unofficial" xml:space="preserve">
     <value>Unofficial Hytale Launcher</value>
@@ -1813,7 +1813,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>License</value>
   </data>
   <data name="settings.aboutSettings.licenseHint" xml:space="preserve">
-    <value>HyPrism source code is distributed under GPL-3.0-only</value>
+    <value>Hyprism source code is distributed under GPL-3.0-only</value>
   </data>
   <data name="settings.aboutSettings.credits" xml:space="preserve">
     <value>Visual materials</value>
@@ -1978,7 +1978,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>How downloads work</value>
   </data>
   <data name="settings.downloads.howDownloadsWorkDescription" xml:space="preserve">
-    <value>HyPrism prioritizes the official download source and automatically selects the fastest added user mirror when the official source is unavailable</value>
+    <value>Hyprism prioritizes the official download source and automatically selects the fastest added user mirror when the official source is unavailable</value>
   </data>
   <data name="settings.downloads.mirrorUrlHint" xml:space="preserve">
     <value>Enter the base URL of a Hytale mirror. The launcher will attempt to auto-detect the configuration.</value>
@@ -2056,7 +2056,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>Connect a download source</value>
   </data>
   <data name="settings.downloads.addSourceHint" xml:space="preserve">
-    <value>Enter its public address and HyPrism will detect the supported mirror format</value>
+    <value>Enter its public address and Hyprism will detect the supported mirror format</value>
   </data>
   <data name="settings.downloads.sourceUrlPlaceholder" xml:space="preserve">
     <value>https://mirror.example.com</value>
@@ -2080,7 +2080,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>Checking source compatibility</value>
   </data>
   <data name="settings.downloads.sourceDetectionFailed" xml:space="preserve">
-    <value>HyPrism could not detect a compatible mirror at this address</value>
+    <value>Hyprism could not detect a compatible mirror at this address</value>
   </data>
   <data name="settings.downloads.sourceSaveFailed" xml:space="preserve">
     <value>The download source could not be saved</value>
@@ -2392,7 +2392,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>Use bundled Java</value>
   </data>
   <data name="settings.javaSettings.useBundledJavaHint" xml:space="preserve">
-    <value>Recommended: uses Java shipped with HyPrism</value>
+    <value>Recommended: uses Java shipped with Hyprism</value>
   </data>
   <data name="settings.javaSettings.useCustomJava" xml:space="preserve">
     <value>Use custom Java</value>
@@ -2503,7 +2503,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>Connected mode</value>
   </data>
   <data name="settings.networkSettings.onlineModeHint" xml:space="preserve">
-    <value>Use the authentication service and account data; when disabled, HyPrism creates a local OmniAuth session</value>
+    <value>Use the authentication service and account data; when disabled, Hyprism creates a local OmniAuth session</value>
   </data>
   <data name="settings.networkSettings.unofficialProfileNote" xml:space="preserve">
     <value>Unofficial accounts cannot use official Hytale authentication.</value>
@@ -2689,7 +2689,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>Installing</value>
   </data>
   <data name="updateOverlay.message" xml:space="preserve">
-    <value>Please wait while we download and install the latest version of HyPrism.</value>
+    <value>Please wait while we download and install the latest version of Hyprism.</value>
   </data>
   <data name="updateOverlay.title" xml:space="preserve">
     <value>UPDATING LAUNCHER</value>
@@ -2698,7 +2698,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>Check for updates</value>
   </data>
   <data name="wrapper.description" xml:space="preserve">
-    <value>Wrapper mode — download and launch the full version of HyPrism</value>
+    <value>Wrapper mode — download and launch the full version of Hyprism</value>
   </data>
   <data name="wrapper.downloadInstall" xml:space="preserve">
     <value>Download &amp; Install</value>
@@ -2716,7 +2716,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>Launch</value>
   </data>
   <data name="wrapper.launchFailed" xml:space="preserve">
-    <value>Failed to launch HyPrism</value>
+    <value>Failed to launch Hyprism</value>
   </data>
   <data name="wrapper.loadingNews" xml:space="preserve">
     <value>Loading news…</value>
@@ -2851,7 +2851,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>Authorization successful</value>
   </data>
   <data name="oauth.callback.successMessage" xml:space="preserve">
-    <value>Your official Hytale account is connected to HyPrism</value>
+    <value>Your official Hytale account is connected to Hyprism</value>
   </data>
   <data name="oauth.callback.closeHint" xml:space="preserve">
     <value>You can close this window and return to the launcher</value>
@@ -2866,13 +2866,13 @@ You may need to reinstall the game if switching drives.</value>
     <value>Enabled</value>
   </data>
   <data name="settings.downloads.addSourceMethodHint" xml:space="preserve">
-    <value>Choose how HyPrism should configure the source</value>
+    <value>Choose how Hyprism should configure the source</value>
   </data>
   <data name="settings.downloads.addSourceAutomatic" xml:space="preserve">
     <value>Detect automatically</value>
   </data>
   <data name="settings.downloads.addSourceAutomaticHint" xml:space="preserve">
-    <value>Enter an address and let HyPrism detect the source format</value>
+    <value>Enter an address and let Hyprism detect the source format</value>
   </data>
   <data name="settings.downloads.addSourceManual" xml:space="preserve">
     <value>Enter JSON manually</value>
@@ -2884,7 +2884,7 @@ You may need to reinstall the game if switching drives.</value>
     <value>Add source from JSON</value>
   </data>
   <data name="settings.downloads.manualSourceHint" xml:space="preserve">
-    <value>Paste a .mirror.json definition. HyPrism will validate it before saving</value>
+    <value>Paste a .mirror.json definition. Hyprism will validate it before saving</value>
   </data>
   <data name="settings.downloads.manualSourceJson" xml:space="preserve">
     <value>Source definition</value>

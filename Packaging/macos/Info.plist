@@ -9,17 +9,17 @@ SPDX-License-Identifier: GPL-3.0-only
   <key>CFBundleDevelopmentRegion</key>
   <string>en</string>
   <key>CFBundleDisplayName</key>
-  <string>HyPrism</string>
+  <string>Hyprism</string>
   <key>CFBundleExecutable</key>
   <string>HyPrism.Desktop</string>
   <key>CFBundleIconFile</key>
-  <string>HyPrism.icns</string>
+  <string>Hyprism.icns</string>
   <key>CFBundleIdentifier</key>
   <string>io.github.hyprismteam.HyPrism</string>
   <key>CFBundleInfoDictionaryVersion</key>
   <string>6.0</string>
   <key>CFBundleName</key>
-  <string>HyPrism</string>
+  <string>Hyprism</string>
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>CFBundleShortVersionString</key>

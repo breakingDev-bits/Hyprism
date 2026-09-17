@@ -29,7 +29,7 @@ public sealed class HytaleNewsClientTests
             .InformationalVersion;
         var productVersion = informationalVersion.Split('+', 2)[0];
         Assert.Equal(productVersion, DesktopApplicationInfo.Version);
-        Assert.Equal($"HyPrism/{productVersion}", client.DefaultRequestHeaders.UserAgent.ToString());
+        Assert.Equal($"Hyprism/{productVersion}", client.DefaultRequestHeaders.UserAgent.ToString());
     }
 
     [Fact]

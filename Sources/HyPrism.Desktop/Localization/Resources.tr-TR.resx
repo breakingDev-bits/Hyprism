@@ -29,13 +29,13 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Bölümlü kontrol</value>
   </data>
   <data name="app.downloadedUpdate" xml:space="preserve">
-    <value>En son HyPrism sürümü İndirilenler klasörüne indirildi.</value>
+    <value>En son Hyprism sürümü İndirilenler klasörüne indirildi.</value>
   </data>
   <data name="app.downloadedUpdateHint" xml:space="preserve">
     <value>Yükleyebilmeniz için dosyayı açmaya çalıştık. Açılmadıysa, İndirilenler klasörüne gidin ve dosyayı manuel olarak çalıştırın.</value>
   </data>
   <data name="app.enterInstancePath" xml:space="preserve">
-    <value>HyPrism örneklerinin saklanacağı tam yolu girin:</value>
+    <value>Hyprism örneklerinin saklanacağı tam yolu girin:</value>
   </data>
   <data name="app.failedChangeDir" xml:space="preserve">
     <value>Örnek dizini değiştirilemedi</value>
@@ -73,10 +73,10 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Yol kullanılamadı. Lütfen var olduğunu ve yazma izniniz olduğunu kontrol edin.</value>
   </data>
   <data name="app.title" xml:space="preserve">
-    <value>HyPrism</value>
+    <value>Hyprism</value>
   </data>
   <data name="app.version" xml:space="preserve">
-    <value>HyPrism {0}</value>
+    <value>Hyprism {0}</value>
   </data>
   <data name="common.all" xml:space="preserve">
     <value>Tümü</value>
@@ -1207,7 +1207,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Genişlet</value>
   </data>
   <data name="news.hyprism" xml:space="preserve">
-    <value>HyPrism</value>
+    <value>Hyprism</value>
   </data>
   <data name="news.hytale" xml:space="preserve">
     <value>Hytale</value>
@@ -1234,7 +1234,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Hakkında</value>
   </data>
   <data name="onboarding.aboutHyPrism" xml:space="preserve">
-    <value>HyPrism Hakkında</value>
+    <value>Hyprism Hakkında</value>
   </data>
   <data name="onboarding.allSet" xml:space="preserve">
     <value>Hazırsınız! İşte başlatıcı hakkında bazı bilgiler</value>
@@ -1291,7 +1291,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Görünümü özelleştir</value>
   </data>
   <data name="onboarding.disclaimer" xml:space="preserve">
-    <value>HyPrism, Hytale için resmi olmayan bir başlatıcıdır. Bu proje Hypixel Studios ile bağlantılı değildir.</value>
+    <value>Hyprism, Hytale için resmi olmayan bir başlatıcıdır. Bu proje Hypixel Studios ile bağlantılı değildir.</value>
   </data>
   <data name="onboarding.enterLauncher" xml:space="preserve">
     <value>Başlatıcıya Gir</value>
@@ -1390,7 +1390,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Görsel</value>
   </data>
   <data name="onboarding.welcome" xml:space="preserve">
-    <value>HyPrism'e Hoş Geldiniz</value>
+    <value>Hyprism'e Hoş Geldiniz</value>
   </data>
   <data name="onboarding.welcomeBack" xml:space="preserve">
     <value>Tekrar hoş geldin, {{name}}!</value>
@@ -1615,7 +1615,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Çekirdek Ekip</value>
   </data>
   <data name="settings.aboutSettings.coreTeamDescription" xml:space="preserve">
-    <value>HyPrism geliştirmesinin arkasındaki ekip</value>
+    <value>Hyprism geliştirmesinin arkasındaki ekip</value>
   </data>
   <data name="settings.aboutSettings.creatorRole" xml:space="preserve">
     <value>Proje Oluşturucusu</value>
@@ -1624,7 +1624,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Hytale için modern bir başlatıcı</value>
   </data>
   <data name="settings.aboutSettings.disclaimer" xml:space="preserve">
-    <value>HyPrism, Hytale için resmi olmayan bir başlatıcıdır. Bu proje Hypixel Studios ile bağlantılı değildir.</value>
+    <value>Hyprism, Hytale için resmi olmayan bir başlatıcıdır. Bu proje Hypixel Studios ile bağlantılı değildir.</value>
   </data>
   <data name="settings.aboutSettings.builtWith" xml:space="preserve">
     <value>Şununla oluşturuldu</value>
@@ -1645,7 +1645,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Baş Test Uzmanı</value>
   </data>
   <data name="settings.aboutSettings.title" xml:space="preserve">
-    <value>HyPrism Başlatıcısı</value>
+    <value>Hyprism Başlatıcısı</value>
   </data>
   <data name="settings.aboutSettings.unofficial" xml:space="preserve">
     <value>Resmi Olmayan Hytale Başlatıcısı</value>
@@ -1777,7 +1777,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>İndirmeler nasıl çalışır</value>
   </data>
   <data name="settings.downloads.howDownloadsWorkDescription" xml:space="preserve">
-    <value>HyPrism, oyun dosyalarını indirmek için en hızlı kaynağı otomatik olarak seçer. Bağlantınızı kontrol etmek için "Hızı Test Et" düğmesine basın.</value>
+    <value>Hyprism, oyun dosyalarını indirmek için en hızlı kaynağı otomatik olarak seçer. Bağlantınızı kontrol etmek için "Hızı Test Et" düğmesine basın.</value>
   </data>
   <data name="settings.downloads.mirrorUrlHint" xml:space="preserve">
     <value>Hytale aynasının temel URL'sini girin. Başlatıcı yapılandırmayı otomatik olarak algılamaya çalışacaktır.</value>
@@ -2068,7 +2068,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Dahili Java kullan</value>
   </data>
   <data name="settings.javaSettings.useBundledJavaHint" xml:space="preserve">
-    <value>Önerilen: HyPrism ile birlikte gelen Java'yı kullanır</value>
+    <value>Önerilen: Hyprism ile birlikte gelen Java'yı kullanır</value>
   </data>
   <data name="settings.javaSettings.useCustomJava" xml:space="preserve">
     <value>Özel Java kullan</value>
@@ -2149,7 +2149,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Çevrimiçi Mod</value>
   </data>
   <data name="settings.networkSettings.onlineModeHint" xml:space="preserve">
-    <value>Kimlik doğrulama hizmetini ve hesap verilerini kullan; devre dışı bırakıldığında HyPrism yerel bir OmniAuth oturumu oluşturur</value>
+    <value>Kimlik doğrulama hizmetini ve hesap verilerini kullan; devre dışı bırakıldığında Hyprism yerel bir OmniAuth oturumu oluşturur</value>
   </data>
   <data name="settings.profile.avatar" xml:space="preserve">
     <value>Avatar</value>
@@ -2332,7 +2332,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Kuruluyor</value>
   </data>
   <data name="updateOverlay.message" xml:space="preserve">
-    <value>HyPrism'in en son sürümü indiriliyor ve kuruluyor, lütfen bekleyin.</value>
+    <value>Hyprism'in en son sürümü indiriliyor ve kuruluyor, lütfen bekleyin.</value>
   </data>
   <data name="updateOverlay.title" xml:space="preserve">
     <value>BAŞLATICI GÜNCELLENİYOR</value>
@@ -2341,7 +2341,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Güncellemeleri kontrol et</value>
   </data>
   <data name="wrapper.description" xml:space="preserve">
-    <value>Sarıcı modu — HyPrism'in tam sürümünü indirin ve başlatın</value>
+    <value>Sarıcı modu — Hyprism'in tam sürümünü indirin ve başlatın</value>
   </data>
   <data name="wrapper.downloadInstall" xml:space="preserve">
     <value>İndir ve Kur</value>
@@ -2359,7 +2359,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Başlat</value>
   </data>
   <data name="wrapper.launchFailed" xml:space="preserve">
-    <value>HyPrism başlatılamadı</value>
+    <value>Hyprism başlatılamadı</value>
   </data>
   <data name="wrapper.loadingNews" xml:space="preserve">
     <value>Haberler yükleniyor…</value>
@@ -2377,7 +2377,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Yetkilendirme başarılı</value>
   </data>
   <data name="oauth.callback.successMessage" xml:space="preserve">
-    <value>Resmî Hytale hesabınız HyPrism'e bağlandı</value>
+    <value>Resmî Hytale hesabınız Hyprism'e bağlandı</value>
   </data>
   <data name="oauth.callback.closeHint" xml:space="preserve">
     <value>Bu pencereyi kapatıp başlatıcıya dönebilirsiniz</value>
@@ -2425,7 +2425,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Bir Hytale sürümü seçmek, dosyalarını indirmek ve bir sonraki macerana başlamak için bir örnek oluştur</value>
   </data>
   <data name="home.welcomeTitle" xml:space="preserve">
-    <value>HyPrism'e hoş geldiniz</value>
+    <value>Hyprism'e hoş geldiniz</value>
   </data>
   <data name="instances.newInstance" xml:space="preserve">
     <value>Yeni örnek</value>
@@ -2545,7 +2545,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Lisans</value>
   </data>
   <data name="settings.aboutSettings.licenseHint" xml:space="preserve">
-    <value>HyPrism kaynak kodu yalnızca GPL-3.0 altında dağıtılmaktadır</value>
+    <value>Hyprism kaynak kodu yalnızca GPL-3.0 altında dağıtılmaktadır</value>
   </data>
   <data name="settings.aboutSettings.credits" xml:space="preserve">
     <value>Görsel materyaller</value>
@@ -2629,7 +2629,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Bir indirme kaynağı bağla</value>
   </data>
   <data name="settings.downloads.addSourceHint" xml:space="preserve">
-    <value>Genel adresini gir ve HyPrism desteklenen aynalama formatını algılayacak</value>
+    <value>Genel adresini gir ve Hyprism desteklenen aynalama formatını algılayacak</value>
   </data>
   <data name="settings.downloads.sourceUrlPlaceholder" xml:space="preserve">
     <value>https://mirror.example.com</value>
@@ -2653,7 +2653,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Kaynak uyumluluğu kontrol ediliyor</value>
   </data>
   <data name="settings.downloads.sourceDetectionFailed" xml:space="preserve">
-    <value>HyPrism bu adreste uyumlu bir ayna tespit edemedi</value>
+    <value>Hyprism bu adreste uyumlu bir ayna tespit edemedi</value>
   </data>
   <data name="settings.downloads.sourceSaveFailed" xml:space="preserve">
     <value>İndirme kaynağı kaydedilemedi</value>
@@ -2857,13 +2857,13 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>Etkin</value>
   </data>
   <data name="settings.downloads.addSourceMethodHint" xml:space="preserve">
-    <value>HyPrism’in kaynağı nasıl yapılandıracağını seçin</value>
+    <value>Hyprism’in kaynağı nasıl yapılandıracağını seçin</value>
   </data>
   <data name="settings.downloads.addSourceAutomatic" xml:space="preserve">
     <value>Otomatik algıla</value>
   </data>
   <data name="settings.downloads.addSourceAutomaticHint" xml:space="preserve">
-    <value>Bir adres girin ve kaynak biçimini HyPrism algılasın</value>
+    <value>Bir adres girin ve kaynak biçimini Hyprism algılasın</value>
   </data>
   <data name="settings.downloads.addSourceManual" xml:space="preserve">
     <value>JSON’u elle gir</value>
@@ -2875,7 +2875,7 @@ Sürücü değiştirirseniz oyunu yeniden yüklemeniz gerekebilir.</value>
     <value>JSON’dan kaynak ekle</value>
   </data>
   <data name="settings.downloads.manualSourceHint" xml:space="preserve">
-    <value>Bir .mirror.json tanımı yapıştırın. HyPrism kaydetmeden önce doğrular</value>
+    <value>Bir .mirror.json tanımı yapıştırın. Hyprism kaydetmeden önce doğrular</value>
   </data>
   <data name="settings.downloads.manualSourceJson" xml:space="preserve">
     <value>Kaynak tanımı</value>

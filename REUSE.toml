@@ -21,6 +21,7 @@ path = [
     "**/*.ogg",
     "**/*.ico",
     "**/*.icns",
+    "**/*.svg",
     "HyPrism.slnx"
 ]
 precedence = "aggregate"

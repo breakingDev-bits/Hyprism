@@ -8,7 +8,8 @@ set -euo pipefail
 PACKAGING_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$PACKAGING_DIR/.." && pwd)"
 PROJECT_FILE="$PROJECT_ROOT/Sources/HyPrism.Desktop/HyPrism.Desktop.csproj"
-APP_ICON="$PROJECT_ROOT/Sources/HyPrism.Desktop/Assets/Images/appicon_512.png"
+APP_ICON="$PROJECT_ROOT/Sources/HyPrism.Desktop/Assets/Images/logo.svg"
+APP_NAME="Hyprism"
 INFO_PLIST="$PACKAGING_DIR/macos/Info.plist"
 OUTPUT_DIR="$PROJECT_ROOT/dist"
 TARGETS=()
@@ -66,19 +67,21 @@ fi
 BUNDLE_VERSION="${VERSION%%[-+]*}"
 
 BUILD_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/hyprism-macos-publish.XXXXXX")"
-APP_DIR="$BUILD_ROOT/HyPrism.app"
-ICONSET_DIR="$BUILD_ROOT/HyPrism.iconset"
+APP_DIR="$BUILD_ROOT/$APP_NAME.app"
+ICONSET_DIR="$BUILD_ROOT/$APP_NAME.iconset"
 trap 'rm -rf "$BUILD_ROOT"' EXIT
 mkdir -p "$OUTPUT_DIR" "$APP_DIR/Contents/MacOS" "$APP_DIR/Contents/Resources" "$ICONSET_DIR"
 
+sips -s format png "$APP_ICON" --out "$ICONSET_DIR/logo.png" >/dev/null
+
 for size in 16 32 64 128 256 512; do
-    sips -z "$size" "$size" "$APP_ICON" --out "$ICONSET_DIR/icon_${size}x${size}.png" >/dev/null
+    sips -z "$size" "$size" "$ICONSET_DIR/logo.png" --out "$ICONSET_DIR/icon_${size}x${size}.png" >/dev/null
     doubled_size=$((size * 2))
     if [[ "$doubled_size" -le 1024 ]]; then
-        sips -z "$doubled_size" "$doubled_size" "$APP_ICON" --out "$ICONSET_DIR/icon_${size}x${size}@2x.png" >/dev/null
+        sips -z "$doubled_size" "$doubled_size" "$ICONSET_DIR/logo.png" --out "$ICONSET_DIR/icon_${size}x${size}@2x.png" >/dev/null
     fi
 done
-iconutil -c icns "$ICONSET_DIR" -o "$APP_DIR/Contents/Resources/HyPrism.icns"
+iconutil -c icns "$ICONSET_DIR" -o "$APP_DIR/Contents/Resources/$APP_NAME.icns"
 
 dotnet publish "$PROJECT_FILE" \
     --configuration Release \
@@ -101,13 +104,13 @@ codesign --verify --deep --strict "$APP_DIR"
 
 DMG_STAGE="$BUILD_ROOT/dmg"
 mkdir -p "$DMG_STAGE"
-cp -R "$APP_DIR" "$DMG_STAGE/HyPrism.app"
+cp -R "$APP_DIR" "$DMG_STAGE/$APP_NAME.app"
 ln -s /Applications "$DMG_STAGE/Applications"
 hdiutil create \
-    -volname HyPrism \
+    -volname "$APP_NAME" \
     -srcfolder "$DMG_STAGE" \
     -ov \
     -format UDZO \
-    "$OUTPUT_DIR/HyPrism-mac-arm64-$VERSION.dmg"
+    "$OUTPUT_DIR/$APP_NAME-mac-arm64-$VERSION.dmg"
 
 echo "Published macOS artifact to $OUTPUT_DIR"

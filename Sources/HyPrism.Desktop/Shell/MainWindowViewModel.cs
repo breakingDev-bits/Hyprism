@@ -58,7 +58,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable,
     private string _currentPageTitle = string.Empty;
 
     [ObservableProperty]
-    private string _userName = "HyPrism";
+    private string _userName = "Hyprism";
 
     [ObservableProperty]
     private string _userInitial = "H";

@@ -44,9 +44,6 @@ Docs/AGENTS.md
 Docs/CLAUDE.md
 *.tsbuildinfo
 
-# IMPORTANT folder (backup)
-IMPORTANT/
-
 # Environment files (contains secrets)
 .env
 .env.local
@@ -57,10 +54,6 @@ build/bin/
 build/darwin/
 build/windows/
 release-artifacts/
-
-# Butler
-butler
-butler.exe
 
 # Configuration files with sensitive data
 *.local
@@ -75,18 +68,6 @@ logs/
 *.temp
 ~*
 
-# PWR staging directories
-.staging/
-staging/
-
-# Go (legacy from Wails)
-*.test
-*.out
-
-# Wails (legacy)
-wails.json.bak
-HyPrism
-
 # Flatpak build artifacts
 flatpak-repo/
 .flatpak-builder/
@@ -96,22 +77,17 @@ repo
 build-dir
 flathub-bundle.tar.gz
 
-# scripts
-scripts/run.sh
-
 # Build artifacts folder
 artifacts/
 dist/
 dmg-arm64/Applications
 scripts/build-linux-all-ubuntu.sh
+
 # Python debug scripts
 __pycache__/
 *.pyc
 *.hash
 tu.sh
-# Python debug scripts
-__pycache__/
-*.pyc
 
 # Virtual environments
 .venv/

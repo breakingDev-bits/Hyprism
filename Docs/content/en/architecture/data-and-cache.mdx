@@ -5,7 +5,7 @@ description: Application directories, persistent files, migrations, and session 
 
 # Data and cache
 
-HyPrism separates persistent player data from replaceable downloads and presentation caches
+Hyprism separates persistent player data from replaceable downloads and presentation caches
 
 ## Application directory
 
@@ -56,7 +56,7 @@ Back up profiles, worlds, configuration, and local account data before migration
 | `Jre/`, `Butler/`, `DualAuth/` | Downloaded launch tools |
 | `LocalNode/Sessions/<session-id>/` | Per-launch node runtime files and trust bundles |
 
-Do not clear downloads or runtime files while an installation or related game is active. Clearing a cache makes HyPrism retrieve or recreate its contents when needed
+Do not clear downloads or runtime files while an installation or related game is active. Clearing a cache makes Hyprism retrieve or recreate its contents when needed
 
 ## Session logs
 
@@ -74,12 +74,12 @@ Instance logs capture game standard output and standard error. Local Node logs r
 
 ## Migration rules
 
-HyPrism-owned JSON uses PascalCase filenames and property names. `LauncherJsonFile` recognizes earlier filenames and moves them to canonical names; deserialization stays case-insensitive
+Hyprism-owned JSON uses PascalCase filenames and property names. `LauncherJsonFile` recognizes earlier filenames and moves them to canonical names; deserialization stays case-insensitive
 
 `CoreMigrationRunner` applies local data migrations before Desktop reads instances, profiles, sessions, or mods. It records a durable step only after the step returns successfully, while the migration itself remains safe to rerun after an interrupted launch
 
 `LegacyProfileConfigMigration` moves old identity fields into the profile store. Instance and profile migrations preserve compatibility with older directory layouts. Cache migration moves old PWR downloads and remote images to the current directories
 
-Version names are retryable enrichment rather than a one-time migration. HyPrism fills missing names in instance metadata when a configured source can resolve the stored build identifier
+Version names are retryable enrichment rather than a one-time migration. Hyprism fills missing names in instance metadata when a configured source can resolve the stored build identifier
 
 Keep migration tests based on temporary copies of old data, and avoid changing game-owned filenames or external protocol casing

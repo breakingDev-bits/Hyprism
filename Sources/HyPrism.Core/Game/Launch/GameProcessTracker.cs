@@ -9,7 +9,7 @@ using HyPrism.Core.Infrastructure;
 namespace HyPrism.Core.Game.Launch;
 
 /// <summary>
-/// Tracks every game process started by HyPrism and restores still-live entries after restart.
+/// Tracks every game process started by Hyprism and restores still-live entries after restart.
 /// Persisted entries are verified by PID and process start time before they are trusted, which
 /// prevents stale files and PID reuse from being reported as running games.
 /// </summary>

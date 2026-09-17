@@ -29,13 +29,13 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Сегментный контрол</value>
   </data>
   <data name="app.downloadedUpdate" xml:space="preserve">
-    <value>Последняя версия HyPrism загружена в папку Загрузки.</value>
+    <value>Последняя версия Hyprism загружена в папку Загрузки.</value>
   </data>
   <data name="app.downloadedUpdateHint" xml:space="preserve">
     <value>Мы попытались открыть файл для установки. Если он не открылся, перейдите в Загрузки и запустите файл вручную.</value>
   </data>
   <data name="app.enterInstancePath" xml:space="preserve">
-    <value>Введите полный путь для хранения экземпляров HyPrism:</value>
+    <value>Введите полный путь для хранения экземпляров Hyprism:</value>
   </data>
   <data name="app.failedChangeDir" xml:space="preserve">
     <value>Не удалось сменить папку экземпляров</value>
@@ -73,10 +73,10 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Этот путь не может быть использован. Убедитесь, что папка существует и у вас есть права на запись.</value>
   </data>
   <data name="app.title" xml:space="preserve">
-    <value>HyPrism</value>
+    <value>Hyprism</value>
   </data>
   <data name="app.version" xml:space="preserve">
-    <value>HyPrism {0}</value>
+    <value>Hyprism {0}</value>
   </data>
   <data name="common.all" xml:space="preserve">
     <value>Все</value>
@@ -316,7 +316,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Создайте экземпляр, выберите версию Hytale, скачайте файлы и отправляйтесь в новое приключение</value>
   </data>
   <data name="home.welcomeTitle" xml:space="preserve">
-    <value>Добро пожаловать в HyPrism</value>
+    <value>Добро пожаловать в Hyprism</value>
   </data>
   <data name="error.copyError" xml:space="preserve">
     <value>Скопировать ошибку</value>
@@ -1303,7 +1303,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Развернуть</value>
   </data>
   <data name="news.hyprism" xml:space="preserve">
-    <value>HyPrism</value>
+    <value>Hyprism</value>
   </data>
   <data name="news.hytale" xml:space="preserve">
     <value>Hytale</value>
@@ -1336,7 +1336,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>О проекте</value>
   </data>
   <data name="onboarding.aboutHyPrism" xml:space="preserve">
-    <value>О HyPrism</value>
+    <value>О Hyprism</value>
   </data>
   <data name="onboarding.allSet" xml:space="preserve">
     <value>Всё готово! Вот информация о лаунчере</value>
@@ -1393,7 +1393,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Настройте внешний вид</value>
   </data>
   <data name="onboarding.disclaimer" xml:space="preserve">
-    <value>HyPrism — неофициальный лаунчер Hytale. Проект не имеет отношения к Hypixel Studios.</value>
+    <value>Hyprism — неофициальный лаунчер Hytale. Проект не имеет отношения к Hypixel Studios.</value>
   </data>
   <data name="onboarding.enterLauncher" xml:space="preserve">
     <value>Войти в лаунчер</value>
@@ -1510,7 +1510,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Нет источников загрузки</value>
   </data>
   <data name="onboarding.welcome" xml:space="preserve">
-    <value>Добро пожаловать в HyPrism</value>
+    <value>Добро пожаловать в Hyprism</value>
   </data>
   <data name="onboarding.welcomeBack" xml:space="preserve">
     <value>С возвращением, {{name}}!</value>
@@ -1741,7 +1741,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Команда разработки</value>
   </data>
   <data name="settings.aboutSettings.coreTeamDescription" xml:space="preserve">
-    <value>Люди, стоящие за разработкой HyPrism</value>
+    <value>Люди, стоящие за разработкой Hyprism</value>
   </data>
   <data name="settings.aboutSettings.creatorRole" xml:space="preserve">
     <value>Создатель проекта</value>
@@ -1750,7 +1750,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Современный лаунчер для Hytale</value>
   </data>
   <data name="settings.aboutSettings.disclaimer" xml:space="preserve">
-    <value>HyPrism — неофициальный лаунчер Hytale и не имеет отношения к Hypixel Studios</value>
+    <value>Hyprism — неофициальный лаунчер Hytale и не имеет отношения к Hypixel Studios</value>
   </data>
   <data name="settings.aboutSettings.builtWith" xml:space="preserve">
     <value>Создано с помощью</value>
@@ -1774,7 +1774,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Главный тестировщик</value>
   </data>
   <data name="settings.aboutSettings.title" xml:space="preserve">
-    <value>HyPrism Launcher</value>
+    <value>Hyprism Launcher</value>
   </data>
   <data name="settings.aboutSettings.unofficial" xml:space="preserve">
     <value>Неофициальный лаунчер Hytale</value>
@@ -1810,7 +1810,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Лицензия</value>
   </data>
   <data name="settings.aboutSettings.licenseHint" xml:space="preserve">
-    <value>Исходный код HyPrism распространяется под GPL-3.0-only</value>
+    <value>Исходный код Hyprism распространяется под GPL-3.0-only</value>
   </data>
   <data name="settings.aboutSettings.credits" xml:space="preserve">
     <value>Визуальные материалы</value>
@@ -1975,7 +1975,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Как работают загрузки</value>
   </data>
   <data name="settings.downloads.howDownloadsWorkDescription" xml:space="preserve">
-    <value>HyPrism отдает приоритет официальному источнику загрузки, а при его недоступности автоматически выбирает самое быстрое из добавленных пользовательских зеркал</value>
+    <value>Hyprism отдает приоритет официальному источнику загрузки, а при его недоступности автоматически выбирает самое быстрое из добавленных пользовательских зеркал</value>
   </data>
   <data name="settings.downloads.mirrorUrlHint" xml:space="preserve">
     <value>Введите базовый URL зеркала Hytale. Лаунчер попытается автоматически определить конфигурацию.</value>
@@ -2053,7 +2053,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Подключение источника</value>
   </data>
   <data name="settings.downloads.addSourceHint" xml:space="preserve">
-    <value>Введите его публичный адрес, а HyPrism определит поддерживаемый формат зеркала</value>
+    <value>Введите его публичный адрес, а Hyprism определит поддерживаемый формат зеркала</value>
   </data>
   <data name="settings.downloads.sourceUrlPlaceholder" xml:space="preserve">
     <value>https://mirror.example.com</value>
@@ -2077,7 +2077,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Проверка совместимости источника</value>
   </data>
   <data name="settings.downloads.sourceDetectionFailed" xml:space="preserve">
-    <value>HyPrism не смог определить совместимое зеркало по этому адресу</value>
+    <value>Hyprism не смог определить совместимое зеркало по этому адресу</value>
   </data>
   <data name="settings.downloads.sourceSaveFailed" xml:space="preserve">
     <value>Не удалось сохранить источник загрузки</value>
@@ -2389,7 +2389,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Использовать оригинальную Java</value>
   </data>
   <data name="settings.javaSettings.useBundledJavaHint" xml:space="preserve">
-    <value>Рекомендуется: используется Java, встроенная в HyPrism</value>
+    <value>Рекомендуется: используется Java, встроенная в Hyprism</value>
   </data>
   <data name="settings.javaSettings.useCustomJava" xml:space="preserve">
     <value>Кастомная Java</value>
@@ -2500,7 +2500,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Сетевой режим</value>
   </data>
   <data name="settings.networkSettings.onlineModeHint" xml:space="preserve">
-    <value>Использовать сервис авторизации и данные аккаунта; при отключении HyPrism создает локальную OmniAuth-сессию</value>
+    <value>Использовать сервис авторизации и данные аккаунта; при отключении Hyprism создает локальную OmniAuth-сессию</value>
   </data>
   <data name="settings.networkSettings.unofficialProfileNote" xml:space="preserve">
     <value>Неофициальные аккаунты не могут использовать официальную авторизацию Hytale.</value>
@@ -2686,7 +2686,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Установка</value>
   </data>
   <data name="updateOverlay.message" xml:space="preserve">
-    <value>Подождите, мы загружаем и устанавливаем последнюю версию HyPrism.</value>
+    <value>Подождите, мы загружаем и устанавливаем последнюю версию Hyprism.</value>
   </data>
   <data name="updateOverlay.title" xml:space="preserve">
     <value>ОБНОВЛЕНИЕ ЛАУНЧЕРА</value>
@@ -2695,7 +2695,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Проверить обновления</value>
   </data>
   <data name="wrapper.description" xml:space="preserve">
-    <value>Режим обёртки — скачайте и запустите полную версию HyPrism</value>
+    <value>Режим обёртки — скачайте и запустите полную версию Hyprism</value>
   </data>
   <data name="wrapper.downloadInstall" xml:space="preserve">
     <value>Скачать и установить</value>
@@ -2713,7 +2713,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Запустить</value>
   </data>
   <data name="wrapper.launchFailed" xml:space="preserve">
-    <value>Не удалось запустить HyPrism</value>
+    <value>Не удалось запустить Hyprism</value>
   </data>
   <data name="wrapper.loadingNews" xml:space="preserve">
     <value>Загрузка новостей…</value>
@@ -2848,7 +2848,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Авторизация завершена</value>
   </data>
   <data name="oauth.callback.successMessage" xml:space="preserve">
-    <value>Ваш официальный аккаунт Hytale подключён к HyPrism</value>
+    <value>Ваш официальный аккаунт Hytale подключён к Hyprism</value>
   </data>
   <data name="oauth.callback.closeHint" xml:space="preserve">
     <value>Вы можете закрыть это окно и вернуться в лаунчер</value>
@@ -2863,13 +2863,13 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Активен</value>
   </data>
   <data name="settings.downloads.addSourceMethodHint" xml:space="preserve">
-    <value>Выберите, как HyPrism должен настроить источник</value>
+    <value>Выберите, как Hyprism должен настроить источник</value>
   </data>
   <data name="settings.downloads.addSourceAutomatic" xml:space="preserve">
     <value>Определить автоматически</value>
   </data>
   <data name="settings.downloads.addSourceAutomaticHint" xml:space="preserve">
-    <value>Введите адрес, и HyPrism сам определит формат источника</value>
+    <value>Введите адрес, и Hyprism сам определит формат источника</value>
   </data>
   <data name="settings.downloads.addSourceManual" xml:space="preserve">
     <value>Ввести JSON вручную</value>
@@ -2881,7 +2881,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Добавление источника из JSON</value>
   </data>
   <data name="settings.downloads.manualSourceHint" xml:space="preserve">
-    <value>Вставьте описание .mirror.json. HyPrism проверит его перед сохранением</value>
+    <value>Вставьте описание .mirror.json. Hyprism проверит его перед сохранением</value>
   </data>
   <data name="settings.downloads.manualSourceJson" xml:space="preserve">
     <value>Описание источника</value>

@@ -26,7 +26,7 @@ public sealed class FilePicker(Func<TopLevel?> topLevelProvider) : IFilePicker
         Patterns = ["*.jar", "*.zip"]
     };
 
-    private static readonly FilePickerFileType InstanceArchiveFileType = new("HyPrism instance archive")
+    private static readonly FilePickerFileType InstanceArchiveFileType = new("Hyprism instance archive")
     {
         Patterns = ["*.zip", "*.pwr"]
     };

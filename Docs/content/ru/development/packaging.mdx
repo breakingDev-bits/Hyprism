@@ -30,7 +30,7 @@ description: Платформенные пакеты, CI, целевые арт�
 
 ## NixOS
 
-Репозиторий содержит flake для нативного пакета `x86_64-linux`. Установите Nix с поддержкой flakes, затем собирайте или запускайте HyPrism из корня репозитория
+Репозиторий содержит flake для нативного пакета `x86_64-linux`. Установите Nix с поддержкой flakes, затем собирайте или запускайте Hyprism из корня репозитория
 
 ```bash
 nix build ./Packaging/linux/flake#hyprism
@@ -61,7 +61,7 @@ pwsh Packaging/publish-windows.ps1 all --output dist
 
 ## macOS
 
-Сценарий использует системные `sips`, `iconutil`, `plutil`, `hdiutil`, `codesign` и `file`
+Упаковщики используют `logo.svg` как иконку Linux и создают набор иконок macOS из того же ассета. Сценарий macOS использует системные `sips`, `iconutil`, `plutil`, `hdiutil`, `codesign` и `file`
 
 ```bash
 ./Packaging/publish-macos.sh dmg --output dist

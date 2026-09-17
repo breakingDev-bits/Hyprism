@@ -4,8 +4,8 @@ SPDX-License-Identifier: GPL-3.0-only
 -->
 
 <!--
-  HyPrism default control themes. Every ControlTheme used by the application
-  is defined here with HyPrism tokens only, so no third-party theme resource
+  Hyprism default control themes. Every ControlTheme used by the application
+  is defined here with Hyprism tokens only, so no third-party theme resource
   key is required.
 -->
 

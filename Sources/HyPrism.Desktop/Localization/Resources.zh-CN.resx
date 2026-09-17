@@ -29,13 +29,13 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>分段控件</value>
   </data>
   <data name="app.downloadedUpdate" xml:space="preserve">
-    <value>已将最新版 HyPrism 下载到您的下载文件夹。</value>
+    <value>已将最新版 Hyprism 下载到您的下载文件夹。</value>
   </data>
   <data name="app.downloadedUpdateHint" xml:space="preserve">
     <value>我们已尝试打开文件以便您安装。如果未打开，请前往下载文件夹手动运行。</value>
   </data>
   <data name="app.enterInstancePath" xml:space="preserve">
-    <value>输入您想要存储 HyPrism 实例的完整路径：</value>
+    <value>输入您想要存储 Hyprism 实例的完整路径：</value>
   </data>
   <data name="app.failedChangeDir" xml:space="preserve">
     <value>更改实例目录失败</value>
@@ -73,10 +73,10 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>无法使用该路径。请检查路径是否存在且您有写入权限。</value>
   </data>
   <data name="app.title" xml:space="preserve">
-    <value>HyPrism</value>
+    <value>Hyprism</value>
   </data>
   <data name="app.version" xml:space="preserve">
-    <value>HyPrism {0}</value>
+    <value>Hyprism {0}</value>
   </data>
   <data name="common.all" xml:space="preserve">
     <value>全部</value>
@@ -1207,7 +1207,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>展开</value>
   </data>
   <data name="news.hyprism" xml:space="preserve">
-    <value>HyPrism</value>
+    <value>Hyprism</value>
   </data>
   <data name="news.hytale" xml:space="preserve">
     <value>Hytale</value>
@@ -1234,7 +1234,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>关于</value>
   </data>
   <data name="onboarding.aboutHyPrism" xml:space="preserve">
-    <value>关于 HyPrism</value>
+    <value>关于 Hyprism</value>
   </data>
   <data name="onboarding.allSet" xml:space="preserve">
     <value>一切就绪！以下是关于启动器的一些信息</value>
@@ -1291,7 +1291,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>自定义外观</value>
   </data>
   <data name="onboarding.disclaimer" xml:space="preserve">
-    <value>HyPrism 是非官方 Hytale 启动器。本项目与 Hypixel Studios 无关。</value>
+    <value>Hyprism 是非官方 Hytale 启动器。本项目与 Hypixel Studios 无关。</value>
   </data>
   <data name="onboarding.enterLauncher" xml:space="preserve">
     <value>进入启动器</value>
@@ -1390,7 +1390,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>外观</value>
   </data>
   <data name="onboarding.welcome" xml:space="preserve">
-    <value>欢迎使用 HyPrism</value>
+    <value>欢迎使用 Hyprism</value>
   </data>
   <data name="onboarding.welcomeBack" xml:space="preserve">
     <value>欢迎回来，{{name}}！</value>
@@ -1615,7 +1615,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>核心团队</value>
   </data>
   <data name="settings.aboutSettings.coreTeamDescription" xml:space="preserve">
-    <value>HyPrism 开发背后的团队</value>
+    <value>Hyprism 开发背后的团队</value>
   </data>
   <data name="settings.aboutSettings.creatorRole" xml:space="preserve">
     <value>项目创建者</value>
@@ -1624,7 +1624,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>现代化的 Hytale 启动器</value>
   </data>
   <data name="settings.aboutSettings.disclaimer" xml:space="preserve">
-    <value>HyPrism 是非官方 Hytale 启动器。本项目与 Hypixel Studios 无关。</value>
+    <value>Hyprism 是非官方 Hytale 启动器。本项目与 Hypixel Studios 无关。</value>
   </data>
   <data name="settings.aboutSettings.builtWith" xml:space="preserve">
     <value>构建工具</value>
@@ -1645,7 +1645,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>首席测试员</value>
   </data>
   <data name="settings.aboutSettings.title" xml:space="preserve">
-    <value>HyPrism 启动器</value>
+    <value>Hyprism 启动器</value>
   </data>
   <data name="settings.aboutSettings.unofficial" xml:space="preserve">
     <value>非官方 Hytale 启动器</value>
@@ -1777,7 +1777,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>下载方式</value>
   </data>
   <data name="settings.downloads.howDownloadsWorkDescription" xml:space="preserve">
-    <value>HyPrism 自动选择最快的可用源来下载游戏文件。点击「测试速度」检查您的连接。</value>
+    <value>Hyprism 自动选择最快的可用源来下载游戏文件。点击「测试速度」检查您的连接。</value>
   </data>
   <data name="settings.downloads.mirrorUrlHint" xml:space="preserve">
     <value>输入 Hytale 镜像的基础 URL。启动器将尝试自动检测配置。</value>
@@ -2068,7 +2068,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>使用内置 Java</value>
   </data>
   <data name="settings.javaSettings.useBundledJavaHint" xml:space="preserve">
-    <value>推荐：使用 HyPrism 附带的 Java</value>
+    <value>推荐：使用 Hyprism 附带的 Java</value>
   </data>
   <data name="settings.javaSettings.useCustomJava" xml:space="preserve">
     <value>使用自定义 Java</value>
@@ -2149,7 +2149,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>在线模式</value>
   </data>
   <data name="settings.networkSettings.onlineModeHint" xml:space="preserve">
-    <value>使用认证服务和账户数据；禁用后 HyPrism 将创建本地 OmniAuth 会话</value>
+    <value>使用认证服务和账户数据；禁用后 Hyprism 将创建本地 OmniAuth 会话</value>
   </data>
   <data name="settings.profile.avatar" xml:space="preserve">
     <value>头像</value>
@@ -2332,7 +2332,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>正在安装</value>
   </data>
   <data name="updateOverlay.message" xml:space="preserve">
-    <value>请稍候，正在下载并安装最新版本的 HyPrism。</value>
+    <value>请稍候，正在下载并安装最新版本的 Hyprism。</value>
   </data>
   <data name="updateOverlay.title" xml:space="preserve">
     <value>正在更新启动器</value>
@@ -2341,7 +2341,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>检查更新</value>
   </data>
   <data name="wrapper.description" xml:space="preserve">
-    <value>包装模式 — 下载并启动完整版 HyPrism</value>
+    <value>包装模式 — 下载并启动完整版 Hyprism</value>
   </data>
   <data name="wrapper.downloadInstall" xml:space="preserve">
     <value>下载并安装</value>
@@ -2359,7 +2359,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>启动</value>
   </data>
   <data name="wrapper.launchFailed" xml:space="preserve">
-    <value>启动 HyPrism 失败</value>
+    <value>启动 Hyprism 失败</value>
   </data>
   <data name="wrapper.loadingNews" xml:space="preserve">
     <value>加载新闻中…</value>
@@ -2377,7 +2377,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>授权成功</value>
   </data>
   <data name="oauth.callback.successMessage" xml:space="preserve">
-    <value>您的 Hytale 官方账号已连接到 HyPrism</value>
+    <value>您的 Hytale 官方账号已连接到 Hyprism</value>
   </data>
   <data name="oauth.callback.closeHint" xml:space="preserve">
     <value>您可以关闭此窗口并返回启动器</value>
@@ -2425,7 +2425,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>创建一个实例以选择 Hytale 版本，下载其文件，并开始你的下一个冒险</value>
   </data>
   <data name="home.welcomeTitle" xml:space="preserve">
-    <value>欢迎来到 HyPrism</value>
+    <value>欢迎来到 Hyprism</value>
   </data>
   <data name="instances.newInstance" xml:space="preserve">
     <value>新建实例</value>
@@ -2545,7 +2545,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>许可</value>
   </data>
   <data name="settings.aboutSettings.licenseHint" xml:space="preserve">
-    <value>HyPrism 源代码在 GPL-3.0-only 协议下分发</value>
+    <value>Hyprism 源代码在 GPL-3.0-only 协议下分发</value>
   </data>
   <data name="settings.aboutSettings.credits" xml:space="preserve">
     <value>视觉素材</value>
@@ -2629,7 +2629,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>连接下载来源</value>
   </data>
   <data name="settings.downloads.addSourceHint" xml:space="preserve">
-    <value>输入其公共地址，HyPrism 将检测支持的镜像格式</value>
+    <value>输入其公共地址，Hyprism 将检测支持的镜像格式</value>
   </data>
   <data name="settings.downloads.sourceUrlPlaceholder" xml:space="preserve">
     <value>https://mirror.example.com</value>
@@ -2653,7 +2653,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>正在检查源兼容性</value>
   </data>
   <data name="settings.downloads.sourceDetectionFailed" xml:space="preserve">
-    <value>HyPrism 无法在此地址检测到兼容的镜像</value>
+    <value>Hyprism 无法在此地址检测到兼容的镜像</value>
   </data>
   <data name="settings.downloads.sourceSaveFailed" xml:space="preserve">
     <value>无法保存下载源</value>
@@ -2857,13 +2857,13 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>已启用</value>
   </data>
   <data name="settings.downloads.addSourceMethodHint" xml:space="preserve">
-    <value>选择 HyPrism 配置下载源的方式</value>
+    <value>选择 Hyprism 配置下载源的方式</value>
   </data>
   <data name="settings.downloads.addSourceAutomatic" xml:space="preserve">
     <value>自动检测</value>
   </data>
   <data name="settings.downloads.addSourceAutomaticHint" xml:space="preserve">
-    <value>输入地址，由 HyPrism 检测下载源格式</value>
+    <value>输入地址，由 Hyprism 检测下载源格式</value>
   </data>
   <data name="settings.downloads.addSourceManual" xml:space="preserve">
     <value>手动输入 JSON</value>
@@ -2875,7 +2875,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>从 JSON 添加下载源</value>
   </data>
   <data name="settings.downloads.manualSourceHint" xml:space="preserve">
-    <value>粘贴 .mirror.json 定义，HyPrism 会在保存前进行验证</value>
+    <value>粘贴 .mirror.json 定义，Hyprism 会在保存前进行验证</value>
   </data>
   <data name="settings.downloads.manualSourceJson" xml:space="preserve">
     <value>下载源定义</value>

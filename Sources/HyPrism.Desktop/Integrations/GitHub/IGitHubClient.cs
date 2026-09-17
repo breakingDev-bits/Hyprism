@@ -9,7 +9,7 @@ namespace HyPrism.Desktop.Integrations.GitHub;
 public interface IGitHubClient
 {
     /// <summary>
-    /// Retrieves contributors to the HyPrism repository
+    /// Retrieves contributors to the Hyprism repository
     /// </summary>
     /// <returns>The contributors reported by GitHub, with recently active accounts first</returns>
     Task<List<GitHubUser>> GetContributorsAsync();

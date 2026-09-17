@@ -1,7 +1,7 @@
 # Copyright (C) 2026 HyPrism Launcher
 # SPDX-License-Identifier: GPL-3.0-only
 
-name: Release HyPrism
+name: Release Hyprism
 
 on:
   push:
@@ -112,17 +112,17 @@ jobs:
             "platforms": {
               "linux": {
                 "x64": {
-                  "tar": "https://github.com/$REPO/releases/download/$TAG/HyPrism-linux-x64-$VERSION.tar.xz"
+                  "tar": "https://github.com/$REPO/releases/download/$TAG/Hyprism-linux-x64-$VERSION.tar.xz"
                 }
               },
               "windows": {
                 "x64": {
-                  "zip": "https://github.com/$REPO/releases/download/$TAG/HyPrism-win-x64-$VERSION.zip"
+                  "zip": "https://github.com/$REPO/releases/download/$TAG/Hyprism-win-x64-$VERSION.zip"
                 }
               },
               "macos": {
                 "arm64": {
-                  "dmg": "https://github.com/$REPO/releases/download/$TAG/HyPrism-mac-arm64-$VERSION.dmg"
+                  "dmg": "https://github.com/$REPO/releases/download/$TAG/Hyprism-mac-arm64-$VERSION.dmg"
                 }
               }
             }
@@ -161,9 +161,9 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ needs.version.outputs.tag_name }}
-          name: HyPrism ${{ needs.version.outputs.tag_name }}
+          name: Hyprism ${{ needs.version.outputs.tag_name }}
           body: |
-            ## HyPrism ${{ needs.version.outputs.tag_name }}
+            ## Hyprism ${{ needs.version.outputs.tag_name }}
             
             ${{ steps.build_status.outputs.warnings }}
             
@@ -171,15 +171,15 @@ jobs:
             
             | Platform | Architecture | Format | Download |
             |----------|-------------|--------|----------|
-            | **Windows** | x64 | Portable ZIP | [HyPrism-win-x64-${{ needs.version.outputs.version }}.zip](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/HyPrism-win-x64-${{ needs.version.outputs.version }}.zip) |
-            | **Windows** | x64 | MSI | [HyPrism-win-x64-${{ needs.version.outputs.version }}.msi](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/HyPrism-win-x64-${{ needs.version.outputs.version }}.msi) |
-            | **Windows** | x64 | EXE installer | [HyPrism-win-x64-${{ needs.version.outputs.version }}-setup.exe](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/HyPrism-win-x64-${{ needs.version.outputs.version }}-setup.exe) |
-            | **macOS** | ARM64 (Apple Silicon) | DMG | [HyPrism-mac-arm64-${{ needs.version.outputs.version }}.dmg](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/HyPrism-mac-arm64-${{ needs.version.outputs.version }}.dmg) |
-            | **Linux** | x64 | deb | [HyPrism-linux-x64-${{ needs.version.outputs.version }}.deb](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/HyPrism-linux-x64-${{ needs.version.outputs.version }}.deb) |
-            | **Linux** | x64 | rpm | [HyPrism-linux-x64-${{ needs.version.outputs.version }}.rpm](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/HyPrism-linux-x64-${{ needs.version.outputs.version }}.rpm) |
-            | **Linux** | x64 | AppImage | [HyPrism-linux-x64-${{ needs.version.outputs.version }}.AppImage](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/HyPrism-linux-x64-${{ needs.version.outputs.version }}.AppImage) |
-            | **Linux** | x64 | Flatpak bundle | [HyPrism-linux-x64-${{ needs.version.outputs.version }}.flatpak](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/HyPrism-linux-x64-${{ needs.version.outputs.version }}.flatpak) |
-            | **Linux** | x64 | tar.xz | [HyPrism-linux-x64-${{ needs.version.outputs.version }}.tar.xz](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/HyPrism-linux-x64-${{ needs.version.outputs.version }}.tar.xz) |
+            | **Windows** | x64 | Portable ZIP | [Hyprism-win-x64-${{ needs.version.outputs.version }}.zip](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/Hyprism-win-x64-${{ needs.version.outputs.version }}.zip) |
+            | **Windows** | x64 | MSI | [Hyprism-win-x64-${{ needs.version.outputs.version }}.msi](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/Hyprism-win-x64-${{ needs.version.outputs.version }}.msi) |
+            | **Windows** | x64 | EXE installer | [Hyprism-win-x64-${{ needs.version.outputs.version }}-setup.exe](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/Hyprism-win-x64-${{ needs.version.outputs.version }}-setup.exe) |
+            | **macOS** | ARM64 (Apple Silicon) | DMG | [Hyprism-mac-arm64-${{ needs.version.outputs.version }}.dmg](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/Hyprism-mac-arm64-${{ needs.version.outputs.version }}.dmg) |
+            | **Linux** | x64 | deb | [Hyprism-linux-x64-${{ needs.version.outputs.version }}.deb](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/Hyprism-linux-x64-${{ needs.version.outputs.version }}.deb) |
+            | **Linux** | x64 | rpm | [Hyprism-linux-x64-${{ needs.version.outputs.version }}.rpm](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/Hyprism-linux-x64-${{ needs.version.outputs.version }}.rpm) |
+            | **Linux** | x64 | AppImage | [Hyprism-linux-x64-${{ needs.version.outputs.version }}.AppImage](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/Hyprism-linux-x64-${{ needs.version.outputs.version }}.AppImage) |
+            | **Linux** | x64 | Flatpak bundle | [Hyprism-linux-x64-${{ needs.version.outputs.version }}.flatpak](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/Hyprism-linux-x64-${{ needs.version.outputs.version }}.flatpak) |
+            | **Linux** | x64 | tar.xz | [Hyprism-linux-x64-${{ needs.version.outputs.version }}.tar.xz](https://github.com/${{ github.repository }}/releases/download/${{ needs.version.outputs.tag_name }}/Hyprism-linux-x64-${{ needs.version.outputs.version }}.tar.xz) |
             | **Linux** | x64 | Nix flake | [Packaging/linux/flake](https://github.com/${{ github.repository }}/tree/${{ needs.version.outputs.tag_name }}/Packaging/linux/flake) |
 
             > For Nix users: Run the Nix package directly from this release with `nix run github:${{ github.repository }}?ref=${{ needs.version.outputs.tag_name }}&dir=Packaging/linux/flake`

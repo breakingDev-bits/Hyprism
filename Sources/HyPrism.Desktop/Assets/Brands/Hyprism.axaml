@@ -1,0 +1,75 @@
+<!--
+Copyright (C) 2026 Hyprism Launcher
+SPDX-License-Identifier: GPL-3.0-only
+-->
+
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <LinearGradientBrush x:Key="HyprismLogoTopLeftBrush"
+                       StartPoint="0%,100%"
+                       EndPoint="100%,0%">
+    <GradientStop Offset="0" Color="#6818FF" />
+    <GradientStop Offset="0.48" Color="#4C20F3" />
+    <GradientStop Offset="1" Color="#2920E7" />
+  </LinearGradientBrush>
+
+  <LinearGradientBrush x:Key="HyprismLogoTopRightBrush"
+                       StartPoint="0%,25%"
+                       EndPoint="100%,75%">
+    <GradientStop Offset="0" Color="#1472FF" />
+    <GradientStop Offset="0.52" Color="#029FFB" />
+    <GradientStop Offset="1" Color="#00C9EE" />
+  </LinearGradientBrush>
+
+  <LinearGradientBrush x:Key="HyprismLogoLeftBrush"
+                       StartPoint="0%,0%"
+                       EndPoint="100%,100%">
+    <GradientStop Offset="0" Color="#4124FF" />
+    <GradientStop Offset="0.48" Color="#175DFF" />
+    <GradientStop Offset="1" Color="#0C6CFF" />
+  </LinearGradientBrush>
+
+  <LinearGradientBrush x:Key="HyprismLogoFacetBrush"
+                       StartPoint="0%,0%"
+                       EndPoint="100%,100%">
+    <GradientStop Offset="0" Color="#2122C6" />
+    <GradientStop Offset="1" Color="#0837D1" />
+  </LinearGradientBrush>
+
+  <LinearGradientBrush x:Key="HyprismLogoBottomBrush"
+                       StartPoint="0%,100%"
+                       EndPoint="100%,0%">
+    <GradientStop Offset="0" Color="#086FFF" />
+    <GradientStop Offset="1" Color="#117DFF" />
+  </LinearGradientBrush>
+
+  <LinearGradientBrush x:Key="HyprismLogoBeamBrush"
+                       StartPoint="0%,50%"
+                       EndPoint="100%,50%">
+    <GradientStop Offset="0" Color="#0757FF" />
+    <GradientStop Offset="0.33" Color="#2145FF" />
+    <GradientStop Offset="0.5" Color="#4D28FB" />
+    <GradientStop Offset="0.63" Color="#BD20B9" />
+    <GradientStop Offset="0.77" Color="#FF4264" />
+    <GradientStop Offset="1" Color="#FF9013" />
+  </LinearGradientBrush>
+
+  <DrawingImage x:Key="HyprismBrandLogo">
+    <DrawingImage.Drawing>
+      <DrawingGroup>
+        <GeometryDrawing Geometry="M162 265.812L457.142 101L458.077 264.877L324.124 347.166L162 265.812Z"
+                         Brush="{StaticResource HyprismLogoTopLeftBrush}" />
+        <GeometryDrawing Geometry="M457.141 101L768.998 266.163L659.824 374.401L457.554 265.197L457.141 101Z"
+                         Brush="{StaticResource HyprismLogoTopRightBrush}" />
+        <GeometryDrawing Geometry="M162 265.812L324.24 346.464L324.942 729.74L162 625.476V265.812Z"
+                         Brush="{StaticResource HyprismLogoLeftBrush}" />
+        <GeometryDrawing Geometry="M162 265.812L324.24 346.464L324.942 531.147L162 265.812Z"
+                         Brush="{StaticResource HyprismLogoFacetBrush}" />
+        <GeometryDrawing Geometry="M371.578 560.72L580.457 654.23L389.462 771.819L329.904 732.364L371.578 560.72Z"
+                         Brush="{StaticResource HyprismLogoBottomBrush}" />
+        <GeometryDrawing Geometry="M371.582 560.72L769.001 266.162V540.03L579.759 654.698L371.582 560.72Z"
+                         Brush="{StaticResource HyprismLogoBeamBrush}" />
+      </DrawingGroup>
+    </DrawingImage.Drawing>
+  </DrawingImage>
+</ResourceDictionary>

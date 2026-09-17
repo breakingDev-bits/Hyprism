@@ -1850,14 +1850,14 @@ public sealed class MainWindowRenderTests
             .Returns("/tmp/hyprism-preview-instance");
         instances.Setup(service => service.IsClientPresent(It.IsAny<string>()))
             .Returns(true);
-        profile.Setup(service => service.GetNick()).Returns("HyPrism Player");
+        profile.Setup(service => service.GetNick()).Returns("Hyprism Player");
         profile.Setup(service => service.GetAvatarPreviewForUUID(It.IsAny<string>()))
             .Returns($"data:image/png;base64,{Convert.ToBase64String(TinyPngHandler.ImageBytes)}");
         profileManagement.Setup(service => service.GetSelectedProfile())
             .Returns(new Profile
             {
                 Id = "active-profile",
-                Name = "HyPrism Player",
+                Name = "Hyprism Player",
                 UUID = Guid.NewGuid().ToString(),
                 IsOfficial = isOfficialProfile
             });
@@ -1867,7 +1867,7 @@ public sealed class MainWindowRenderTests
                 new Profile
                 {
                     Id = "active-profile",
-                    Name = "HyPrism Player",
+                    Name = "Hyprism Player",
                     UUID = "00000000-0000-0000-0000-000000000001",
                     IsOfficial = isOfficialProfile
                 }
@@ -2194,7 +2194,7 @@ public sealed class MainWindowRenderTests
         Assert.Equal(new CornerRadius(24), mainSceneFrame.CornerRadius);
         Assert.Equal(new Thickness(1), mainSceneFrame.BorderThickness);
         viewModel.SelectedModCatalogPreview = new ModCatalogItemViewModel(
-            "frame-preview", "Frame Preview", "HyPrism", "", "1");
+            "frame-preview", "Frame Preview", "Hyprism", "", "1");
         Dispatcher.UIThread.RunJobs();
         Assert.Equal(new Thickness(1, 1, 1, 0), mainSceneFrame.BorderThickness);
         viewModel.SelectedModCatalogPreview = null;
