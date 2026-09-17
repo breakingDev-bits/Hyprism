@@ -52,14 +52,8 @@ public class InstanceMeta
     public long PlayTimeSeconds { get; set; }
 
     /// <summary>
-    /// Whether this is the "latest" rolling instance that auto-updates.
-    /// </summary>
-    public bool IsLatest { get; set; } = false;
-
-    /// <summary>
     /// The actual installed version number.
-    /// For "latest" instances (Version == 0), this tracks which version is currently
-    /// on disk after download/update. Updated by SaveLatestInfo / PatchManager.
+    /// This can differ from <see cref="Version"/> while a version change is being prepared.
     /// </summary>
     public int InstalledVersion { get; set; }
 

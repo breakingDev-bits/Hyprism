@@ -4,7 +4,6 @@
 using HyPrism.Core.Infrastructure;
 using HyPrism.Core.Application.Progress;
 using HyPrism.Core.Game.Patching;
-using HyPrism.Core.Game.Instances;
 using HyPrism.Core.Game.Versions;
 using HyPrism.Core.Migrations;
 
@@ -23,7 +22,6 @@ public class PatchManager : IPatchManager
     private readonly IGameVersionCatalog _versions;
     private readonly IButlerClient _butler;
     private readonly IFileDownloader _downloader;
-    private readonly IInstanceRepository _instances;
     private readonly IProgressReporter _progress;
     private readonly HttpClient _httpClient;
     private readonly string _downloadsCacheDirectory;
@@ -34,7 +32,6 @@ public class PatchManager : IPatchManager
     /// <param name="versions">Service for version management and patch sequence calculation.</param>
     /// <param name="butler">Service for Butler patch tool operations.</param>
     /// <param name="downloader">Service for downloading patch files.</param>
-    /// <param name="instances">Service for managing game instances.</param>
     /// <param name="progress">Service for reporting progress notifications.</param>
     /// <param name="httpClient">HTTP client for network operations.</param>
     /// <param name="appPath">Application path configuration.</param>
@@ -42,7 +39,6 @@ public class PatchManager : IPatchManager
         IGameVersionCatalog versions,
         IButlerClient butler,
         IFileDownloader downloader,
-        IInstanceRepository instances,
         IProgressReporter progress,
         HttpClient httpClient,
         AppPathConfiguration appPath)
@@ -50,7 +46,6 @@ public class PatchManager : IPatchManager
         _versions = versions;
         _butler = butler;
         _downloader = downloader;
-        _instances = instances;
         _progress = progress;
         _httpClient = httpClient;
         GameDownloadCacheMigration.Migrate(appPath.AppDir);
@@ -62,7 +57,7 @@ public class PatchManager : IPatchManager
         string versionPath,
         string branch,
         int installedVersion,
-        int latestVersion,
+        int targetVersion,
         CancellationToken ct = default)
     {
         bool officialDown = _versions.IsOfficialServerDown(branch);
@@ -70,20 +65,20 @@ public class PatchManager : IPatchManager
         var os = LauncherUtilities.GetOS();
         var arch = LauncherUtilities.GetArch();
 
-        Logger.Info("Download", $"Differential update: v{installedVersion} -> v{latestVersion} (official={!officialDown})");
-        _progress.ReportDownloadProgress("update", 0, $"Updating game from v{installedVersion} to v{latestVersion}...", null, 0, 0);
+        Logger.Info("Download", $"Differential update: v{installedVersion} -> v{targetVersion} (official={!officialDown})");
+        _progress.ReportDownloadProgress("update", 0, $"Updating game from v{installedVersion} to v{targetVersion}...", null, 0, 0);
 
         await _butler.EnsureButlerInstalledAsync((_, _) => { }, ct);
 
         // Release mirrors provide full copies; differential updates are reserved for pre-release
         if (officialDown && !_versions.IsDiffBasedBranch(normalizedBranch))
         {
-            Logger.Info("Download", $"Mirror release: downloading full copy v{latestVersion}");
-            await DownloadAndApplyMirrorFullCopyAsync(versionPath, normalizedBranch, os, arch, latestVersion, ct);
+            Logger.Info("Download", $"Mirror release: downloading full copy v{targetVersion}");
+            await DownloadAndApplyMirrorFullCopyAsync(versionPath, normalizedBranch, os, arch, targetVersion, ct);
             return;
         }
 
-        var patchesToApply = _versions.GetPatchSequence(installedVersion, latestVersion);
+        var patchesToApply = _versions.GetPatchSequence(installedVersion, targetVersion);
         Logger.Info("Download", $"Patches to apply: {string.Join(" -> ", patchesToApply)}");
 
         for (int i = 0; i < patchesToApply.Count; i++)
@@ -143,11 +138,10 @@ public class PatchManager : IPatchManager
             if (File.Exists(patchPwrPath))
                 try { File.Delete(patchPwrPath); } catch { }
 
-            _instances.SaveLatestInfo(branch, patchVersion);
             Logger.Success("Download", $"Patch v{patchVersion} applied successfully");
         }
 
-        Logger.Success("Download", $"Differential update complete: now at v{latestVersion}");
+        Logger.Success("Download", $"Differential update complete: now at v{targetVersion}");
     }
 
     /// <summary>
@@ -186,7 +180,6 @@ public class PatchManager : IPatchManager
         if (File.Exists(pwrPath))
             try { File.Delete(pwrPath); } catch { }
 
-        _instances.SaveLatestInfo(branch, version);
         Logger.Success("Download", $"Mirror release update complete: now at v{version}");
     }
 

@@ -3,6 +3,8 @@
 
 using HyPrism.Core.Infrastructure;
 using HyPrism.Core.Game.Instances;
+using HyPrism.Core.Models;
+using HyPrism.Core.Migrations;
 using System.Text.Json;
 
 namespace HyPrism.Core.Tests.Game;
@@ -129,5 +131,58 @@ public class InstanceRepositoryTests : IDisposable
         _svc.SaveInstanceMeta(path, instanceMeta);
 
         Assert.Equal(0, raised);
+    }
+
+    [Fact]
+    public void MigrateLegacyRollingInstancesToFixedVersions_UsesInstalledVersion()
+    {
+        var instanceId = Guid.NewGuid().ToString();
+        var instancePath = Path.Combine(_svc.GetInstanceRoot(), instanceId);
+        var legacyMeta = new InstanceMeta
+        {
+            Id = instanceId,
+            Name = "release (Latest)",
+            Branch = "release",
+            Version = 0,
+            InstalledVersion = 42,
+            CreatedAt = DateTime.UtcNow
+        };
+        _svc.SaveInstanceMeta(instancePath, legacyMeta);
+
+        var migrator = new InstanceMigrator(new AppPathConfiguration(_tempDir), _config, _svc);
+
+        Assert.True(migrator.MigrateLegacyRollingInstancesToFixedVersions());
+
+        var migrated = _svc.GetInstanceMeta(instancePath)!;
+        Assert.Equal(42, migrated.Version);
+        Assert.Equal(42, migrated.InstalledVersion);
+        Assert.Equal(0, migrated.PendingVersion);
+        Assert.Equal("release v42", migrated.Name);
+    }
+
+    [Fact]
+    public void MigrateLegacyRollingInstancesToFixedVersions_UsesLegacyMarker()
+    {
+        var instanceId = Guid.NewGuid().ToString();
+        var instancePath = Path.Combine(_svc.GetInstanceRoot(), instanceId);
+        var legacyMeta = new InstanceMeta
+        {
+            Id = instanceId,
+            Name = "release (Latest)",
+            Branch = "release",
+            Version = 0,
+            CreatedAt = DateTime.UtcNow
+        };
+        _svc.SaveInstanceMeta(instancePath, legacyMeta);
+        File.WriteAllText(Path.Combine(instancePath, "latest.json"), "{\"Version\":43}");
+
+        var migrator = new InstanceMigrator(new AppPathConfiguration(_tempDir), _config, _svc);
+
+        Assert.True(migrator.MigrateLegacyRollingInstancesToFixedVersions());
+
+        var migrated = _svc.GetInstanceMeta(instancePath)!;
+        Assert.Equal(43, migrated.Version);
+        Assert.Equal(43, migrated.InstalledVersion);
+        Assert.False(File.Exists(Path.Combine(instancePath, "latest.json")));
     }
 }

@@ -39,14 +39,6 @@ public interface IInstanceRepository
     string GetInstanceUserDataPath(string versionPath);
 
     /// <summary>
-    /// Resolves a version number, returning the latest if the specified version is not available
-    /// </summary>
-    /// <param name="branch">The game branch</param>
-    /// <param name="version">The requested version number</param>
-    /// <returns>The resolved version number</returns>
-    int ResolveVersionOrLatest(string branch, int version);
-
-    /// <summary>
     /// Finds an existing instance path for the specified branch and version
     /// </summary>
     /// <param name="branch">The game branch</param>
@@ -59,34 +51,6 @@ public interface IInstanceRepository
     /// </summary>
     /// <returns>An enumerable of all instance root paths</returns>
     IEnumerable<string> GetInstanceRootsIncludingLegacy();
-
-    /// <summary>
-    /// Gets the path to the latest installed instance for a branch
-    /// </summary>
-    /// <param name="branch">The game branch</param>
-    /// <returns>The path to the latest instance directory</returns>
-    string GetLatestInstancePath(string branch);
-
-    /// <summary>
-    /// Gets the path to the latest instance info file for a branch
-    /// </summary>
-    /// <param name="branch">The game branch</param>
-    /// <returns>The path to the latest info JSON file</returns>
-    string GetLatestInfoPath(string branch);
-
-    /// <summary>
-    /// Loads the latest instance info from disk
-    /// </summary>
-    /// <param name="branch">The game branch</param>
-    /// <returns>The latest instance info, or <c>null</c> if not found</returns>
-    LatestInstanceInfo? LoadLatestInfo(string branch);
-
-    /// <summary>
-    /// Saves the latest instance info to disk
-    /// </summary>
-    /// <param name="branch">The game branch</param>
-    /// <param name="version">The version number to save as latest</param>
-    void SaveLatestInfo(string branch, int version);
 
     /// <summary>
     /// Checks if the game client executable is present at the specified path
@@ -175,10 +139,9 @@ public interface IInstanceRepository
     /// <param name="branch">The game branch</param>
     /// <param name="version">The version number</param>
     /// <param name="name">Optional custom name for the instance</param>
-    /// <param name="isLatest">Whether this is the auto-updating "latest" instance</param>
     /// <param name="versionName">Optional human-readable game version name</param>
     /// <returns>The created instance metadata</returns>
-    InstanceMeta CreateInstanceMeta(string branch, int version, string? name = null, bool isLatest = false, string? versionName = null);
+    InstanceMeta CreateInstanceMeta(string branch, int version, string? name = null, string? versionName = null);
 
     /// <summary>
     /// Gets the currently selected instance based on SelectedInstanceId
@@ -245,7 +208,7 @@ public interface IInstanceRepository
     /// Changes the version/branch of an existing instance.
     /// For upgrades within the same branch: preserves game files and sets up for patching.
     /// For downgrades or branch changes: clears game client files and prepares for fresh download.
-    /// Always keeps UserData, and marks the instance as non-latest so it never suggests updates
+    /// Always keeps UserData and stores the selected target version in Meta.json
     /// </summary>
     /// <param name="instanceId">The unique instance ID</param>
     /// <param name="branch">The new game branch (e.g. "release")</param>

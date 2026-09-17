@@ -49,7 +49,7 @@ public class InstalledInstance
     public string Id { get; set; } = "";
     /// <summary>Game branch this instance belongs to (e.g. "release" or "pre-release").</summary>
     public string Branch { get; set; } = "";
-    /// <summary>Installed game version number (0 = "latest" rolling instance).</summary>
+    /// <summary>Installed game version number.</summary>
     public int Version { get; set; }
     /// <summary>Absolute path to the instance directory on disk.</summary>
     public string Path { get; set; } = "";

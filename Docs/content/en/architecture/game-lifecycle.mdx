@@ -20,7 +20,7 @@ Desktop instance action
   -> GameProcessTracker and per-instance console
 ```
 
-`GameInstallationWorkflow` rejects concurrent installation work for the same instance. It records `PendingVersion` before modifying an installation so an interrupted patch can be resumed. Fixed installed versions take a fast path; latest-version instances can request differential updates
+`GameInstallationWorkflow` rejects concurrent installation work for the same instance. Every instance targets an explicit branch and numeric version. It records `PendingVersion` before modifying an installation so an interrupted update can be resumed. An installed instance whose metadata matches the selected version uses a fast path without contacting version sources or mirrors
 
 Game payloads are cached under `Cache/Game/Downloads`. Transfer and patching propagate cancellation through network I/O, writes, extraction, and process waits. A successful installation automatically starts the game
 

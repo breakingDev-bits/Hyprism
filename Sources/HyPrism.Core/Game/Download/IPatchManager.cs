@@ -9,13 +9,13 @@ namespace HyPrism.Core.Game.Download;
 public interface IPatchManager
 {
     /// <summary>
-    /// Applies differential patches from installedVersion to latestVersion.
+    /// Applies differential patches from installedVersion to the selected target version.
     /// Downloads and applies patch files sequentially to update the game
     /// </summary>
     /// <param name="versionPath">The path to the game version directory</param>
     /// <param name="branch">The game branch ("release" or "pre-release")</param>
     /// <param name="installedVersion">The currently installed version number</param>
-    /// <param name="latestVersion">The target version number to update to</param>
+    /// <param name="targetVersion">The target version number to update to</param>
     /// <param name="ct">Token to cancel the update operation</param>
     /// <exception cref="OperationCanceledException">Thrown if the operation is cancelled</exception>
     /// <exception cref="InvalidOperationException">Thrown if a patch file is not found or cannot be applied</exception>
@@ -23,6 +23,6 @@ public interface IPatchManager
         string versionPath,
         string branch,
         int installedVersion,
-        int latestVersion,
+        int targetVersion,
         CancellationToken ct = default);
 }

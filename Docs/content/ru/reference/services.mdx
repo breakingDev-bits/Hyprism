@@ -59,7 +59,9 @@ static Task LaunchInstalledAsync(
     => coordinator.LaunchAsync(instanceId, openAuthorizationUri);
 ```
 
-Для новой установки вызовите `DownloadAndLaunchInstanceAsync` у `IGameInstallationWorkflow` и проверьте результат. Отмена выполняется через `CancelDownload(instanceId)`. Различие описано в [жизненном цикле игры](/docs/architecture/game-lifecycle)
+Для новой установки вызовите `DownloadAndLaunchInstanceAsync` у `IGameInstallationWorkflow` и проверьте результат. Экземпляр передает явные ветку и числовую версию, а workflow не выбирает версию неявно. Отмена выполняется через `CancelDownload(instanceId)`. Различие описано в [жизненном цикле игры](/docs/architecture/game-lifecycle)
+
+ZIP-архив для импорта должен содержать `Meta.json` с явной числовой версией. Архивы без этих метаданных отклоняются
 
 ## События и отмена
 

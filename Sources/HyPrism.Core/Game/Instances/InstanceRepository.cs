@@ -76,7 +76,9 @@ public partial class InstanceRepository : IInstanceRepository
             try
             {
                 var json = File.ReadAllText(path);
-                return JsonSerializer.Deserialize<List<InstanceInfo>>(json, JsonOptions) ?? [];
+                return (JsonSerializer.Deserialize<List<InstanceInfo>>(json, JsonOptions) ?? [])
+                    .Where(instance => instance.Version > 0)
+                    .ToList();
             }
             catch (Exception ex)
             {
@@ -186,46 +188,17 @@ public partial class InstanceRepository : IInstanceRepository
     }
 
     /// <summary>
-    /// Resolve version to actual number. Returns 0 if not found.
-    /// Checks in order: provided version > config.SelectedVersion > latest.json > local folders
-    /// </summary>
-    /// <returns>The resolved version or latest</returns>
-    public int ResolveVersionOrLatest(string branch, int version)
-    {
-        var config = GetConfig();
-        if (version > 0) return version;
-#pragma warning disable CS0618 // Backward compatibility: SelectedVersion and VersionType kept for migration
-        if (config.SelectedVersion > 0) return config.SelectedVersion;
-
-        var info = LoadLatestInfo(branch);
-        if (info?.Version > 0) return info.Version;
-
-        string resolvedBranch = string.IsNullOrWhiteSpace(branch) ? config.VersionType : branch;
-#pragma warning restore CS0618
-        string branchDir = GetBranchPath(resolvedBranch);
-        if (Directory.Exists(branchDir))
-        {
-            var latest = Directory.GetDirectories(branchDir)
-                .Select(Path.GetFileName)
-                .Select(name => int.TryParse(name, out var v) ? v : -1)
-                .Where(v => v > 0)
-                .OrderByDescending(v => v)
-                .FirstOrDefault();
-            return latest;
-        }
-
-        return 0;
-    }
-
-    /// <summary>
     /// Find existing instance path by branch and version.
     /// Checks multiple locations including legacy naming formats and GUID-named folders
     /// </summary>
     /// <returns>The existing instance path, or null when unavailable</returns>
     public string? FindExistingInstancePath(string branch, int version)
     {
+        if (version <= 0)
+            return null;
+
         string normalizedBranch = NormalizeVersionType(branch);
-        string versionSegment = version == 0 ? "latest" : version.ToString();
+        string versionSegment = version.ToString();
 
         var flatRoot = GetInstanceRoot();
         if (Directory.Exists(flatRoot))
@@ -243,8 +216,7 @@ public partial class InstanceRepository : IInstanceRepository
                 if (meta == null) continue;
                 if (!meta.Branch.Equals(normalizedBranch, StringComparison.OrdinalIgnoreCase)) continue;
 
-                if (version == 0 && meta.IsLatest) return instanceDir;
-                if (version > 0 && meta.Version == version) return instanceDir;
+                if (meta.Version == version) return instanceDir;
             }
         }
 
@@ -263,17 +235,13 @@ public partial class InstanceRepository : IInstanceRepository
                         var meta = GetInstanceMeta(instanceDir);
                         if (meta != null)
                         {
-                            if (version == 0 && meta.IsLatest) return instanceDir;
-                            if (version > 0 && meta.Version == version &&
+                            if (meta.Version == version &&
                                 meta.Branch.Equals(normalizedBranch, StringComparison.OrdinalIgnoreCase))
                                 return instanceDir;
                         }
                     }
 
-                    if (version == 0 && folderName.Equals("latest", StringComparison.OrdinalIgnoreCase))
-                        return instanceDir;
-
-                    if (version > 0 && folderName == version.ToString())
+                    if (folderName == version.ToString())
                         return instanceDir;
                 }
             }
@@ -331,127 +299,6 @@ public partial class InstanceRepository : IInstanceRepository
             yield return r;
         }
     }
-
-    /// <summary>
-    /// Get path for latest instance symlink/info
-    /// </summary>
-    /// <returns>The latest instance path</returns>
-    public string GetLatestInstancePath(string branch)
-    {
-        return Path.Combine(GetBranchPath(branch), "latest");
-    }
-
-    /// <summary>
-    /// Get path for latest.json file (legacy, used for migration only)
-    /// </summary>
-    /// <returns>The latest instance information path</returns>
-    public string GetLatestInfoPath(string branch)
-    {
-        return Path.Combine(GetBranchPath(branch), "latest.json");
-    }
-
-    private string GetLegacyLatestInfoPath(string branch)
-    {
-        return Path.Combine(GetLatestInstancePath(branch), "latest.json");
-    }
-
-    /// <summary>
-    /// Load latest instance info.
-    /// Reads from the "latest" instance's Meta.json (InstalledVersion field).
-    /// Falls back to legacy latest.json for migration
-    /// </summary>
-    /// <returns>The loaded latest info, or null when unavailable</returns>
-    public LatestInstanceInfo? LoadLatestInfo(string branch)
-    {
-        try
-        {
-            var normalizedBranch = NormalizeVersionType(branch);
-
-            var latestPath = GetLatestInstancePath(normalizedBranch);
-            if (Directory.Exists(latestPath))
-            {
-                var meta = GetInstanceMeta(latestPath);
-                if (meta != null && meta.InstalledVersion > 0)
-                {
-                    return new LatestInstanceInfo { Version = meta.InstalledVersion, UpdatedAt = meta.LastPlayedAt ?? meta.CreatedAt };
-                }
-            }
-
-            var path = GetLatestInfoPath(normalizedBranch);
-            if (!File.Exists(path))
-            {
-                path = GetLegacyLatestInfoPath(normalizedBranch);
-                if (!File.Exists(path)) return null;
-            }
-            var json = File.ReadAllText(path);
-            var info = JsonSerializer.Deserialize<LatestInstanceInfo>(json, JsonOptions);
-
-            if (info?.Version > 0 && Directory.Exists(latestPath))
-            {
-                var meta = GetInstanceMeta(latestPath);
-                if (meta != null && meta.InstalledVersion == 0)
-                {
-                    meta.InstalledVersion = info.Version;
-                    SaveInstanceMeta(latestPath, meta);
-                    Logger.Info("Instance", $"Migrated InstalledVersion={info.Version} from latest.json to instance meta for {branch}");
-                }
-            }
-
-            return info;
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    /// <summary>
-    /// Save latest instance info.
-    /// Updates the "latest" instance's Meta.json InstalledVersion field.
-    /// No longer creates latest.json files
-    /// </summary>
-    public void SaveLatestInfo(string branch, int version)
-    {
-        try
-        {
-            var normalizedBranch = NormalizeVersionType(branch);
-            var latestPath = GetLatestInstancePath(normalizedBranch);
-
-            if (Directory.Exists(latestPath))
-            {
-                var meta = GetInstanceMeta(latestPath);
-                if (meta != null)
-                {
-                    meta.InstalledVersion = version;
-                    SaveInstanceMeta(latestPath, meta);
-                    Logger.Debug("Instance", $"Updated InstalledVersion={version} in instance meta for {branch}");
-                    return;
-                }
-            }
-
-            var latestFlat = GetInstalledInstances()
-                .FirstOrDefault(i => i.Version == 0 &&
-                    i.Branch.Equals(normalizedBranch, StringComparison.OrdinalIgnoreCase));
-            if (latestFlat != null)
-            {
-                var flatMeta = GetInstanceMeta(latestFlat.Path);
-                if (flatMeta != null)
-                {
-                    flatMeta.InstalledVersion = version;
-                    SaveInstanceMeta(latestFlat.Path, flatMeta);
-                    Logger.Debug("Instance", $"Updated InstalledVersion={version} for latest instance {latestFlat.Id}");
-                    return;
-                }
-            }
-
-            Logger.Warning("Instance", $"SaveLatestInfo: no latest instance found for branch '{branch}', skipping");
-        }
-        catch (Exception ex)
-        {
-            Logger.Error("Instance", $"Failed to save latest info: {ex.Message}");
-        }
-    }
-
 
     /// <summary>
     /// Safely copy directory recursively, preventing infinite loops
@@ -530,17 +377,14 @@ public partial class InstanceRepository : IInstanceRepository
     }
 
     /// <summary>
-    /// Gets the path to a specific instance version. Returns latest path if version is 0.
+    /// Gets the path to a specific instance version.
     /// Searches existing instances by branch/version using Meta.json.
     /// If not found, returns a path for a new instance (but does not create it)
     /// </summary>
     /// <returns>The instance path</returns>
     public string GetInstancePath(string branch, int version)
     {
-        if (version == 0)
-        {
-            return GetLatestInstancePath(branch);
-        }
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(version);
 
         string normalizedBranch = NormalizeVersionType(branch);
         var flatRoot = GetInstanceRoot();
@@ -652,8 +496,7 @@ public partial class InstanceRepository : IInstanceRepository
     #endregion
 
     /// <summary>
-    /// Deletes a game instance by branch and version number.
-    /// Also removes latest.json for latest instances (version 0)
+    /// Deletes a game instance by branch and version number
     /// </summary>
     /// <returns>true when the operation succeeds; otherwise false</returns>
     public bool DeleteGame(string branch, int versionNumber)
@@ -666,15 +509,6 @@ public partial class InstanceRepository : IInstanceRepository
             if (Directory.Exists(versionPath))
             {
                 Directory.Delete(versionPath, true);
-            }
-
-            if (versionNumber == 0)
-            {
-                var infoPath = GetLatestInfoPath(normalizedBranch);
-                if (File.Exists(infoPath))
-                {
-                    File.Delete(infoPath);
-                }
             }
 
             SyncInstancesWithConfig();
@@ -709,15 +543,6 @@ public partial class InstanceRepository : IInstanceRepository
 
             Directory.Delete(versionPath, true);
 
-            if (info?.Version == 0)
-            {
-                var infoPath = GetLatestInfoPath(info.Branch);
-                if (File.Exists(infoPath))
-                {
-                    File.Delete(infoPath);
-                }
-            }
-
             SyncInstancesWithConfig();
             return true;
         }
@@ -746,7 +571,6 @@ public partial class InstanceRepository : IInstanceRepository
             string? customName = null;
             string instanceId = "";
             int version = -1;
-            bool isLatest = false;
             string branch = branchHint ?? "";
             var metaPath = LauncherJsonFile.GetPath(folder, "Meta.json", "meta.json");
 
@@ -761,7 +585,6 @@ public partial class InstanceRepository : IInstanceRepository
                         instanceId = meta.Id ?? "";
                         customName = meta.Name;
                         version = meta.Version;
-                        isLatest = meta.IsLatest;
                         if (!string.IsNullOrEmpty(meta.Branch))
                             branch = meta.Branch;
                     }
@@ -771,12 +594,7 @@ public partial class InstanceRepository : IInstanceRepository
 
             if (version < 0)
             {
-                if (string.Equals(dirName, "latest", StringComparison.OrdinalIgnoreCase))
-                {
-                    version = 0;
-                    isLatest = true;
-                }
-                else if (int.TryParse(dirName, out var parsedVersion))
+                if (int.TryParse(dirName, out var parsedVersion) && parsedVersion > 0)
                 {
                     version = parsedVersion;
                 }
@@ -789,6 +607,12 @@ public partial class InstanceRepository : IInstanceRepository
                 {
                     return;
                 }
+            }
+
+            if (version <= 0)
+            {
+                Logger.Warning("InstanceRepository", $"Skipping instance without an explicit version: {folder}");
+                return;
             }
 
             var userDataPath = Path.Combine(folder, "UserData");
@@ -836,8 +660,7 @@ public partial class InstanceRepository : IInstanceRepository
                         Name = customName ?? "",
                         Branch = branch,
                         Version = version,
-                        CreatedAt = DateTime.UtcNow,
-                        IsLatest = isLatest
+                        CreatedAt = DateTime.UtcNow
                     };
                     var json = JsonSerializer.Serialize(newMeta, JsonOptions);
                     File.WriteAllText(metaPath, json);
@@ -1143,7 +966,7 @@ public partial class InstanceRepository : IInstanceRepository
             }
 
             meta.Name = string.IsNullOrWhiteSpace(customName)
-                ? (meta.IsLatest ? $"{meta.Branch} (Latest)" : $"{meta.Branch} v{meta.Version}")
+                ? $"{meta.Branch} v{meta.Version}"
                 : customName;
 
             SaveInstanceMeta(instancePath, meta);
@@ -1204,27 +1027,10 @@ public partial class InstanceRepository : IInstanceRepository
     }
 
     /// <inheritdoc/>
-    public InstanceMeta CreateInstanceMeta(string branch, int version, string? name = null, bool isLatest = false, string? versionName = null)
+    public InstanceMeta CreateInstanceMeta(string branch, int version, string? name = null, string? versionName = null)
     {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(version);
         var normalizedBranch = NormalizeVersionType(branch);
-
-        if (isLatest)
-        {
-            var existingLatest = FindInstanceByBranchAndVersion(normalizedBranch, 0);
-            if (existingLatest != null)
-            {
-                var existingPath = GetInstancePathById(existingLatest.Id);
-                if (!string.IsNullOrEmpty(existingPath))
-                {
-                    var existingMeta = GetInstanceMeta(existingPath);
-                    if (existingMeta != null && existingMeta.IsLatest)
-                    {
-                        Logger.Debug("InstanceRepository", $"Latest instance already exists for {branch}");
-                        return existingMeta;
-                    }
-                }
-            }
-        }
 
         string instancePath;
         string instanceId = Guid.NewGuid().ToString();
@@ -1240,14 +1046,11 @@ public partial class InstanceRepository : IInstanceRepository
         var meta = new InstanceMeta
         {
             Id = instanceId,
-            Name = name ?? (isLatest
-                ? $"{normalizedBranch} (Latest)"
-                : $"{normalizedBranch} v{versionName ?? version.ToString()}"),
+            Name = name ?? $"{normalizedBranch} v{versionName ?? version.ToString()}",
             Branch = normalizedBranch,
             Version = version,
             VersionName = versionName,
-            CreatedAt = DateTime.UtcNow,
-            IsLatest = isLatest
+            CreatedAt = DateTime.UtcNow
         };
 
         SaveInstanceMeta(instancePath, meta);
@@ -1350,7 +1153,12 @@ public partial class InstanceRepository : IInstanceRepository
         void ProcessInstanceDir(string instanceDir)
         {
             var meta = GetInstanceMeta(instanceDir);
-            if (meta == null) return;
+            if (meta == null || meta.Version <= 0)
+            {
+                if (meta?.Version == 0)
+                    Logger.Warning("InstanceRepository", $"Skipping instance without an explicit version: {instanceDir}");
+                return;
+            }
 
             if (string.IsNullOrWhiteSpace(meta.Id))
             {
@@ -1438,8 +1246,7 @@ public partial class InstanceRepository : IInstanceRepository
                 Name = legacyData?.GetValueOrDefault("customName") ?? (isLatest ? $"{parentName} (Latest)" : $"{parentName} v{version}"),
                 Branch = parentName,
                 Version = version,
-                CreatedAt = DateTime.UtcNow,
-                IsLatest = isLatest
+                CreatedAt = DateTime.UtcNow
             };
 
             SaveInstanceMeta(instancePath, meta);
@@ -1495,6 +1302,9 @@ public partial class InstanceRepository : IInstanceRepository
     /// <inheritdoc/>
     public InstanceInfo? FindInstanceByBranchAndVersion(string branch, int version)
     {
+        if (version <= 0)
+            return null;
+
         var normalizedBranch = NormalizeVersionType(branch);
         var config = GetConfig();
 
@@ -1555,13 +1365,14 @@ public partial class InstanceRepository : IInstanceRepository
     /// Changes the version/branch of an existing instance.
     /// For upgrades within the same branch: preserves game files and sets up for patching.
     /// For downgrades or branch changes: removes game client files and prepares for fresh download.
-    /// Always keeps UserData and Meta.json, and marks IsLatest = false
+    /// Always keeps UserData and Meta.json
     /// </summary>
     /// <returns>true when the operation succeeds; otherwise false</returns>
     public bool ChangeInstanceVersion(string instanceId, string branch, int version)
     {
         try
         {
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(version);
             var instancePath = GetInstancePathById(instanceId);
             if (string.IsNullOrEmpty(instancePath) || !Directory.Exists(instancePath))
             {
@@ -1593,7 +1404,6 @@ public partial class InstanceRepository : IInstanceRepository
                 meta.Version = version;
                 meta.PendingVersion = version;
                 // Keep InstalledVersion as-is so patcher knows the starting point
-                meta.IsLatest = false;
 
                 SaveInstanceMeta(instancePath, meta);
             }
@@ -1620,7 +1430,6 @@ public partial class InstanceRepository : IInstanceRepository
                 meta.Version = version;
                 meta.InstalledVersion = 0;
                 meta.PendingVersion = 0;
-                meta.IsLatest = false;
 
                 SaveInstanceMeta(instancePath, meta);
             }
@@ -1635,7 +1444,7 @@ public partial class InstanceRepository : IInstanceRepository
             }
 
             var mode = canUsePatch ? "patch" : "full-download";
-            Logger.Success("InstanceRepository", $"Changed instance {instanceId} to {normalizedBranch} v{version} (non-latest, mode={mode})");
+            Logger.Success("InstanceRepository", $"Changed instance {instanceId} to {normalizedBranch} v{version} (mode={mode})");
             RaiseInstancesChanged();
             return true;
         }
@@ -1679,6 +1488,13 @@ public partial class InstanceRepository : IInstanceRepository
             existingId = importedMeta?.Id;
         }
 
+        if (importedMeta is null || version <= 0)
+        {
+            DeleteTemporaryImportDirectory(tempDir);
+            throw new InvalidDataException(
+                "The archive must contain Meta.json with an explicit game version");
+        }
+
         var existingInstances = GetInstalledInstances();
         var idAlreadyExists = !string.IsNullOrEmpty(existingId) &&
             existingInstances.Any(i => i.Id == existingId);
@@ -1712,10 +1528,27 @@ public partial class InstanceRepository : IInstanceRepository
             Directory.Move(dir, destDir);
         }
 
-        try { Directory.Delete(tempDir, true); } catch { }
+        DeleteTemporaryImportDirectory(tempDir);
 
         Logger.Success("InstanceRepository", $"Imported ZIP instance to: {targetPath}");
         SyncInstancesWithConfig();
+    }
+
+    private static void DeleteTemporaryImportDirectory(string path)
+    {
+        try
+        {
+            if (Directory.Exists(path))
+                Directory.Delete(path, recursive: true);
+        }
+        catch (IOException exception)
+        {
+            Logger.Warning("InstanceRepository", $"Could not remove temporary import directory {path}: {exception.Message}");
+        }
+        catch (UnauthorizedAccessException exception)
+        {
+            Logger.Warning("InstanceRepository", $"Could not remove temporary import directory {path}: {exception.Message}");
+        }
     }
 
     /// <summary>

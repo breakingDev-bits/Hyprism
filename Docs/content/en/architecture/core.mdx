@@ -28,7 +28,7 @@ Core owns launcher behavior that can operate without a UI toolkit. Interfaces li
 
 ## Orchestration
 
-`GameLaunchCoordinator` guards installed-instance launches. `GameInstallationWorkflow` chooses installation or update work and calls `GameLauncher` after preparation. The [launch workflow](/docs/architecture/game-lifecycle) describes their ordering and cancellation boundaries
+`GameLaunchCoordinator` guards installed-instance launches. `GameInstallationWorkflow` handles the selected branch and numeric version during installation or an explicit update, then calls `GameLauncher` after preparation. The [launch workflow](/docs/architecture/game-lifecycle) describes their ordering and cancellation boundaries
 
 The repository services raise `InstancesChanged` and `ProfilesChanged` after mutations. Consumers subscribe to these events instead of polling disk or assuming their own action was the only writer
 

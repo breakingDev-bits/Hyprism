@@ -146,7 +146,6 @@ public static partial class Bootstrapper
                     sp.GetRequiredService<IGameVersionCatalog>(),
                     sp.GetRequiredService<IButlerClient>(),
                     sp.GetRequiredService<IFileDownloader>(),
-                    sp.GetRequiredService<IInstanceRepository>(),
                     sp.GetRequiredService<IProgressReporter>(),
                     sp.GetRequiredService<HttpClient>(),
                     sp.GetRequiredService<AppPathConfiguration>()));

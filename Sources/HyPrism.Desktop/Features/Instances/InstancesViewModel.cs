@@ -3001,7 +3001,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     }
     private string FormatVersion(int version, string? versionName)
         => version <= 0
-            ? _localizer["common.latest"]
+            ? _localizer["common.unknown"]
             : string.IsNullOrWhiteSpace(versionName) ? version.ToString() : versionName;
 
     private string FormatBranch(string branch)
@@ -3200,7 +3200,8 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
             if (!string.IsNullOrWhiteSpace(instanceId))
                 EndInstanceActivity(instanceId);
 
-            IsActivityVisible = false;
+            if (e.ExitCode == 0)
+                IsActivityVisible = false;
 
             UpdateSelectedInstancePresentation();
             if (endsManagedAction)
@@ -3217,7 +3218,9 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
             !string.Equals(error.InstanceId, activeInstanceId, StringComparison.OrdinalIgnoreCase))
             return;
 
-        Dispatcher.UIThread.Post(() => ShowError(error.Technical ?? error.Message));
+        Dispatcher.UIThread.Post(
+            () => ShowError(error.Technical ?? error.Message),
+            DispatcherPriority.Normal);
     }
 
     private void ShowError(string message)

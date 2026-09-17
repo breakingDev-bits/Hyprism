@@ -7,7 +7,7 @@ using HyPrism.Core.Game.Sources;
 namespace HyPrism.Core.Game.Versions;
 
 /// <summary>
-/// Provides version management and update detection for game installations
+/// Provides explicit version discovery, patch planning, and source selection
 /// </summary>
 public interface IGameVersionCatalog
 {
@@ -36,35 +36,6 @@ public interface IGameVersionCatalog
     /// <param name="versions">The cached version entries if found and valid</param>
     /// <returns><c>true</c> if valid cached data was found; otherwise, <c>false</c></returns>
     bool TryGetCachedVersionEntries(string branch, TimeSpan maxAge, out List<CachedVersionEntry> versions);
-
-    /// <summary>
-    /// Checks if the latest installed version needs an update
-    /// </summary>
-    /// <param name="branch">The game branch</param>
-    /// <param name="isClientPresent">Function to check if client exists at a path</param>
-    /// <param name="getLatestInstancePath">Function to get the latest instance path</param>
-    /// <param name="loadLatestInfo">Function to load the latest version info from a path</param>
-    /// <returns><c>true</c> if an update is available; otherwise, <c>false</c></returns>
-    Task<bool> CheckLatestNeedsUpdateAsync(string branch, Func<string, bool> isClientPresent, Func<string> getLatestInstancePath, Func<string, LatestVersionInfo?> loadLatestInfo);
-
-    /// <summary>
-    /// Gets detailed status information about the latest version
-    /// </summary>
-    /// <param name="branch">The game branch</param>
-    /// <param name="isClientPresent">Function to check if client exists at a path</param>
-    /// <param name="getLatestInstancePath">Function to get the latest instance path</param>
-    /// <param name="loadLatestInfo">Function to load the latest version info from a path</param>
-    /// <returns>The version status including installed and available versions</returns>
-    Task<VersionStatus> GetLatestVersionStatusAsync(string branch, Func<string, bool> isClientPresent, Func<string> getLatestInstancePath, Func<string, LatestVersionInfo?> loadLatestInfo);
-
-    /// <summary>
-    /// Gets information about a pending update if one is available
-    /// </summary>
-    /// <param name="branch">The game branch</param>
-    /// <param name="getLatestInstancePath">Function to get the latest instance path</param>
-    /// <param name="loadLatestInfo">Function to load the latest version info from a path</param>
-    /// <returns>Update information if an update is pending, or <c>null</c> if up to date</returns>
-    Task<UpdateInfo?> GetPendingUpdateInfoAsync(string branch, Func<string> getLatestInstancePath, Func<string, LatestVersionInfo?> loadLatestInfo);
 
     /// <summary>
     /// Calculates the sequence of patch versions needed to update from one version to another

@@ -21,7 +21,6 @@ public sealed class GameLaunchCoordinator(
     private readonly HashSet<string> _launchingInstanceIds = new(StringComparer.OrdinalIgnoreCase);
     private readonly Lock _launchLock = new();
     private const int ExitSuccess = 0;
-    private const int ErrorGenericLaunch = 1;
     private const int ErrorNotInstalled = 11;
     private const int ErrorDownloadFailed = 12;
     private const int ErrorLaunchFailed = 13;
@@ -137,6 +136,6 @@ public sealed class GameLaunchCoordinator(
         if (normalized.Contains("download"))
             return ErrorDownloadFailed;
 
-        return ErrorGenericLaunch;
+        return ErrorDownloadFailed;
     }
 }

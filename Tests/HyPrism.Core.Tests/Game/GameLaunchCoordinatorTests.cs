@@ -130,6 +130,33 @@ public sealed class GameLaunchCoordinatorTests
         Assert.Equal(14, failure.ExitCode);
     }
 
+    [Fact]
+    public async Task LaunchAsync_MapsUnknownWorkflowFailureToDownloadExitCode()
+    {
+        var instance = CreateInstalledInstance();
+
+        _gameProcess.Setup(service => service.IsGameRunning()).Returns(false);
+        _instances.Setup(service => service.GetSelectedInstance()).Returns(instance);
+        _instances.Setup(service => service.GetInstancePathById(instance.Id)).Returns("/game");
+        _instances.Setup(service => service.IsClientPresent("/game")).Returns(true);
+        _gameSession
+            .Setup(service => service.DownloadAndLaunchAsync(It.IsAny<AuthUriPresenter?>()))
+            .ReturnsAsync(new DownloadProgress
+            {
+                Success = false,
+                Error = "No explicit game version is selected for this instance"
+            });
+
+        LaunchFailedEventArgs? failure = null;
+        var subject = CreateSubject();
+        subject.LaunchFailed += (_, args) => failure = args;
+
+        await subject.LaunchAsync();
+
+        Assert.NotNull(failure);
+        Assert.Equal(12, failure!.ExitCode);
+    }
+
     private GameLaunchCoordinator CreateSubject()
         => new(
             _gameSession.Object,

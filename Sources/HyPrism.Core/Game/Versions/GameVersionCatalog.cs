@@ -10,7 +10,7 @@ using HyPrism.Core.Game.Sources;
 namespace HyPrism.Core.Game.Versions;
 
 /// <summary>
-/// Manages game version detection, update checking, and version caching.
+/// Manages explicit game version discovery, patch planning, and version caching.
 /// Queries all registered version sources (official + mirrors) and merges results
 /// </summary>
 /// <remarks>
@@ -757,131 +757,6 @@ public class GameVersionCatalog : IGameVersionCatalog
         }
 
         return candidates;
-    }
-
-    /// <summary>
-    /// Check if latest instance needs an update
-    /// </summary>
-    /// <returns>A task that completes with true when the operation succeeds; otherwise false</returns>
-    public async Task<bool> CheckLatestNeedsUpdateAsync(string branch, Func<string, bool> isClientPresent, Func<string> getLatestInstancePath, Func<string, LatestVersionInfo?> loadLatestInfo)
-    {
-        var normalizedBranch = NormalizeBranch(branch);
-        var versions = await GetVersionListAsync(normalizedBranch);
-        if (versions.Count == 0) return false;
-
-        var latest = versions[0];
-        var latestPath = getLatestInstancePath();
-        var info = loadLatestInfo(normalizedBranch);
-        var baseOk = isClientPresent(latestPath);
-        if (!baseOk) return true;
-        if (info == null)
-        {
-            Logger.Info("Update", $"No latest.json found for {normalizedBranch}, assuming update may be needed");
-            return true;
-        }
-        return info.Version != latest;
-    }
-
-    /// <summary>
-    /// Gets the version status for the latest instance
-    /// </summary>
-    /// <returns>A task that completes with the latest version status</returns>
-    public async Task<VersionStatus> GetLatestVersionStatusAsync(string branch, Func<string, bool> isClientPresent, Func<string> getLatestInstancePath, Func<string, LatestVersionInfo?> loadLatestInfo)
-    {
-        try
-        {
-            var normalizedBranch = NormalizeBranch(branch);
-            var versions = await GetVersionListAsync(normalizedBranch);
-
-            if (versions.Count == 0)
-            {
-                return new VersionStatus { Status = "none", InstalledVersion = 0, LatestVersion = 0 };
-            }
-
-            var latestAvailable = versions[0];
-            var latestPath = getLatestInstancePath();
-            var info = loadLatestInfo(normalizedBranch);
-            var baseOk = isClientPresent(latestPath);
-
-            if (!baseOk)
-            {
-                return new VersionStatus
-                {
-                    Status = "not_installed",
-                    InstalledVersion = 0,
-                    LatestVersion = latestAvailable
-                };
-            }
-
-            if (info == null)
-            {
-                return new VersionStatus
-                {
-                    Status = "update_available",
-                    InstalledVersion = 0,
-                    LatestVersion = latestAvailable
-                };
-            }
-
-            if (info.Version < latestAvailable)
-            {
-                return new VersionStatus
-                {
-                    Status = "update_available",
-                    InstalledVersion = info.Version,
-                    LatestVersion = latestAvailable
-                };
-            }
-
-            return new VersionStatus
-            {
-                Status = "current",
-                InstalledVersion = info.Version,
-                LatestVersion = latestAvailable
-            };
-        }
-        catch (Exception ex)
-        {
-            Logger.Error("Version", $"Failed to get latest version status: {ex.Message}");
-            return new VersionStatus { Status = "error", InstalledVersion = 0, LatestVersion = 0 };
-        }
-    }
-
-    /// <summary>
-    /// Get pending update information
-    /// </summary>
-    /// <returns>A task that completes with the requested pending update info, or null when unavailable</returns>
-    public async Task<UpdateInfo?> GetPendingUpdateInfoAsync(string branch, Func<string> getLatestInstancePath, Func<string, LatestVersionInfo?> loadLatestInfo)
-    {
-        try
-        {
-            var normalizedBranch = NormalizeBranch(branch);
-            var versions = await GetVersionListAsync(normalizedBranch);
-            if (versions.Count == 0) return null;
-
-            var latestVersion = versions[0];
-            var latestPath = getLatestInstancePath();
-            var info = loadLatestInfo(normalizedBranch);
-
-            if (info == null || info.Version == latestVersion) return null;
-
-            var oldUserDataPath = Path.Combine(latestPath, "UserData");
-            var hasOldUserData = Directory.Exists(oldUserDataPath) &&
-                                 Directory.GetFileSystemEntries(oldUserDataPath).Length > 0;
-
-            return new UpdateInfo
-            {
-                OldVersion = info.Version,
-                NewVersion = latestVersion,
-                HasOldUserData = hasOldUserData,
-                Branch = normalizedBranch
-            };
-        }
-        catch (Exception ex)
-        {
-            Logger.Warning("Update", $"Failed to get pending update info: {ex.Message}");
-            return null;
-        }
     }
 
     /// <summary>

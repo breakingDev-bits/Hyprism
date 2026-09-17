@@ -419,14 +419,15 @@ public class InstanceMigrator : IInstanceMigrator
                         if (latestMeta != null && !string.IsNullOrEmpty(latestMeta.Id))
                         {
                             latestId = latestMeta.Id;
-                            if (!latestMeta.IsLatest)
+                            if (latestMeta.Version > 0 && latestMeta.InstalledVersion <= 0)
                             {
-                                latestMeta.IsLatest = true;
-                                latestMeta.Version = 0;
-                                if (string.IsNullOrEmpty(latestMeta.Name))
-                                    latestMeta.Name = $"{branchName} (Latest)";
-                                _instances.SaveInstanceMeta(instanceDir, latestMeta);
+                                latestMeta.InstalledVersion = latestMeta.Version;
                             }
+
+                            latestMeta.Version = 0;
+                            if (string.IsNullOrEmpty(latestMeta.Name))
+                                latestMeta.Name = $"{branchName} (Latest)";
+                            _instances.SaveInstanceMeta(instanceDir, latestMeta);
                         }
                         else
                         {
@@ -437,8 +438,7 @@ public class InstanceMigrator : IInstanceMigrator
                                 Name = $"{branchName} (Latest)",
                                 Branch = branchName,
                                 Version = 0,
-                                CreatedAt = DateTime.UtcNow,
-                                IsLatest = true
+                                CreatedAt = DateTime.UtcNow
                             };
                             _instances.SaveInstanceMeta(instanceDir, newLatestMeta);
                             Logger.Info("Migrate", $"Created meta.json for latest instance in {branchName}");
@@ -482,8 +482,7 @@ public class InstanceMigrator : IInstanceMigrator
                             Name = $"{branchName} v{version}",
                             Branch = branchName,
                             Version = version,
-                            CreatedAt = DateTime.UtcNow,
-                            IsLatest = false
+                            CreatedAt = DateTime.UtcNow
                         };
                         _instances.SaveInstanceMeta(instanceDir, meta);
                     }
@@ -597,6 +596,151 @@ public class InstanceMigrator : IInstanceMigrator
         catch (Exception ex)
         {
             Logger.Error("Migrate", $"Failed to flatten branch subdirectories: {ex.Message}");
+        }
+    }
+
+    /// <inheritdoc/>
+    public bool MigrateLegacyRollingInstancesToFixedVersions()
+    {
+        var changed = false;
+        try
+        {
+            var root = _instances.GetInstanceRoot();
+            if (!Directory.Exists(root))
+                return false;
+
+            foreach (var instancePath in EnumerateInstancePaths(root))
+            {
+                var meta = _instances.GetInstanceMeta(instancePath);
+                if (meta is null || meta.Version > 0)
+                    continue;
+
+                var branch = LauncherUtilities.NormalizeVersionType(meta.Branch);
+                var installedVersion = meta.InstalledVersion;
+                var markerVersion = installedVersion > 0
+                    ? 0
+                    : ReadLegacyVersion(instancePath, root, branch);
+                var selectedVersion = installedVersion > 0
+                    ? installedVersion
+                    : markerVersion;
+                var selectedInstalledVersion = installedVersion > 0
+                    ? installedVersion
+                    : markerVersion;
+
+                if (selectedVersion <= 0 && meta.PendingVersion > 0 && !_instances.IsClientPresent(instancePath))
+                {
+                    selectedVersion = meta.PendingVersion;
+                    selectedInstalledVersion = 0;
+                }
+
+                if (selectedVersion <= 0)
+                {
+                    Logger.Warning(
+                        "Migrate",
+                        $"Could not determine an explicit version for legacy instance {instancePath}; leaving its files untouched");
+                    continue;
+                }
+
+                meta.Branch = branch;
+                meta.Version = selectedVersion;
+                meta.InstalledVersion = selectedInstalledVersion;
+                meta.PendingVersion = 0;
+                if (IsGeneratedLatestName(meta.Name, branch))
+                    meta.Name = $"{branch} v{selectedVersion}";
+
+                _instances.SaveInstanceMeta(instancePath, meta);
+                DeleteLegacyVersionMarker(instancePath);
+                changed = true;
+                Logger.Success("Migrate", $"Converted legacy latest instance {meta.Id} to {branch} v{selectedVersion}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("Migrate", $"Failed to convert legacy latest instances: {ex.Message}");
+        }
+
+        return changed;
+    }
+
+    private static IEnumerable<string> EnumerateInstancePaths(string root)
+    {
+        foreach (var path in Directory.GetDirectories(root))
+        {
+            var name = Path.GetFileName(path);
+            if (name.Equals("release", StringComparison.OrdinalIgnoreCase) ||
+                name.Equals("pre-release", StringComparison.OrdinalIgnoreCase))
+            {
+                foreach (var nestedPath in Directory.GetDirectories(path))
+                    yield return nestedPath;
+            }
+            else
+            {
+                yield return path;
+            }
+        }
+    }
+
+    private static int ReadLegacyVersion(string instancePath, string root, string branch)
+    {
+        var candidates = new[]
+        {
+            Path.Combine(instancePath, "latest.json"),
+            Path.Combine(root, branch, "latest.json"),
+            Path.Combine(Path.GetDirectoryName(instancePath) ?? string.Empty, "latest.json")
+        };
+
+        foreach (var path in candidates.Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            if (!File.Exists(path))
+                continue;
+
+            try
+            {
+                using var document = JsonDocument.Parse(File.ReadAllText(path));
+                foreach (var property in document.RootElement.EnumerateObject())
+                {
+                    if (!property.Name.Equals("Version", StringComparison.OrdinalIgnoreCase) &&
+                        !property.Name.Equals("InstalledVersion", StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    if (property.Value.TryGetInt32(out var version) && version > 0)
+                        return version;
+                }
+            }
+            catch (JsonException exception)
+            {
+                Logger.Warning("Migrate", $"Could not read legacy version marker {path}: {exception.Message}");
+            }
+            catch (IOException exception)
+            {
+                Logger.Warning("Migrate", $"Could not read legacy version marker {path}: {exception.Message}");
+            }
+        }
+
+        return 0;
+    }
+
+    private static bool IsGeneratedLatestName(string? name, string branch)
+        => string.IsNullOrWhiteSpace(name) ||
+           name.Equals($"{branch} (Latest)", StringComparison.OrdinalIgnoreCase);
+
+    private static void DeleteLegacyVersionMarker(string instancePath)
+    {
+        var markerPath = Path.Combine(instancePath, "latest.json");
+        if (!File.Exists(markerPath))
+            return;
+
+        try
+        {
+            File.Delete(markerPath);
+        }
+        catch (IOException exception)
+        {
+            Logger.Warning("Migrate", $"Could not remove legacy version marker {markerPath}: {exception.Message}");
+        }
+        catch (UnauthorizedAccessException exception)
+        {
+            Logger.Warning("Migrate", $"Could not remove legacy version marker {markerPath}: {exception.Message}");
         }
     }
 

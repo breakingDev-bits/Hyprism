@@ -138,8 +138,15 @@ public class GameInstallationWorkflow : IGameInstallationWorkflow
             _progress.ReportDownloadProgress("preparing", 0, "launch.detail.preparing_session", null, 0, 0);
 
             var branch = LauncherUtilities.NormalizeVersionType(selectedInstance.Branch);
-            var isLatestInstance = selectedInstance.Version == 0;
             var targetVersion = selectedInstance.Version;
+
+            if (targetVersion <= 0)
+            {
+                const string error = "No explicit game version is selected for this instance";
+                Logger.Error("Download", error);
+                _progress.ReportError("download", "No game version selected", error, selectedInstance.Id);
+                return new DownloadProgress { Error = error };
+            }
 
             var versionPath = _instances.GetInstancePathById(selectedInstance.Id)
                 ?? _instances.CreateInstanceDirectory(branch, selectedInstance.Id);
@@ -149,11 +156,16 @@ public class GameInstallationWorkflow : IGameInstallationWorkflow
             Directory.CreateDirectory(versionPath);
 
             bool gameIsInstalled = _instances.IsClientPresent(versionPath);
+            var instanceMeta = _instances.GetInstanceMeta(versionPath);
+            var hasPendingUpdate = instanceMeta?.PendingVersion > 0;
+            var installedVersionMatchesSelection = instanceMeta is null
+                || instanceMeta.InstalledVersion <= 0
+                || instanceMeta.InstalledVersion == targetVersion;
 
-            if (gameIsInstalled && !isLatestInstance && targetVersion > 0)
+            if (gameIsInstalled && !hasPendingUpdate && installedVersionMatchesSelection)
             {
                 Logger.Success("Download", $"Fast path: Game already installed at v{targetVersion}, skipping version check");
-                return await HandleInstalledGameFastAsync(
+                return await HandleInstalledGameAsync(
                     versionPath,
                     branch,
                     selectedInstance.Id,
@@ -168,48 +180,70 @@ public class GameInstallationWorkflow : IGameInstallationWorkflow
             if (versions.Count == 0)
                 return new DownloadProgress { Error = "No versions available for this branch" };
 
-            if (targetVersion <= 0 || !versions.Contains(targetVersion))
-                targetVersion = versions[0];
+            if (!versions.Contains(targetVersion))
+                return new DownloadProgress { Error = $"Selected version v{targetVersion} is not available for branch {branch}" };
 
             Logger.Info("Download", $"=== INSTALL CHECK ===", false);
             Logger.Info("Download", $"Version path: {versionPath}", false);
-            Logger.Info("Download", $"Is latest instance: {isLatestInstance}", false);
             Logger.Info("Download", $"Target version: {targetVersion}", false);
             Logger.Info("Download", $"Client exists (game installed): {gameIsInstalled}", false);
 
-            var instanceMeta = _instances.GetInstanceMeta(versionPath);
             if (instanceMeta != null && instanceMeta.PendingVersion > 0)
             {
                 Logger.Warning("Download", $"Detected interrupted install: PendingVersion={instanceMeta.PendingVersion}, InstalledVersion={instanceMeta.InstalledVersion}");
 
-                if (gameIsInstalled && instanceMeta.InstalledVersion > 0 && instanceMeta.InstalledVersion < instanceMeta.PendingVersion)
+                if (instanceMeta.PendingVersion != targetVersion)
                 {
-                    Logger.Info("Download", $"Resuming differential update from v{instanceMeta.InstalledVersion} to v{instanceMeta.PendingVersion}");
-                    try
-                    {
-                        await _patchManager.ApplyDifferentialUpdateAsync(
-                            versionPath, branch, instanceMeta.InstalledVersion, instanceMeta.PendingVersion, cts.Token);
-                        return await CompleteInstallAsync(
-                            versionPath,
-                            branch,
-                            isLatestInstance,
-                            instanceMeta.PendingVersion,
-                            authorizationUriPresenter,
-                            cts.Token);
-                    }
-                    catch (OperationCanceledException) { throw; }
-                    catch (Exception ex)
-                    {
-                        Logger.Warning("Download", $"Resume patching failed: {ex.Message}, falling through to normal flow");
-                    }
+                    Logger.Warning("Download", $"Pending version v{instanceMeta.PendingVersion} does not match selected version v{targetVersion}; clearing stale pending state");
+                    instanceMeta.PendingVersion = 0;
+                    _instances.SaveInstanceMeta(versionPath, instanceMeta);
+                }
+                else if (gameIsInstalled && instanceMeta.InstalledVersion > 0 && instanceMeta.InstalledVersion < targetVersion)
+                {
+                    Logger.Info("Download", $"Resuming differential update from v{instanceMeta.InstalledVersion} to v{targetVersion}");
+                    return await ApplyExplicitUpdateAsync(
+                        versionPath,
+                        branch,
+                        instanceMeta.InstalledVersion,
+                        targetVersion,
+                        authorizationUriPresenter,
+                        cts.Token);
                 }
                 else if (!gameIsInstalled)
                 {
                     Logger.Info("Download", "Client not present despite PendingVersion, will re-install");
                 }
+                else
+                {
+                    Logger.Info("Download", $"Pending version v{targetVersion} is already present, clearing pending state");
+                    instanceMeta.PendingVersion = 0;
+                    _instances.SaveInstanceMeta(versionPath, instanceMeta);
+                }
             }
 
-            if (instanceMeta != null)
+            if (gameIsInstalled && instanceMeta is not null &&
+                instanceMeta.InstalledVersion > 0 && instanceMeta.InstalledVersion != targetVersion)
+            {
+                if (instanceMeta.InstalledVersion < targetVersion)
+                {
+                    instanceMeta.PendingVersion = targetVersion;
+                    _instances.SaveInstanceMeta(versionPath, instanceMeta);
+                    return await ApplyExplicitUpdateAsync(
+                        versionPath,
+                        branch,
+                        instanceMeta.InstalledVersion,
+                        targetVersion,
+                        authorizationUriPresenter,
+                        cts.Token);
+                }
+
+                return new DownloadProgress
+                {
+                    Error = $"Installed version v{instanceMeta.InstalledVersion} is newer than selected version v{targetVersion}"
+                };
+            }
+
+            if (!gameIsInstalled && instanceMeta != null)
             {
                 instanceMeta.PendingVersion = targetVersion;
                 _instances.SaveInstanceMeta(versionPath, instanceMeta);
@@ -220,8 +254,6 @@ public class GameInstallationWorkflow : IGameInstallationWorkflow
                 return await HandleInstalledGameAsync(
                     versionPath,
                     branch,
-                    isLatestInstance,
-                    versions,
                     selectedInstance.Id,
                     authorizationUriPresenter,
                     cts.Token);
@@ -230,7 +262,6 @@ public class GameInstallationWorkflow : IGameInstallationWorkflow
             return await HandleFreshInstallAsync(
                 versionPath,
                 branch,
-                isLatestInstance,
                 targetVersion,
                 authorizationUriPresenter,
                 cts.Token);
@@ -288,18 +319,14 @@ public class GameInstallationWorkflow : IGameInstallationWorkflow
         GC.SuppressFinalize(this);
     }
 
-    /// <summary>
-    /// Fast path for launching an already-installed game with a specific version (not "latest").
-    /// Skips version list fetching because no network calls are needed
-    /// </summary>
-    private async Task<DownloadProgress> HandleInstalledGameFastAsync(
+    private async Task<DownloadProgress> HandleInstalledGameAsync(
         string versionPath,
         string branch,
         string instanceId,
         AuthUriPresenter? authorizationUriPresenter,
         CancellationToken ct)
     {
-        Logger.Success("Download", "Fast path: Game is already installed, skipping version check");
+        Logger.Success("Download", "Game is already installed, skipping version check");
 
         await EnsureRuntimeDependenciesAsync(ct);
 
@@ -317,123 +344,46 @@ public class GameInstallationWorkflow : IGameInstallationWorkflow
         }
     }
 
-    private async Task<DownloadProgress> HandleInstalledGameAsync(
-        string versionPath, string branch, bool isLatestInstance,
-        List<int> versions,
-        string instanceId,
+    private async Task<DownloadProgress> ApplyExplicitUpdateAsync(
+        string versionPath,
+        string branch,
+        int installedVersion,
+        int targetVersion,
         AuthUriPresenter? authorizationUriPresenter,
         CancellationToken ct)
     {
-        Logger.Success("Download", "Game is already installed");
-
-        if (isLatestInstance)
-        {
-            await TryApplyDifferentialUpdateAsync(versionPath, branch, versions, ct);
-        }
-
-        await EnsureRuntimeDependenciesAsync(ct);
-
-        _progress.ReportDownloadProgress("complete", 100, "launch.detail.launching_game", null, 0, 0);
         try
         {
-            await _gameLauncher.LaunchGameAsync(versionPath, branch, authorizationUriPresenter, instanceId, ct);
-            return new DownloadProgress { Success = true, Progress = 100 };
+            await _patchManager.ApplyDifferentialUpdateAsync(
+                versionPath,
+                branch,
+                installedVersion,
+                targetVersion,
+                ct);
+            return await CompleteInstallAsync(
+                versionPath,
+                branch,
+                targetVersion,
+                authorizationUriPresenter,
+                ct);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
-            Logger.Error("Game", $"Launch failed: {ex.Message}");
-            _progress.ReportError("launch", "Failed to launch game", ex.ToString());
-            return new DownloadProgress { Error = $"Failed to launch game: {ex.Message}" };
-        }
-    }
-
-    private async Task TryApplyDifferentialUpdateAsync(
-        string versionPath, string branch, List<int> versions, CancellationToken ct)
-    {
-        var info = _instances.LoadLatestInfo(branch);
-        int installedVersion = info?.Version ?? 0;
-        int latestVersion = versions[0];
-
-        if (installedVersion == 0)
-        {
-            installedVersion = DetectInstalledVersion(versionPath, branch);
-        }
-
-        Logger.Info("Download", $"Installed version: {installedVersion}, Latest version: {latestVersion}", false);
-
-        if (installedVersion > 0 && installedVersion < latestVersion)
-        {
-            var meta = _instances.GetInstanceMeta(versionPath);
-            if (meta != null)
+            Logger.Error("Download", $"Differential update from v{installedVersion} to v{targetVersion} failed: {ex.Message}");
+            return new DownloadProgress
             {
-                meta.PendingVersion = latestVersion;
-                _instances.SaveInstanceMeta(versionPath, meta);
-            }
-
-            try
-            {
-                await _patchManager.ApplyDifferentialUpdateAsync(versionPath, branch, installedVersion, latestVersion, ct);
-
-                if (meta != null)
-                {
-                    meta.InstalledVersion = latestVersion;
-                    meta.PendingVersion = 0;
-                    _instances.SaveInstanceMeta(versionPath, meta);
-                }
-            }
-            catch (OperationCanceledException) { throw; }
-            catch (Exception ex)
-            {
-                Logger.Error("Download", $"Differential update failed: {ex.Message}");
-                Logger.Warning("Download", "Keeping current version, user can try UPDATE again later");
-            }
+                Error = $"Failed to update game from v{installedVersion} to v{targetVersion}: {ex.Message}"
+            };
         }
-        else if (installedVersion >= latestVersion)
-        {
-            Logger.Info("Download", "Already at latest version, no update needed", false);
-            _instances.SaveLatestInfo(branch, latestVersion);
-        }
-    }
-
-    private int DetectInstalledVersion(string versionPath, string branch)
-    {
-        var receiptPath = Path.Combine(versionPath, ".itch", "receipt.json.gz");
-        if (!File.Exists(receiptPath)) return 0;
-
-        var cacheDir = _downloadsCacheDirectory;
-        if (!Directory.Exists(cacheDir)) return 0;
-
-        var pwrFiles = Directory.GetFiles(cacheDir, $"{branch}_patch_*.pwr")
-            .Concat(Directory.GetFiles(cacheDir, $"{branch}_*.pwr"))
-            .Select(f => Path.GetFileNameWithoutExtension(f))
-            .SelectMany(n =>
-            {
-                var parts = n.Split('_');
-                var vs = new List<int>();
-                foreach (var part in parts)
-                {
-                    if (int.TryParse(part, out var v) && v > 0)
-                        vs.Add(v);
-                }
-                return vs;
-            })
-            .OrderByDescending(v => v)
-            .ToList();
-
-        if (pwrFiles.Count > 0)
-        {
-            int detected = pwrFiles[0];
-            Logger.Info("Download", $"Detected installed version from cache: v{detected}", false);
-            _instances.SaveLatestInfo(branch, detected);
-            return detected;
-        }
-
-        Logger.Info("Download", "Butler receipt exists but no version info, launching as-is", false);
-        return 0;
     }
 
     private async Task<DownloadProgress> HandleFreshInstallAsync(
-        string versionPath, string branch, bool isLatestInstance,
+        string versionPath,
+        string branch,
         int targetVersion,
         AuthUriPresenter? authorizationUriPresenter,
         CancellationToken ct)
@@ -486,7 +436,6 @@ public class GameInstallationWorkflow : IGameInstallationWorkflow
             return await CompleteInstallAsync(
                 versionPath,
                 branch,
-                isLatestInstance,
                 targetVersion,
                 authorizationUriPresenter,
                 ct);
@@ -512,7 +461,7 @@ public class GameInstallationWorkflow : IGameInstallationWorkflow
 
             string pwrPath = Path.Combine(
                 _downloadsCacheDirectory,
-                $"{branch}_{(isLatestInstance ? "latest" : "version")}_{targetVersion}.pwr");
+                $"{branch}_version_{targetVersion}.pwr");
 
             Directory.CreateDirectory(Path.GetDirectoryName(pwrPath)!);
 
@@ -533,7 +482,6 @@ public class GameInstallationWorkflow : IGameInstallationWorkflow
                     return await CompleteInstallAsync(
                         versionPath,
                         branch,
-                        isLatestInstance,
                         targetVersion,
                         authorizationUriPresenter,
                         ct);
@@ -571,7 +519,6 @@ public class GameInstallationWorkflow : IGameInstallationWorkflow
                 return await CompleteInstallAsync(
                     versionPath,
                     branch,
-                    isLatestInstance,
                     targetVersion,
                     authorizationUriPresenter,
                     ct);
@@ -600,7 +547,6 @@ public class GameInstallationWorkflow : IGameInstallationWorkflow
         return await CompleteInstallAsync(
             versionPath,
             branch,
-            isLatestInstance,
             targetVersion,
             authorizationUriPresenter,
             ct);
@@ -609,14 +555,10 @@ public class GameInstallationWorkflow : IGameInstallationWorkflow
     private async Task<DownloadProgress> CompleteInstallAsync(
         string versionPath,
         string branch,
-        bool isLatestInstance,
         int targetVersion,
         AuthUriPresenter? authorizationUriPresenter,
         CancellationToken ct)
     {
-        if (isLatestInstance)
-            _instances.SaveLatestInfo(branch, targetVersion);
-
         var meta = _instances.GetInstanceMeta(versionPath);
         if (meta != null)
         {

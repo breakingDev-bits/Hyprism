@@ -59,7 +59,9 @@ static Task LaunchInstalledAsync(
     => coordinator.LaunchAsync(instanceId, openAuthorizationUri);
 ```
 
-For a new installation, call `DownloadAndLaunchInstanceAsync` on `IGameInstallationWorkflow` and inspect its result. Cancel using `CancelDownload(instanceId)`. See [Game lifecycle](/docs/architecture/game-lifecycle) for the distinction
+For a new installation, call `DownloadAndLaunchInstanceAsync` on `IGameInstallationWorkflow` and inspect its result. The instance supplies an explicit branch and numeric version; the workflow does not choose a version implicitly. Cancel using `CancelDownload(instanceId)`. See [Game lifecycle](/docs/architecture/game-lifecycle) for the distinction
+
+ZIP imports must include `Meta.json` with an explicit numeric version. Archives without that metadata are rejected
 
 ## Events and cancellation
 

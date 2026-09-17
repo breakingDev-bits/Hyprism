@@ -45,4 +45,10 @@ public interface IInstanceMigrator
     /// Should be called during startup after <see cref="MigrateVersionFoldersToIdFolders"/>
     /// </summary>
     void MigrateBranchSubdirectoriesToFlat();
+
+    /// <summary>
+    /// Converts legacy rolling instances into instances with an explicit selected version
+    /// </summary>
+    /// <returns><see langword="true"/> when at least one instance was changed</returns>
+    bool MigrateLegacyRollingInstancesToFixedVersions();
 }

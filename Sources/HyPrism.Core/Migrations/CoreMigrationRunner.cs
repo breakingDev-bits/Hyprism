@@ -14,6 +14,7 @@ namespace HyPrism.Core.Migrations;
 public sealed class CoreMigrationRunner
 {
     private const string InstanceLayoutMigrationId = "2026-09-instance-layout";
+    private const string FixedInstanceSelectionMigrationId = "2026-09-fixed-instance-selection";
     private const string ProfileStorageMigrationId = "2026-09-profile-storage";
     private const string ProfileSessionMigrationId = "2026-09-profile-session";
     private const string InstanceModsMigrationId = "2026-09-instance-mods";
@@ -65,6 +66,17 @@ public sealed class CoreMigrationRunner
                     _instanceMigrator.MigrateVersionFoldersToIdFolders();
                     _instanceMigrator.MigrateBranchSubdirectoriesToFlat();
                     _instances.SyncInstancesWithConfig();
+                    return Task.CompletedTask;
+                }),
+            cancellationToken).ConfigureAwait(false);
+
+        await RunOnceAsync(
+            new DelegateMigration(
+                FixedInstanceSelectionMigrationId,
+                _ =>
+                {
+                    if (_instanceMigrator.MigrateLegacyRollingInstancesToFixedVersions())
+                        _instances.SyncInstancesWithConfig();
                     return Task.CompletedTask;
                 }),
             cancellationToken).ConfigureAwait(false);
