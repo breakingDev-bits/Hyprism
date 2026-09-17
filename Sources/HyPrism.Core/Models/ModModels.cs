@@ -81,6 +81,51 @@ public class ModFileInfo
     public List<string> GameVersions { get; set; } = [];
     /// <summary>Download count for this specific file.</summary>
     public int DownloadCount { get; set; }
+    /// <summary>Dependencies and compatibility relations declared by this file.</summary>
+    public List<ModDependency> Dependencies { get; set; } = [];
+}
+
+/// <summary>CurseForge relation kinds used for mod dependencies.</summary>
+public enum CurseForgeDependencyRelationType
+{
+    /// <summary>The relation type was not provided by the source.</summary>
+    Unknown = 0,
+    /// <summary>The related library is embedded in the file.</summary>
+    EmbeddedLibrary = 1,
+    /// <summary>The related mod must not be installed with this file.</summary>
+    Incompatible = 2,
+    /// <summary>The related mod may be installed but is not required.</summary>
+    OptionalDependency = 3,
+    /// <summary>The related mod is required by this file.</summary>
+    RequiredDependency = 4,
+    /// <summary>The relation points to a tool used with this file.</summary>
+    Tool = 5
+}
+
+/// <summary>A normalized dependency relation stored with an installed mod.</summary>
+public class ModDependency
+{
+    /// <summary>Related CurseForge project identifier.</summary>
+    public string ModId { get; set; } = "";
+    /// <summary>Related CurseForge file identifier, when specified.</summary>
+    public string FileId { get; set; } = "";
+    /// <summary>Relation kind.</summary>
+    public CurseForgeDependencyRelationType RelationType { get; set; }
+    /// <summary>Resolved display name of the related mod.</summary>
+    public string Name { get; set; } = "";
+    /// <summary>Resolved display version of the related mod file.</summary>
+    public string Version { get; set; } = "";
+    /// <summary>Resolved icon URL of the related mod.</summary>
+    public string IconUrl { get; set; } = "";
+}
+
+/// <summary>A dependency declared by a Hytale <c>manifest.json</c>.</summary>
+public class HytaleModDependency
+{
+    /// <summary>Hytale plugin identifier in the form <c>group:name</c>.</summary>
+    public string Id { get; set; } = "";
+    /// <summary>Version range declared by the plugin.</summary>
+    public string VersionRange { get; set; } = "";
 }
 
 /// <summary>A mod category returned from CurseForge.</summary>
@@ -144,6 +189,24 @@ public class InstalledMod
     /// Original file extension used before disabling (e.g. .jar or .zip).
     /// </summary>
     public string DisabledOriginalExtension { get; set; } = "";
+
+    /// <summary>CurseForge relations declared by the installed file.</summary>
+    public List<ModDependency> Dependencies { get; set; } = [];
+
+    /// <summary>Hytale plugin identifier read from the installed manifest.</summary>
+    public string ManifestId { get; set; } = "";
+
+    /// <summary>Hytale plugin version read from the installed manifest.</summary>
+    public string ManifestVersion { get; set; } = "";
+
+    /// <summary>Dependencies read from the installed Hytale manifest.</summary>
+    public List<HytaleModDependency> ManifestDependencies { get; set; } = [];
+
+    /// <summary>Optional dependencies read from the installed Hytale manifest.</summary>
+    public List<HytaleModDependency> ManifestOptionalDependencies { get; set; } = [];
+
+    /// <summary>Plugin identifiers that should load after this mod.</summary>
+    public List<string> ManifestLoadBefore { get; set; } = [];
 }
 
 /// <summary>

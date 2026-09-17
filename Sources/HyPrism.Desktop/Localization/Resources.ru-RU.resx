@@ -1032,6 +1032,18 @@ SPDX-License-Identifier: GPL-3.0-only
   <data name="modManager.installSelected" xml:space="preserve">
     <value>Установить выбранные</value>
   </data>
+  <data name="modManager.installPreview" xml:space="preserve">
+    <value>Предварительный просмотр</value>
+  </data>
+  <data name="modManager.installDependencyHint" xml:space="preserve">
+    <value>Необходимые зависимости будут установлены автоматически перед выбранными модами</value>
+  </data>
+  <data name="modManager.dependencies" xml:space="preserve">
+    <value>Зависимости</value>
+  </data>
+  <data name="modManager.dependsOnMods" xml:space="preserve">
+    <value>Зависит от {0} мод(ов)</value>
+  </data>
   <data name="modManager.installed" xml:space="preserve">
     <value>Установленные моды</value>
   </data>
@@ -2951,6 +2963,15 @@ SPDX-License-Identifier: GPL-3.0-only
   </data>
   <data name="instances.browse.categoryAll" xml:space="preserve">
     <value>Все категории</value>
+  </data>
+  <data name="instances.browse.categoryWorldGeneration" xml:space="preserve">
+    <value>Генерация мира</value>
+  </data>
+  <data name="instances.browse.categoryMagic" xml:space="preserve">
+    <value>Магия</value>
+  </data>
+  <data name="instances.browse.categoryTechnology" xml:space="preserve">
+    <value>Технологии</value>
   </data>
   <data name="instances.browse.category" xml:space="preserve">
     <value>Категория</value>

@@ -168,6 +168,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable,
 
     public bool IsBottomSheetMounted =>
         Instances.IsModCatalogPreviewMounted ||
+        Instances.HasModCatalogInstallConfirmation ||
         Settings.IsAddingJavaArgument ||
         Settings.IsAddingEnvironmentVariable ||
         Settings.IsAddingAuthServer;
@@ -273,6 +274,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable,
     {
         OnPropertyChanged(e.PropertyName);
         if (e.PropertyName is nameof(InstancesViewModel.IsModCatalogPreviewMounted) or
+            nameof(InstancesViewModel.HasModCatalogInstallConfirmation) or
             nameof(InstancesViewModel.IsBottomSheetMounted))
             OnPropertyChanged(nameof(IsBottomSheetMounted));
     }

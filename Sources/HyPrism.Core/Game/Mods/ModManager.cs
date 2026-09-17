@@ -62,6 +62,8 @@ public partial class ModManager : IModManager
     private readonly IInstanceRepository _instances;
     private readonly IProgressReporter _progressNotificationService;
 
+    private sealed class ModDependencyException(string message) : Exception(message);
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ModManager"/> class.
     /// </summary>
@@ -205,34 +207,155 @@ public partial class ModManager : IModManager
         return
         [
             new() { Id = 0, Name = "All Mods", Slug = "all" },
-            new() { Id = 2, Name = "World Gen", Slug = "world-gen" },
-            new() { Id = 3, Name = "Magic", Slug = "magic" },
-            new() { Id = 4, Name = "Tech", Slug = "tech" }
+            // Negative identifiers keep fallback categories visible without pretending
+            // that their CurseForge IDs are known. Search ignores these values until
+            // the categories endpoint supplies the real identifiers.
+            new() { Id = -1, Name = "Blocks", Slug = "blocks" },
+            new() { Id = -2, Name = "Cosmetics/Armor", Slug = "cosmetics-armor" },
+            new() { Id = -3, Name = "Food/Farming", Slug = "food-farming" },
+            new() { Id = -4, Name = "Furniture", Slug = "furniture" },
+            new() { Id = -5, Name = "Gameplay", Slug = "gameplay" },
+            new() { Id = -6, Name = "Library", Slug = "library" },
+            new() { Id = -7, Name = "Miscellaneous", Slug = "miscellaneous" },
+            new() { Id = -8, Name = "Mobs/Characters", Slug = "mobs-characters" },
+            new() { Id = -9, Name = "Prefab", Slug = "prefab" },
+            new() { Id = -10, Name = "Quality of Life", Slug = "quality-of-life" },
+            new() { Id = -11, Name = "Resource Packs", Slug = "resource-packs" },
+            new() { Id = -12, Name = "Utility", Slug = "utility" },
+            new() { Id = -13, Name = "World Gen", Slug = "world-gen" }
         ];
     }
 
     /// <inheritdoc/>
     public async Task<bool> InstallModFileToInstanceAsync(string slugOrId, string fileIdOrVersion, string instancePath, Action<string, string>? onProgress = null)
     {
-        if (!_cfClient.HasApiKey()) return false;
+        if (!_cfClient.HasApiKey())
+            return false;
 
         try
         {
             var requestedFileId = string.IsNullOrWhiteSpace(fileIdOrVersion) ? null : fileIdOrVersion.Trim();
-            var cfFile = await _cfClient.ResolveFileAsync(slugOrId, requestedFileId);
-
-            if (cfFile == null)
+            var instanceGameVersion = ModCompatibilityEvaluator.DetectInstanceGameVersion(instancePath);
+            var rootFile = await _cfClient.ResolveFileAsync(slugOrId, requestedFileId, instanceGameVersion);
+            if (rootFile is null)
             {
                 Logger.Warning("ModManager", $"File info missing for mod {slugOrId} file '{fileIdOrVersion}'");
                 return false;
             }
 
-            var numericModId = cfFile.ModId > 0 ? cfFile.ModId.ToString() : slugOrId;
-            var resolvedFileId = cfFile.Id > 0 ? cfFile.Id.ToString() : requestedFileId;
+            var visiting = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var completed = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var resolvedDependencies = new Dictionary<string, CurseForgeFile>(StringComparer.OrdinalIgnoreCase);
+            return await InstallDependencyGraphAsync(
+                rootFile,
+                instancePath,
+                instanceGameVersion,
+                visiting,
+                completed,
+                resolvedDependencies,
+                onProgress,
+                isRoot: true);
+        }
+        catch (ModDependencyException ex)
+        {
+            Logger.Warning("ModManager", ex.Message);
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("ModManager", $"Install failed: {ex.Message}");
+            return false;
+        }
+    }
 
-            if (string.IsNullOrWhiteSpace(resolvedFileId))
+    private async Task<bool> InstallDependencyGraphAsync(
+        CurseForgeFile file,
+        string instancePath,
+        string? instanceGameVersion,
+        HashSet<string> visiting,
+        HashSet<string> completed,
+        Dictionary<string, CurseForgeFile> resolvedDependencies,
+        Action<string, string>? onProgress,
+        bool isRoot)
+    {
+        var fileKey = $"{file.ModId}:{file.Id}";
+        if (!visiting.Add(fileKey))
+            throw new ModDependencyException($"Circular mod dependency detected at {fileKey}");
+
+        var currentInstalledMods = GetInstanceInstalledMods(instancePath);
+        if (isRoot && currentInstalledMods.Any(mod =>
+                mod.Enabled &&
+                string.Equals(mod.CurseForgeId, file.ModId.ToString(), StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(mod.FileId, file.Id.ToString(), StringComparison.OrdinalIgnoreCase)))
+        {
+            onProgress?.Invoke("complete", file.FileName ?? file.Id.ToString());
+            return true;
+        }
+
+        foreach (var dependency in file.Dependencies ?? [])
+        {
+            if (dependency.ModId <= 0)
+                continue;
+
+            if (dependency.RelationType == CurseForgeDependencyRelationType.Incompatible)
             {
-                Logger.Warning("ModManager", $"Could not resolve fileId for mod {slugOrId}");
+                if (FindInstalledMod(currentInstalledMods, dependency.ModId.ToString()) is not null)
+                    throw new ModDependencyException(
+                        $"Mod {file.ModId} is incompatible with CurseForge mod {dependency.ModId}");
+                continue;
+            }
+
+            if (dependency.RelationType != CurseForgeDependencyRelationType.RequiredDependency ||
+                IsDependencySatisfied(currentInstalledMods, dependency))
+            {
+                continue;
+            }
+
+            var dependencyKey = $"{dependency.ModId}:{dependency.FileId}";
+            if (!resolvedDependencies.TryGetValue(dependencyKey, out var dependencyFile))
+            {
+                dependencyFile = await _cfClient.ResolveFileAsync(
+                    dependency.ModId.ToString(),
+                    dependency.FileId > 0 ? dependency.FileId.ToString() : null,
+                    instanceGameVersion) ?? throw new ModDependencyException(
+                        $"Required dependency {dependency.ModId} could not be resolved");
+                resolvedDependencies[dependencyKey] = dependencyFile;
+            }
+
+            onProgress?.Invoke("dependency", dependencyFile.FileName ?? dependency.ModId.ToString());
+            if (!await InstallDependencyGraphAsync(
+                    dependencyFile,
+                    instancePath,
+                    instanceGameVersion,
+                    visiting,
+                    completed,
+                    resolvedDependencies,
+                    onProgress,
+                    isRoot: false))
+            {
+                return false;
+            }
+        }
+
+        visiting.Remove(fileKey);
+        if (!completed.Add(fileKey) && !isRoot)
+            return true;
+
+        return await InstallRawModFileAsync(file, instancePath, onProgress);
+    }
+
+    private async Task<bool> InstallRawModFileAsync(CurseForgeFile cfFile, string instancePath, Action<string, string>? onProgress = null)
+    {
+        if (!_cfClient.HasApiKey()) return false;
+
+        try
+        {
+            var numericModId = cfFile.ModId.ToString();
+            var resolvedFileId = cfFile.Id > 0 ? cfFile.Id.ToString() : "";
+
+            if (cfFile.ModId <= 0 || string.IsNullOrWhiteSpace(resolvedFileId))
+            {
+                Logger.Warning("ModManager", "CurseForge returned an incomplete mod file record");
                 return false;
             }
 
@@ -243,15 +366,15 @@ public partial class ModManager : IModManager
                 return false;
             }
 
-            onProgress?.Invoke("downloading", cfFile.FileName ?? "mod file");
+            var fileName = string.IsNullOrWhiteSpace(cfFile.FileName)
+                ? $"mod_{resolvedFileId}.jar"
+                : Path.GetFileName(cfFile.FileName);
+            onProgress?.Invoke("downloading", fileName);
 
             var modsPath = Path.Combine(instancePath, "UserData", "Mods");
             EnsureModsDirectory(modsPath);
 
-            var fallbackName = !string.IsNullOrWhiteSpace(resolvedFileId)
-                ? $"mod_{resolvedFileId}.jar"
-                : $"mod_{cfFile.Id}.jar";
-            var filePath = Path.Combine(modsPath, cfFile.FileName ?? fallbackName);
+            var filePath = Path.Combine(modsPath, fileName);
 
             const int maxDownloadAttempts = 3;
             var downloaded = false;
@@ -278,7 +401,7 @@ public partial class ModManager : IModManager
                 return false;
             }
 
-            onProgress?.Invoke("installing", cfFile.FileName ?? "mod file");
+            onProgress?.Invoke("installing", fileName);
 
             CurseForgeMod? modInfo = null;
             try
@@ -293,19 +416,21 @@ public partial class ModManager : IModManager
                     modInfo = modResp?.Data;
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Logger.Debug("ModManager", $"Could not load CurseForge metadata for {numericModId}: {ex.Message}");
+            }
 
             var mods = GetInstanceInstalledMods(instancePath);
 
             var oldMods = mods.Where(m =>
                 m.CurseForgeId == numericModId ||
-                m.CurseForgeId == slugOrId ||
-                m.Id == $"cf-{numericModId}" ||
-                m.Id == $"cf-{slugOrId}").ToList();
+                m.Id == $"cf-{numericModId}").ToList();
 
             foreach (var oldMod in oldMods)
             {
-                if (!string.IsNullOrWhiteSpace(oldMod.FileName) && oldMod.FileName != cfFile.FileName)
+                if (!string.IsNullOrWhiteSpace(oldMod.FileName) &&
+                    !oldMod.FileName.Equals(fileName, StringComparison.OrdinalIgnoreCase))
                 {
                     var oldFilePath = Path.Combine(modsPath, oldMod.FileName);
                     var oldDisabledFilePath = Path.Combine(modsPath, oldMod.FileName + ".disabled");
@@ -337,16 +462,18 @@ public partial class ModManager : IModManager
                 }
             }
 
-            mods.RemoveAll(m => m.CurseForgeId == numericModId || m.CurseForgeId == slugOrId || m.Id == $"cf-{numericModId}" || m.Id == $"cf-{slugOrId}");
+            mods.RemoveAll(m => m.CurseForgeId == numericModId || m.Id == $"cf-{numericModId}");
+
+            var manifest = HytaleModManifestReader.Read(filePath);
 
             var installedMod = new InstalledMod
             {
                 Id = $"cf-{numericModId}",
-                Name = modInfo?.Name ?? cfFile.DisplayName ?? cfFile.FileName ?? "Unknown Mod",
+                Name = modInfo?.Name ?? cfFile.DisplayName ?? fileName,
                 Slug = modInfo?.Slug ?? "",
-                Version = ExtractVersion(cfFile.DisplayName, cfFile.FileName),
+                Version = ExtractVersion(cfFile.DisplayName, fileName),
                 FileId = resolvedFileId,
-                FileName = cfFile.FileName ?? "",
+                FileName = fileName,
                 Enabled = true,
                 Author = modInfo?.Authors?.FirstOrDefault()?.Name ?? "",
                 Description = modInfo?.Summary ?? "",
@@ -354,6 +481,12 @@ public partial class ModManager : IModManager
                 CurseForgeId = numericModId,
                 FileDate = cfFile.FileDate ?? "",
                 ReleaseType = cfFile.ReleaseType,
+                Dependencies = MapDependencies(cfFile.Dependencies),
+                ManifestId = manifest?.ManifestId ?? "",
+                ManifestVersion = manifest?.Version ?? "",
+                ManifestDependencies = manifest?.Dependencies ?? [],
+                ManifestOptionalDependencies = manifest?.OptionalDependencies ?? [],
+                ManifestLoadBefore = manifest?.LoadBefore ?? [],
                 Screenshots = modInfo?.Screenshots?.Select(s => new CurseForgeScreenshot
                 {
                     Id = s.Id,
@@ -366,7 +499,7 @@ public partial class ModManager : IModManager
             mods.Add(installedMod);
             await SaveInstanceModsAsync(instancePath, mods);
 
-            onProgress?.Invoke("complete", cfFile.FileName ?? "mod file");
+            onProgress?.Invoke("complete", fileName);
             Logger.Success("ModManager", $"Installed mod {installedMod.Name} (ID: {numericModId}) to {instancePath}");
 
             return true;
@@ -376,6 +509,33 @@ public partial class ModManager : IModManager
             Logger.Error("ModManager", $"Install failed: {ex.Message}");
             return false;
         }
+    }
+
+    private static List<ModDependency> MapDependencies(IEnumerable<CurseForgeFileDependency>? dependencies)
+        => dependencies?.Where(dependency => dependency.ModId > 0)
+            .Select(dependency => new ModDependency
+            {
+                ModId = dependency.ModId.ToString(),
+                FileId = dependency.FileId > 0 ? dependency.FileId.ToString() : "",
+                RelationType = dependency.RelationType
+            })
+            .ToList() ?? [];
+
+    private static InstalledMod? FindInstalledMod(
+        IReadOnlyList<InstalledMod> installedMods,
+        string curseForgeId)
+        => installedMods.FirstOrDefault(mod =>
+            mod.Enabled && string.Equals(mod.CurseForgeId, curseForgeId, StringComparison.OrdinalIgnoreCase));
+
+    private static bool IsDependencySatisfied(
+        IReadOnlyList<InstalledMod> installedMods,
+        CurseForgeFileDependency dependency)
+    {
+        var installed = FindInstalledMod(installedMods, dependency.ModId.ToString());
+        if (installed is null)
+            return false;
+        return dependency.FileId <= 0 ||
+               string.Equals(installed.FileId, dependency.FileId.ToString(), StringComparison.OrdinalIgnoreCase);
     }
 
     /// <inheritdoc/>
@@ -536,6 +696,25 @@ public partial class ModManager : IModManager
             });
         }
 
+        foreach (var mod in mods)
+        {
+            if (string.IsNullOrWhiteSpace(mod.FileName) ||
+                !string.IsNullOrWhiteSpace(mod.ManifestId))
+            {
+                continue;
+            }
+
+            var manifest = HytaleModManifestReader.Read(Path.Combine(modsPath, mod.FileName));
+            if (manifest is null)
+                continue;
+
+            mod.ManifestId = manifest.ManifestId;
+            mod.ManifestVersion = manifest.Version;
+            mod.ManifestDependencies = manifest.Dependencies;
+            mod.ManifestOptionalDependencies = manifest.OptionalDependencies;
+            mod.ManifestLoadBefore = manifest.LoadBefore;
+        }
+
         static bool IsSyntheticLocal(InstalledMod mod)
         {
             var isLocalId = mod.Id?.StartsWith("local-", StringComparison.OrdinalIgnoreCase) == true;
@@ -649,6 +828,65 @@ public partial class ModManager : IModManager
         {
             Logger.Error("ModManager", $"Get mod files failed: {ex.Message}");
             return new ModFilesResult();
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task<List<ModDependency>> GetModDependenciesAsync(string modId, string fileId)
+    {
+        if (!_cfClient.HasApiKey() || string.IsNullOrWhiteSpace(modId))
+            return [];
+
+        try
+        {
+            var sourceFile = await _cfClient.ResolveFileAsync(modId, fileId);
+            var dependencies = MapDependencies(sourceFile?.Dependencies)
+                .Where(dependency => dependency.RelationType == CurseForgeDependencyRelationType.RequiredDependency)
+                .GroupBy(dependency => dependency.ModId, StringComparer.OrdinalIgnoreCase)
+                .Select(group => group.First())
+                .ToList();
+
+            await Parallel.ForEachAsync(
+                dependencies,
+                new ParallelOptions { MaxDegreeOfParallelism = 4 },
+                async (dependency, _) =>
+                {
+                    try
+                    {
+                        var modTask = GetModAsync(dependency.ModId);
+                        var fileTask = string.IsNullOrWhiteSpace(dependency.FileId)
+                            ? Task.FromResult<CurseForgeFile?>(null)
+                            : _cfClient.ResolveFileAsync(dependency.ModId, dependency.FileId);
+                        await Task.WhenAll(modTask, fileTask);
+
+                        var mod = await modTask;
+                        var dependencyFile = await fileTask;
+                        var fallbackFile = mod?.LatestFiles?.FirstOrDefault();
+                        dependency.Name = string.IsNullOrWhiteSpace(mod?.Name)
+                            ? dependency.ModId
+                            : mod.Name;
+                        dependency.IconUrl = mod?.IconUrl ?? string.Empty;
+                        dependency.Version = dependencyFile is not null
+                            ? ExtractVersion(dependencyFile.DisplayName, dependencyFile.FileName)
+                            : ExtractVersion(fallbackFile?.DisplayName, fallbackFile?.FileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Debug(
+                            "ModManager",
+                            $"Could not resolve dependency metadata for {dependency.ModId}: {ex.Message}");
+                        dependency.Name = string.IsNullOrWhiteSpace(dependency.Name)
+                            ? dependency.ModId
+                            : dependency.Name;
+                    }
+                });
+
+            return dependencies;
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning("ModManager", $"Get mod dependencies failed for '{modId}': {ex.Message}");
+            return [];
         }
     }
 
@@ -975,6 +1213,20 @@ public partial class ModManager : IModManager
         if (mod is null)
             return false;
 
+        var dependents = mods.Where(candidate =>
+                !ReferenceEquals(candidate, mod) &&
+                DependsOn(candidate, mod))
+            .Select(candidate => candidate.Name)
+            .Where(name => !string.IsNullOrWhiteSpace(name))
+            .ToList();
+        if (dependents.Count > 0)
+        {
+            Logger.Warning(
+                "ModManager",
+                $"Cannot remove '{mod.Name}' because it is required by: {string.Join(", ", dependents)}");
+            return false;
+        }
+
         mods.Remove(mod);
 
         if (!string.IsNullOrEmpty(mod.FileName))
@@ -987,6 +1239,23 @@ public partial class ModManager : IModManager
         await SaveInstanceModsAsync(instancePath, mods);
         Logger.Info("ModManager", $"Removed mod '{mod.Name}'");
         return true;
+    }
+
+    private static bool DependsOn(InstalledMod candidate, InstalledMod dependency)
+    {
+        var curseForgeMatch = !string.IsNullOrWhiteSpace(dependency.CurseForgeId) &&
+            candidate.Dependencies.Any(relation =>
+                relation.RelationType == CurseForgeDependencyRelationType.RequiredDependency &&
+                string.Equals(relation.ModId, dependency.CurseForgeId, StringComparison.OrdinalIgnoreCase) &&
+                (string.IsNullOrWhiteSpace(relation.FileId) ||
+                 string.IsNullOrWhiteSpace(dependency.FileId) ||
+                 string.Equals(relation.FileId, dependency.FileId, StringComparison.OrdinalIgnoreCase)));
+        if (curseForgeMatch)
+            return true;
+
+        return !string.IsNullOrWhiteSpace(dependency.ManifestId) &&
+            candidate.ManifestDependencies.Any(relation =>
+                string.Equals(relation.Id, dependency.ManifestId, StringComparison.OrdinalIgnoreCase));
     }
 
     private static bool TryDeleteModFile(string modsDir, string fileName)
@@ -1118,7 +1387,8 @@ public partial class ModManager : IModManager
         FileDate = file.FileDate ?? "",
         ReleaseType = file.ReleaseType,
         GameVersions = file.GameVersions ?? [],
-        DownloadCount = file.DownloadCount
+        DownloadCount = file.DownloadCount,
+        Dependencies = MapDependencies(file.Dependencies)
     };
 
     [GeneratedRegex(@"(\d+\.\d+(?:\.\d+)?(?:[-.]\w+)*)")]

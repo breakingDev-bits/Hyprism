@@ -69,6 +69,14 @@ Progress scopes associate nested asynchronous operations with the correct instan
 
 Where a contract accepts `CancellationToken`, forward it through network and file I/O. Installation owns cancellation per instance instead of accepting a token on its public entry point
 
+## Mod installation contract
+
+`IModManager.InstallModFileToInstanceAsync` resolves the selected CurseForge file and its required dependency graph before writing files. The operation installs dependencies depth-first, stores CurseForge relations in `InstalledMod`, and returns `false` for unresolved required dependencies, cycles, or installed incompatible mods. Optional relations are stored but are not installed automatically
+
+`IModManager.GetModDependenciesAsync` resolves the required relations for a catalog file and enriches them with best-effort display names, versions, and icon URLs for the installation preview
+
+`GetInstanceInstalledMods` also reads a root `manifest.json` from each JAR or ZIP and stores Hytale plugin identifiers, required and optional dependency ranges, and load-order hints. `RemoveInstalledModAsync` refuses to remove a mod referenced by another installed mod's required dependency list
+
 ## Official authentication
 
 `IHytaleAuthenticator.LoginAsync` creates an OAuth PKCE challenge and passes an authorization URI to the host. The callback renderer returns success or failure HTML to the browser. Session storage is profile-scoped through `TokenStore`

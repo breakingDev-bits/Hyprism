@@ -2173,8 +2173,16 @@ public sealed class MainWindowRenderTests
         Assert.True(sidebarProfileAvatar!.IsEffectivelyVisible);
         Assert.Same(viewModel.ActiveProfileAvatar, sidebarProfileAvatar.Source);
         Assert.All(
-            window.GetVisualDescendants().OfType<Button>().Where(button => button.IsEnabled),
+            window.GetVisualDescendants().OfType<Button>().Where(button => button.IsEnabled && !button.Classes.Contains("window")),
             button => Assert.Equal(handCursor, button.Cursor?.ToString()));
+        Assert.All(
+            new[]
+            {
+                window.FindControl<Button>("MinimizeWindowButton"),
+                window.FindControl<Button>("MaximizeWindowButton"),
+                window.FindControl<Button>("CloseWindowButton")
+            },
+            button => Assert.Equal(arrowCursor, button!.Cursor?.ToString()));
         Assert.All(
             window.GetVisualDescendants().OfType<ComboBox>().Where(comboBox => comboBox.IsEnabled),
             comboBox => Assert.Equal(handCursor, comboBox.Cursor?.ToString()));
@@ -2247,24 +2255,28 @@ public sealed class MainWindowRenderTests
                 button.Transitions!,
                 transition => transition is BrushTransition));
 
-        var minimizeGlyph = Assert.Single(
-            minimizeButton!.GetVisualDescendants().OfType<Border>(),
-            border => border.Classes.Contains("windowMinimize"));
-        var minimizePosition = minimizeGlyph.TranslatePoint(default, minimizeButton);
+        var minimizeGlyph = window.FindControl<Avalonia.Controls.Shapes.Path>("MinimizeWindowIcon");
+        Assert.NotNull(minimizeGlyph);
+        var minimizePosition = minimizeGlyph!.TranslatePoint(default, minimizeButton);
         Assert.NotNull(minimizePosition);
         Assert.True(minimizePosition!.Value.Y > minimizeButton.Bounds.Height / 2);
         Assert.Contains(
             minimizeGlyph.Transitions!,
             transition => transition is BrushTransition);
 
-        foreach (var iconButton in new[] { maximizeButton!, closeButton! })
-        {
-            var icon = Assert.Single(
-                iconButton.GetVisualDescendants().OfType<Avalonia.Controls.Shapes.Path>());
-            Assert.Contains(
-                icon.Transitions!,
-                transition => transition is BrushTransition);
-        }
+        var maximizeGlyph = window.FindControl<Avalonia.Controls.Shapes.Path>("MaximizeWindowIcon");
+        var restoreGlyph = window.FindControl<Avalonia.Controls.Shapes.Path>("RestoreWindowIcon");
+        var closeGlyph = Assert.Single(
+            closeButton!.GetVisualDescendants().OfType<Avalonia.Controls.Shapes.Path>());
+        Assert.NotNull(maximizeGlyph);
+        Assert.NotNull(restoreGlyph);
+        Assert.True(maximizeGlyph!.IsVisible);
+        Assert.False(restoreGlyph!.IsVisible);
+        Assert.All(
+            new[] { maximizeGlyph, restoreGlyph, closeGlyph },
+            icon => Assert.Contains(
+                icon!.Transitions!,
+                transition => transition is BrushTransition));
 
         if (width == 1280)
         {
@@ -2804,6 +2816,8 @@ public sealed class MainWindowRenderTests
         var instanceSectionTitle = instanceSection.GetVisualDescendants()
             .OfType<TextBlock>()
             .Single(textBlock => textBlock.Classes.Contains("articleToolbarTitle"));
+        var installedModsSection = instancesView.FindControl<Grid>("InstalledModsSection");
+        Assert.NotNull(installedModsSection);
         Assert.Equal("Installed mods", instanceSectionTitle.Text);
 
         var sectionPreviewPath = Environment.GetEnvironmentVariable("HYPRISM_INSTANCES_SECTION_RENDER_OUTPUT");
@@ -2816,6 +2830,7 @@ public sealed class MainWindowRenderTests
         viewModel.CloseInstanceSectionCommand.Execute(null);
         Assert.Equal(usesCompactInstancesLayout, instanceHub.IsVisible);
         Assert.True(instanceSection.IsVisible);
+        Assert.True(installedModsSection!.IsVisible);
         Assert.Equal("Installed mods", instanceSectionTitle.Text);
         await WaitForConditionAsync(
             () => !instanceSection.IsVisible && instanceHub.IsVisible,
@@ -2823,6 +2838,7 @@ public sealed class MainWindowRenderTests
         Dispatcher.UIThread.RunJobs();
         Assert.True(instanceHub.IsVisible);
         Assert.False(instanceSection.IsVisible);
+        Assert.False(installedModsSection.IsVisible);
 
         var instancesPreviewPath = Environment.GetEnvironmentVariable("HYPRISM_INSTANCES_RENDER_OUTPUT");
         if (!string.IsNullOrWhiteSpace(instancesPreviewPath) && width == 1280)

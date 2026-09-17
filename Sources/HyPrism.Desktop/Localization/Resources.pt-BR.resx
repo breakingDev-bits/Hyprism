@@ -948,6 +948,18 @@ Você pode precisar reinstalar o jogo se trocar de unidade.</value>
   <data name="modManager.installSelected" xml:space="preserve">
     <value>Instalar Selecionados</value>
   </data>
+  <data name="modManager.installPreview" xml:space="preserve">
+    <value>Pré-visualização</value>
+  </data>
+  <data name="modManager.installDependencyHint" xml:space="preserve">
+    <value>Required dependencies are installed automatically before the selected mods</value>
+  </data>
+  <data name="modManager.dependencies" xml:space="preserve">
+    <value>Dependencies</value>
+  </data>
+  <data name="modManager.dependsOnMods" xml:space="preserve">
+    <value>Depends on {0} mods</value>
+  </data>
   <data name="modManager.installed" xml:space="preserve">
     <value>Mods instalados</value>
   </data>
@@ -2944,7 +2956,16 @@ Você pode precisar reinstalar o jogo se trocar de unidade.</value>
     <value>Update</value>
   </data>
   <data name="instances.browse.categoryAll" xml:space="preserve">
-    <value>All categories</value>
+    <value>Todas as categorias</value>
+  </data>
+  <data name="instances.browse.categoryWorldGeneration" xml:space="preserve">
+    <value>Geração de mundo</value>
+  </data>
+  <data name="instances.browse.categoryMagic" xml:space="preserve">
+    <value>Magia</value>
+  </data>
+  <data name="instances.browse.categoryTechnology" xml:space="preserve">
+    <value>Tecnologia</value>
   </data>
   <data name="instances.browse.category" xml:space="preserve">
     <value>Category</value>

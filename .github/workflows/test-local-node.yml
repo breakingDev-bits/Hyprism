@@ -17,7 +17,7 @@ jobs:
   tests:
     name: ${{ matrix.platform }}
     runs-on: ${{ matrix.runner }}
-    timeout-minutes: 15
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -41,23 +41,10 @@ jobs:
       - name: Run Local Node integration tests
         env:
           HYPRISM_LOCAL_NODE_SKIP_MACOS_TRUST: '1'
-        run: dotnet test Tests/HyPrism.LocalNode.Tests/HyPrism.LocalNode.Tests.csproj --configuration Release
+        run: dotnet test Tests/HyPrism.LocalNode.Tests/HyPrism.LocalNode.Tests.csproj --configuration Release --logger "trx;LogFileName=local-node-${{ matrix.platform }}.trx" --results-directory "${{ runner.temp }}/hyprism-test-results"
 
-  macos-trust:
-    name: macOS trust and HTTPS smoke
-    runs-on: macos-15
-    timeout-minutes: 15
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-          dotnet-quality: ${{ env.DOTNET_QUALITY }}
-
-      - name: Publish macOS apphosts
+      - name: Publish macOS apphosts for trust smoke
+        if: matrix.platform == 'macOS'
         run: |
           dotnet publish Sources/HyPrism.Desktop/HyPrism.Desktop.csproj \
             --configuration Release \
@@ -70,6 +57,8 @@ jobs:
           file "$RUNNER_TEMP/hyprism-osx-arm64/HyPrism.LocalNode" | grep -q 'Mach-O 64-bit executable arm64'
 
       - name: Verify trusted Local Node HTTPS
+        id: macos_trust
+        if: matrix.platform == 'macOS'
         run: |
           set -euo pipefail
           PORT=18443
@@ -118,3 +107,47 @@ jobs:
           grep -Fq '"status":"ready"' "$HEALTH_RESPONSE"
           grep -Fq '"server":"hyprism-local-node"' "$HEALTH_RESPONSE"
           grep -Fq "\"issuer\":\"https://127.0.0.1:$PORT\"" "$HEALTH_RESPONSE"
+
+      - name: Write test summary
+        if: always()
+        shell: pwsh
+        run: >
+          pwsh -NoProfile -File ./Scripts/write-test-summary.ps1
+          -ResultsDirectory "${{ runner.temp }}/hyprism-test-results"
+          -Title "Local Node tests (${{ matrix.platform }})"
+
+      - name: Write macOS trust smoke summary
+        if: always() && matrix.platform == 'macOS'
+        shell: pwsh
+        env:
+          SMOKE_OUTCOME: ${{ steps.macos_trust.outcome }}
+          SMOKE_LOG: ${{ runner.temp }}/local-node.log
+        run: |
+          $lines = [System.Collections.Generic.List[string]]::new()
+          [void] $lines.Add('### macOS trust and HTTPS smoke')
+          [void] $lines.Add('')
+          [void] $lines.Add("Status: $env:SMOKE_OUTCOME")
+
+          if ($env:SMOKE_OUTCOME -ne 'success' -and (Test-Path -LiteralPath $env:SMOKE_LOG)) {
+              $smokeOutput = (Get-Content -LiteralPath $env:SMOKE_LOG -Raw).Trim()
+              if ($smokeOutput.Length -gt 16000) {
+                  $smokeOutput = $smokeOutput.Substring(0, 16000) + [Environment]::NewLine + '[output truncated]'
+              }
+
+              [void] $lines.Add('')
+              [void] $lines.Add('#### Last smoke output')
+              [void] $lines.Add('')
+              [void] $lines.Add('````text')
+              [void] $lines.Add($smokeOutput)
+              [void] $lines.Add('````')
+          }
+
+          Add-Content -LiteralPath $env:GITHUB_STEP_SUMMARY -Value (([string]::Join([Environment]::NewLine, $lines)) + [Environment]::NewLine) -Encoding utf8
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-node-test-results-${{ matrix.platform }}
+          path: ${{ runner.temp }}/hyprism-test-results/*.trx
+          if-no-files-found: ignore

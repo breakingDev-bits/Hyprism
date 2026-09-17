@@ -18,6 +18,7 @@ using HyPrism.Core.Game.Launch;
 using HyPrism.Core.Game.Mods;
 using HyPrism.Core.Game.Sources;
 using HyPrism.Core.Game.Versions;
+using HyPrism.Core.Infrastructure;
 using HyPrism.Core.Models;
 
 namespace HyPrism.Desktop.Features.Instances;
@@ -52,6 +53,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     private readonly ObservableRangeCollection<InstanceModItemViewModel> _visibleInstalledMods = [];
     private readonly ObservableRangeCollection<ModCatalogItemViewModel> _modCatalogItems = [];
     private readonly ObservableRangeCollection<ModCatalogFileItemViewModel> _modCatalogPreviewFiles = [];
+    private readonly ObservableRangeCollection<ModCatalogInstallItemViewModel> _modCatalogInstallItems = [];
     private readonly ObservableRangeCollection<InstanceWorldItemViewModel> _instanceWorlds = [];
     private ProgressUpdateMessage? _pendingProgressUpdate;
     private int _progressUpdateScheduled;
@@ -77,6 +79,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     private List<ModCategory> _loadedModCategories = [];
     private int _modCatalogPage;
     private CancellationTokenSource _modIconsCancellation = new();
+    private CancellationTokenSource _modDependencyIconsCancellation = new();
     private CancellationTokenSource _modPreviewImageCancellation = new();
     private CancellationTokenSource _modPreviewImageTransitionCancellation = new();
     private CancellationTokenSource _modPreviewRevealCancellation = new();
@@ -85,9 +88,28 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     private readonly List<bool> _modCatalogPreviewBitmapSlotsResolved = [];
     private readonly object _modCatalogPreviewBitmapsLock = new();
     private bool _isModCatalogPreviewImageFadingOut;
+    private bool _modCatalogInstallAccepted;
     private string? _modCatalogGameVersion;
     private const int ModCatalogPageSize = 24;
     private const int MaxConsoleLines = 3000;
+    private static readonly IReadOnlyDictionary<string, string> ModCatalogCategoryResourceKeys =
+        new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["blocks"] = "modManager.category.blocks",
+            ["cosmetics-armor"] = "modManager.category.cosmetics_armor",
+            ["food-farming"] = "modManager.category.food_farming",
+            ["furniture"] = "modManager.category.furniture",
+            ["gameplay"] = "modManager.category.gameplay",
+            ["library"] = "modManager.category.library",
+            ["miscellaneous"] = "modManager.category.miscellaneous",
+            ["mobs-characters"] = "modManager.category.mobs_characters",
+            ["prefab"] = "modManager.category.prefab",
+            ["quality-of-life"] = "modManager.category.quality_of_life",
+            ["qol"] = "modManager.category.quality_of_life",
+            ["resource-packs"] = "modManager.category.resource_packs",
+            ["utility"] = "modManager.category.utility",
+            ["world-gen"] = "modManager.category.world_gen"
+        };
 
     [ObservableProperty]
     private string _selectedInstanceName = string.Empty;
@@ -172,6 +194,14 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     private string _displayedInstanceSectionTitle = string.Empty;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsDisplayedInstanceModsSection))]
+    [NotifyPropertyChangedFor(nameof(IsDisplayedInstanceBrowseSection))]
+    [NotifyPropertyChangedFor(nameof(IsDisplayedInstanceWorldsSection))]
+    [NotifyPropertyChangedFor(nameof(IsDisplayedInstanceConsoleSection))]
+    [NotifyPropertyChangedFor(nameof(IsDisplayedInstanceLogsSection))]
+    private string _displayedInstanceSection = string.Empty;
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsInstanceOverviewSection))]
     [NotifyPropertyChangedFor(nameof(IsInstanceModsSection))]
     [NotifyPropertyChangedFor(nameof(IsInstanceBrowseSection))]
@@ -187,6 +217,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsModCatalogEmpty))]
+    [NotifyPropertyChangedFor(nameof(CanSearchModCatalog))]
     private bool _isModCatalogLoading;
 
     [ObservableProperty]
@@ -201,6 +232,8 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     private string _installedModsSearchQuery = string.Empty;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ShouldShowModCatalogSearchAction))]
+    [NotifyPropertyChangedFor(nameof(CanSearchModCatalog))]
     private string _modCatalogSearchQuery = string.Empty;
 
     [ObservableProperty]
@@ -293,7 +326,21 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanInstallSelectedCatalogMods))]
+    [NotifyPropertyChangedFor(nameof(CanOpenModCatalogInstallConfirmation))]
     private bool _isInstallingSelectedCatalogMods;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasModCatalogInstallConfirmation))]
+    [NotifyPropertyChangedFor(nameof(IsBottomSheetMounted))]
+    private bool _isModCatalogInstallConfirmationOpen;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ModCatalogInstallProgressText))]
+    private double _modCatalogInstallProgress;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ModCatalogInstallProgressText))]
+    private int _modCatalogInstallCompletedCount;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanShowPreviousModCatalogScreenshot))]
@@ -366,6 +413,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     public ObservableCollection<InstanceModItemViewModel> VisibleInstalledMods => _visibleInstalledMods;
     public ObservableCollection<ModCatalogItemViewModel> ModCatalogItems => _modCatalogItems;
     public ObservableCollection<ModCatalogFileItemViewModel> ModCatalogPreviewFiles => _modCatalogPreviewFiles;
+    public ObservableCollection<ModCatalogInstallItemViewModel> ModCatalogInstallItems => _modCatalogInstallItems;
     public ObservableCollection<InstanceWorldItemViewModel> InstanceWorlds => _instanceWorlds;
     public ObservableCollection<ConsoleLineViewModel> ConsoleLines => _consoleLines;
     public ObservableCollection<InstanceListOptionViewModel> ModCatalogCategories { get; } = [];
@@ -438,8 +486,12 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     public string ModCatalogFileTypeColumn => _localizer["settings.downloads.columnType"];
     public string ModCatalogFileNameColumn => _localizer["modManager.name"];
     public string ModCatalogFileGameVersionsColumn => _localizer["modManager.gameVersions"];
-    public string ModCatalogInstallSelectedLabel =>
-        $"{_localizer["modManager.installSelected"]} ({SelectedCatalogModCount})";
+    public string ModCatalogInstallSelectedLabel => InstallLabel;
+    public string ModCatalogInstallTitle => _localizer["modManager.installSelected"];
+    public string ModCatalogInstallPreviewTitle => _localizer["modManager.installPreview"];
+    public string ModCatalogInstallDependencyHint => _localizer["modManager.installDependencyHint"];
+    public string ModCatalogInstallVersionColumn => VersionLabel;
+    public string ModCatalogInstallDependenciesColumn => _localizer["modManager.dependencies"];
     public string ModCatalogGameVersionLabel => string.IsNullOrWhiteSpace(_modCatalogGameVersion)
         ? _localizer["instances.mods.compatibility.versionUnknown"]
         : _localizer.Format("instances.mods.compatibility.gameVersion", _modCatalogGameVersion);
@@ -454,9 +506,12 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     public bool HasConsoleLines => ConsoleLines.Count > 0;
     public bool IsConsoleEmpty => ConsoleLines.Count == 0;
     public bool CanLoadMoreModCatalog => HasMoreModCatalog && !IsLoadingMoreModCatalog && !IsModCatalogLoading;
+    public bool ShouldShowModCatalogSearchAction => ModCatalogSearchQuery.Trim().Length > 3;
+    public bool CanSearchModCatalog => ShouldShowModCatalogSearchAction && !IsModCatalogLoading;
     public bool HasModCatalogPreview => IsModCatalogPreviewOpen;
     public bool IsModCatalogPreviewMounted => SelectedModCatalogPreview is not null;
-    public bool IsBottomSheetMounted => IsModCatalogPreviewMounted;
+    public bool IsBottomSheetMounted => IsModCatalogPreviewMounted || HasModCatalogInstallConfirmation;
+    public bool HasModCatalogInstallConfirmation => IsModCatalogInstallConfirmationOpen;
     public bool HasModCatalogPreviewImage => ModCatalogPreviewImage is not null;
     public bool HasModCatalogPreviewFiles => ModCatalogPreviewFiles.Count > 0;
     public bool HasMultipleModCatalogPreviewScreenshots =>
@@ -472,6 +527,9 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     public int SelectedCatalogModCount => ModCatalogItems.Count(item => item.IsSelected);
     public bool HasSelectedCatalogMods => SelectedCatalogModCount > 0;
     public bool CanInstallSelectedCatalogMods => HasSelectedCatalogMods && !IsInstallingSelectedCatalogMods;
+    public bool CanOpenModCatalogInstallConfirmation => HasSelectedCatalogMods && !IsInstallingSelectedCatalogMods;
+    public string ModCatalogInstallProgressText =>
+        $"{ModCatalogInstallCompletedCount}/{ModCatalogInstallItems.Count}";
     public string SelectedModCountText =>
         _localizer.Format("instances.mods.selectedCount", SelectedModCount);
     public string ModUpdateCountText =>
@@ -564,6 +622,11 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     public bool IsInstanceWorldsSection => InstanceSection == "worlds";
     public bool IsInstanceConsoleSection => InstanceSection == "console";
     public bool IsInstanceLogsSection => InstanceSection == "logs";
+    public bool IsDisplayedInstanceModsSection => DisplayedInstanceSection == "mods";
+    public bool IsDisplayedInstanceBrowseSection => DisplayedInstanceSection == "browse";
+    public bool IsDisplayedInstanceWorldsSection => DisplayedInstanceSection == "worlds";
+    public bool IsDisplayedInstanceConsoleSection => DisplayedInstanceSection == "console";
+    public bool IsDisplayedInstanceLogsSection => DisplayedInstanceSection == "logs";
     public bool HasInstalledMods => VisibleInstalledMods.Count > 0;
     public bool HasModCatalogItems => ModCatalogItems.Count > 0;
     public bool HasInstanceWorlds => InstanceWorlds.Count > 0;
@@ -725,6 +788,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
             return;
 
         DisplayedInstanceSectionTitle = GetInstanceSectionTitle(section);
+        DisplayedInstanceSection = section;
         InstanceSection = section;
         InstanceContentError = string.Empty;
 
@@ -750,10 +814,25 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     [RelayCommand]
     private void CloseInstanceSection()
     {
+        if (IsInstallingSelectedCatalogMods)
+            return;
+
         InstanceSection = string.Empty;
         InstanceContentError = string.Empty;
+        IsModCatalogInstallConfirmationOpen = false;
         ResetModCatalogPreview();
         _consoleFlushTimer.Stop();
+    }
+
+    internal void CompleteInstanceSectionClose()
+    {
+        if (IsInstanceOverviewSection)
+            DisplayedInstanceSection = string.Empty;
+    }
+
+    internal void SynchronizeDisplayedInstanceSection()
+    {
+        DisplayedInstanceSection = InstanceSection;
     }
 
     [RelayCommand]
@@ -781,6 +860,80 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     }
 
     [RelayCommand]
+    private void ClearModCatalogSelection()
+    {
+        foreach (var item in ModCatalogItems.Where(item => item.IsSelected))
+            item.IsSelected = false;
+
+        NotifyCatalogSelectionChanged();
+        if (IsModCatalogInstallConfirmationOpen)
+            IsModCatalogInstallConfirmationOpen = false;
+    }
+
+    [RelayCommand]
+    private async Task OpenModCatalogInstallConfirmation()
+    {
+        if (!CanOpenModCatalogInstallConfirmation)
+            return;
+
+        PrepareModCatalogInstallItems();
+        _modCatalogInstallAccepted = false;
+        ModCatalogInstallCompletedCount = 0;
+        ModCatalogInstallProgress = 0;
+        IsModCatalogInstallConfirmationOpen = true;
+
+        await LoadModCatalogInstallDependenciesAsync(_modCatalogInstallItems.ToArray());
+    }
+
+    private async Task LoadModCatalogInstallDependenciesAsync(
+        IReadOnlyList<ModCatalogInstallItemViewModel> items)
+    {
+        if (_modManager is null || items.Count == 0)
+            return;
+
+        var dependencyTasks = items.Select(async item =>
+        {
+            var task = _modManager.GetModDependenciesAsync(item.Id, item.CatalogItem.RecommendedFileId);
+            return await (task ?? Task.FromResult<List<ModDependency>>([]));
+        });
+        var dependencies = await Task.WhenAll(dependencyTasks);
+
+        for (var index = 0; index < items.Count; index++)
+        {
+            var item = items[index];
+            if (!_modCatalogInstallItems.Contains(item))
+                continue;
+
+            item.CatalogItem.SetDependencies(dependencies[index]);
+        }
+
+        FetchCatalogDependencyIcons(items);
+    }
+
+    [RelayCommand]
+    private void CloseModCatalogInstallConfirmation()
+    {
+        if (IsInstallingSelectedCatalogMods)
+            return;
+
+        IsModCatalogInstallConfirmationOpen = false;
+    }
+
+    internal void CompleteModCatalogInstallConfirmationClose()
+    {
+        if (!IsModCatalogInstallConfirmationOpen &&
+            !IsInstallingSelectedCatalogMods &&
+            !_modCatalogInstallAccepted)
+            DisposeModCatalogInstallItems();
+    }
+
+    internal void CompleteModCatalogInstallation()
+    {
+        DisposeModCatalogInstallItems();
+        _modCatalogInstallAccepted = false;
+    }
+
+    [RelayCommand]
     private async Task InstallSelectedCatalogModsAsync()
     {
         if (!CanInstallSelectedCatalogMods || _modManager is null ||
@@ -793,22 +946,54 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
         if (string.IsNullOrWhiteSpace(instancePath))
             return;
 
-        var selected = ModCatalogItems.Where(item => item.IsSelected && item.CanSelect).ToArray();
+        if (_modCatalogInstallItems.Count == 0)
+            PrepareModCatalogInstallItems();
+
+        var installItems = _modCatalogInstallItems.ToArray();
+        if (installItems.Length == 0)
+            return;
+
+        _modCatalogInstallAccepted = true;
+        IsModCatalogInstallConfirmationOpen = false;
         IsInstallingSelectedCatalogMods = true;
+        ModCatalogInstallCompletedCount = 0;
+        ModCatalogInstallProgress = 0;
         InstanceContentError = string.Empty;
         var failed = false;
         try
         {
-            foreach (var item in selected)
+            for (var index = 0; index < installItems.Length; index++)
             {
+                var installItem = installItems[index];
+                var item = installItem.CatalogItem;
+                if (!item.CanSelect)
+                {
+                    installItem.Fail();
+                    failed = true;
+                    ModCatalogInstallCompletedCount = index + 1;
+                    ModCatalogInstallProgress = (index + 1) * 100d / installItems.Length;
+                    continue;
+                }
+
                 item.IsInstalling = true;
+                installItem.Begin();
                 try
                 {
                     if (!await _modManager.InstallModFileToInstanceAsync(
                             item.Id,
                             item.RecommendedFileId,
-                            instancePath))
+                            instancePath,
+                            (stage, _) => Dispatcher.UIThread.Post(() =>
+                            {
+                                if (stage.Equals("downloading", StringComparison.OrdinalIgnoreCase))
+                                    installItem.SetProgress(28);
+                                else if (stage.Equals("installing", StringComparison.OrdinalIgnoreCase))
+                                    installItem.SetProgress(72);
+                                else if (stage.Equals("complete", StringComparison.OrdinalIgnoreCase))
+                                    installItem.Complete();
+                            })))
                     {
+                        installItem.Fail();
                         failed = true;
                         continue;
                     }
@@ -816,14 +1001,18 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
                     item.IsInstalled = true;
                     item.InstalledFileId = item.RecommendedFileId;
                     item.IsSelected = false;
+                    installItem.Complete();
                 }
                 catch
                 {
+                    installItem.Fail();
                     failed = true;
                 }
                 finally
                 {
                     item.IsInstalling = false;
+                    ModCatalogInstallCompletedCount = index + 1;
+                    ModCatalogInstallProgress = (index + 1) * 100d / installItems.Length;
                 }
             }
 
@@ -1427,6 +1616,67 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
             });
     }
 
+    private void FetchCatalogDependencyIcons(
+        IEnumerable<ModCatalogInstallItemViewModel> items)
+    {
+        if (_remoteImageCache is null)
+            return;
+
+        var token = _modDependencyIconsCancellation.Token;
+        var targets = items
+            .SelectMany(item => item.DependencyItems)
+            .Where(item => item.Icon is null && !string.IsNullOrWhiteSpace(item.IconUrl))
+            .ToList();
+        if (targets.Count == 0)
+            return;
+
+        _ = Parallel.ForEachAsync(
+            targets,
+            new ParallelOptions
+            {
+                CancellationToken = token,
+                MaxDegreeOfParallelism = 4
+            },
+            async (item, cancellationToken) =>
+            {
+                try
+                {
+                    var icon = await RemoteBitmapLoader.LoadAsync(
+                            item.IconUrl,
+                            64,
+                            _httpClient,
+                            cancellationToken,
+                            _remoteImageCache,
+                            "mod-dependencies")
+                        .ConfigureAwait(false);
+                    if (icon is null || cancellationToken.IsCancellationRequested)
+                    {
+                        icon?.Dispose();
+                        return;
+                    }
+
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            icon.Dispose();
+                            return;
+                        }
+
+                        item.Icon = icon;
+                    });
+                }
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Debug("InstancesViewModel", $"Could not load dependency icon: {ex.Message}");
+                }
+            });
+    }
+
     private async Task<Bitmap?> LoadCatalogAuthorAvatarAsync(
         ModCatalogItemViewModel item,
         CancellationToken cancellationToken)
@@ -1723,6 +1973,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(SelectedCatalogModCount));
         OnPropertyChanged(nameof(HasSelectedCatalogMods));
         OnPropertyChanged(nameof(CanInstallSelectedCatalogMods));
+        OnPropertyChanged(nameof(CanOpenModCatalogInstallConfirmation));
         OnPropertyChanged(nameof(ModCatalogInstallSelectedLabel));
     }
 
@@ -1742,7 +1993,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
         try
         {
             var categories = await _modManager.GetModCategoriesAsync();
-            if (categories.Count == 0)
+            if (categories is not { Count: > 0 })
             {
                 _modCatalogFiltersLoaded = false;
                 return;
@@ -1766,9 +2017,18 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
             new InstanceListOptionViewModel("all", _localizer["instances.browse.categoryAll"]));
         foreach (var category in _loadedModCategories)
         {
+            if (category.Id == 0 ||
+                string.Equals(category.Slug, "all", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            var categoryValue = category.Id > 0
+                ? category.Id.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                : $"fallback:{category.Slug}";
             ModCatalogCategories.Add(new InstanceListOptionViewModel(
-                category.Id.ToString(System.Globalization.CultureInfo.CurrentCulture),
-                category.Name));
+                categoryValue,
+                LocalizeModCatalogCategory(category)));
         }
 
         SelectedModCatalogCategory =
@@ -1776,6 +2036,14 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
                 string.Equals(option.Value, selectedValue, StringComparison.Ordinal)) ??
             ModCatalogCategories[0];
         _suppressCatalogReload = false;
+    }
+
+    private string LocalizeModCatalogCategory(ModCategory category)
+    {
+        var slug = category.Slug.Trim().Replace('_', '-').ToLowerInvariant();
+        return ModCatalogCategoryResourceKeys.TryGetValue(slug, out var resourceKey)
+            ? _localizer[resourceKey]
+            : category.Name;
     }
 
     private void BuildModCatalogSortOptions()
@@ -2157,6 +2425,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     {
         InstalledMods.Clear();
         VisibleInstalledMods.Clear();
+        DisposeModCatalogInstallItems();
         foreach (var item in ModCatalogItems)
             item.Dispose();
         ModCatalogItems.Clear();
@@ -2310,11 +2579,19 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
                         (mod.LatestFiles.Count == 0 ? mod.LatestFileId : string.Empty),
                     compatibility: compatibility,
                     compatibilityLabel: GetModCompatibilityLabel(compatibility),
-                    authorAvatarUrl: mod.AuthorAvatarUrl)
+                    authorAvatarUrl: mod.AuthorAvatarUrl,
+                    recommendedVersionLabel: recommendedFile is not null
+                        ? string.IsNullOrWhiteSpace(recommendedFile.DisplayName)
+                            ? recommendedFile.FileName
+                            : recommendedFile.DisplayName
+                        : mod.LatestFileId,
+                    dependencies: recommendedFile?.Dependencies)
                 {
                     IsInstalled = installedMod is not null
                 };
-            }).ToList();
+            })
+            .Where(item => !item.IsInstalled)
+            .ToList();
 
             if (append)
                 _modCatalogItems.AddRange(items);
@@ -2327,7 +2604,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
             }
 
             _modCatalogPage = page;
-            HasMoreModCatalog = _modCatalogItems.Count < result.TotalCount && items.Count > 0;
+            HasMoreModCatalog = _modCatalogItems.Count < result.TotalCount && result.Mods.Count > 0;
             FetchCatalogModIcons(items);
             NotifyInstanceContentCollectionsChanged();
             NotifyCatalogSelectionChanged();
@@ -2431,16 +2708,57 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
 
     private void RefreshCatalogInstalledState(IReadOnlyCollection<InstalledMod> installedMods)
     {
-        foreach (var item in ModCatalogItems)
+        for (var index = ModCatalogItems.Count - 1; index >= 0; index--)
         {
+            var item = ModCatalogItems[index];
             var installedMod = FindInstalledCatalogMod(item.Id, installedMods);
-            item.IsInstalled = installedMod is not null;
-            item.InstalledFileId = installedMod?.FileId ?? string.Empty;
-            if (item.IsInstalled)
-                item.IsSelected = false;
+            if (installedMod is not null)
+            {
+                var isInstallSnapshotItem = _modCatalogInstallItems.Any(installItem =>
+                    ReferenceEquals(installItem.CatalogItem, item));
+                if (!isInstallSnapshotItem)
+                    item.Dispose();
+                ModCatalogItems.RemoveAt(index);
+                continue;
+            }
+
+            item.IsInstalled = false;
         }
 
         NotifyCatalogSelectionChanged();
+    }
+
+    private void PrepareModCatalogInstallItems()
+    {
+        DisposeModCatalogInstallItems();
+        RestartModDependencyIconFetch();
+        foreach (var item in ModCatalogItems.Where(item => item.IsSelected && item.CanSelect))
+        {
+            _modCatalogInstallItems.Add(new ModCatalogInstallItemViewModel(
+                item,
+                count => _localizer.Format("modManager.dependsOnMods", count),
+                _localizer["common.unknown"]));
+        }
+    }
+
+    private void DisposeModCatalogInstallItems()
+    {
+        _modDependencyIconsCancellation.Cancel();
+        foreach (var installItem in _modCatalogInstallItems)
+        {
+            installItem.Dispose();
+            if (!ModCatalogItems.Contains(installItem.CatalogItem))
+                installItem.CatalogItem.Dispose();
+        }
+
+        _modCatalogInstallItems.Clear();
+    }
+
+    private void RestartModDependencyIconFetch()
+    {
+        _modDependencyIconsCancellation.Cancel();
+        _modDependencyIconsCancellation.Dispose();
+        _modDependencyIconsCancellation = new CancellationTokenSource();
     }
 
     private static InstalledMod? FindInstalledCatalogMod(
@@ -2945,6 +3263,8 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
         _modPreviewRevealCancellation.Dispose();
         DisposeModCatalogPreviewBitmaps();
         CancelInstanceVersionLoading();
+        DisposeModCatalogInstallItems();
+        _modDependencyIconsCancellation.Dispose();
         foreach (var item in ModCatalogItems)
             item.Dispose();
         Interlocked.Exchange(ref _pendingProgressUpdate, null);
