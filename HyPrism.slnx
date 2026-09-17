@@ -14,5 +14,4 @@
     <Project Path="Tests/HyPrism.Desktop.Tests/HyPrism.Desktop.Tests.csproj" />
     <Project Path="Tests/HyPrism.LocalNode.Tests/HyPrism.LocalNode.Tests.csproj" />
   </Folder>
-  <Project Path="HyPrism.csproj" />
 </Solution>

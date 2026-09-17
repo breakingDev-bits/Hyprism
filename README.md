@@ -36,7 +36,7 @@ git clone https://github.com/hyprismteam/HyPrism.git
 cd HyPrism
 
 # Build the application and tests
-dotnet build HyPrism.sln
+dotnet build HyPrism.slnx
 
 # Run the launcher
 dotnet run --project Sources/HyPrism.Desktop/HyPrism.Desktop.csproj

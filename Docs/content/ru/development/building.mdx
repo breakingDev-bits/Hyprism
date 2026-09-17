@@ -14,8 +14,8 @@ description: Восстановление зависимостей, сборка
 ```bash
 git clone https://github.com/hyprismteam/HyPrism.git
 cd HyPrism
-dotnet restore HyPrism.sln
-dotnet build HyPrism.sln
+dotnet restore HyPrism.slnx
+dotnet build HyPrism.slnx
 ```
 
 Решение собирает Core, Desktop, Local Node и их тестовые проекты
@@ -48,7 +48,7 @@ dotnet run --project Sources/HyPrism.Desktop/HyPrism.Desktop.csproj
 ## Конфигурация Release
 
 ```bash
-dotnet build HyPrism.sln --configuration Release
+dotnet build HyPrism.slnx --configuration Release
 ```
 
 Обычная сборка создает файлы для разработки. Автономные приложения и установщики описаны в разделе [Упаковка и релизы](/docs/development/packaging)
