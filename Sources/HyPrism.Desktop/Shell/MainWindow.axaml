@@ -24,7 +24,8 @@ SPDX-License-Identifier: GPL-3.0-only
         CanResize="True"
         Background="{DynamicResource AppBackgroundBrush}"
         WindowStartupLocation="CenterScreen"
-        WindowDecorations="None">
+        ExtendClientAreaToDecorationsHint="True"
+        WindowDecorations="{OnPlatform Default=None, Windows=Full}">
 
 
   <Grid x:Name="WindowRoot">
@@ -362,7 +363,6 @@ SPDX-License-Identifier: GPL-3.0-only
         ZIndex="2000">
     <Border Grid.Column="0"
             Background="Transparent"
-            PointerPressed="OnTitleBarPointerPressed"
             WindowDecorationProperties.ElementRole="TitleBar" />
 
     <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="0">
@@ -400,13 +400,13 @@ SPDX-License-Identifier: GPL-3.0-only
     </StackPanel>
   </Grid>
 
-  <Border x:Name="ResizeNorth" ZIndex="2001" Height="6" VerticalAlignment="Top" Background="Transparent" Cursor="SizeNorthSouth" PointerPressed="OnResizeNorth" />
-  <Border x:Name="ResizeSouth" ZIndex="2001" Height="6" VerticalAlignment="Bottom" Background="Transparent" Cursor="SizeNorthSouth" PointerPressed="OnResizeSouth" />
-  <Border x:Name="ResizeWest" ZIndex="2001" Width="6" HorizontalAlignment="Left" Background="Transparent" Cursor="SizeWestEast" PointerPressed="OnResizeWest" />
-  <Border x:Name="ResizeEast" ZIndex="2001" Width="6" HorizontalAlignment="Right" Background="Transparent" Cursor="SizeWestEast" PointerPressed="OnResizeEast" />
-  <Border x:Name="ResizeNorthWest" ZIndex="2002" Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Cursor="TopLeftCorner" PointerPressed="OnResizeNorthWest" />
-  <Border x:Name="ResizeNorthEast" ZIndex="2002" Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" Cursor="TopRightCorner" PointerPressed="OnResizeNorthEast" />
-  <Border x:Name="ResizeSouthWest" ZIndex="2002" Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="Transparent" Cursor="BottomLeftCorner" PointerPressed="OnResizeSouthWest" />
-  <Border x:Name="ResizeSouthEast" ZIndex="2002" Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" Cursor="BottomRightCorner" PointerPressed="OnResizeSouthEast" />
+  <Border x:Name="ResizeNorth" ZIndex="2001" Height="6" VerticalAlignment="Top" Background="Transparent" Cursor="SizeNorthSouth" WindowDecorationProperties.ElementRole="ResizeN" />
+  <Border x:Name="ResizeSouth" ZIndex="2001" Height="6" VerticalAlignment="Bottom" Background="Transparent" Cursor="SizeNorthSouth" WindowDecorationProperties.ElementRole="ResizeS" />
+  <Border x:Name="ResizeWest" ZIndex="2001" Width="6" HorizontalAlignment="Left" Background="Transparent" Cursor="SizeWestEast" WindowDecorationProperties.ElementRole="ResizeW" />
+  <Border x:Name="ResizeEast" ZIndex="2001" Width="6" HorizontalAlignment="Right" Background="Transparent" Cursor="SizeWestEast" WindowDecorationProperties.ElementRole="ResizeE" />
+  <Border x:Name="ResizeNorthWest" ZIndex="2002" Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" Cursor="TopLeftCorner" WindowDecorationProperties.ElementRole="ResizeNW" />
+  <Border x:Name="ResizeNorthEast" ZIndex="2002" Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" Cursor="TopRightCorner" WindowDecorationProperties.ElementRole="ResizeNE" />
+  <Border x:Name="ResizeSouthWest" ZIndex="2002" Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="Transparent" Cursor="BottomLeftCorner" WindowDecorationProperties.ElementRole="ResizeSW" />
+  <Border x:Name="ResizeSouthEast" ZIndex="2002" Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Transparent" Cursor="BottomRightCorner" WindowDecorationProperties.ElementRole="ResizeSE" />
   </Grid>
 </Window>

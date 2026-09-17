@@ -1,8 +1,9 @@
 // Copyright (C) 2026 HyPrism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Chrome;
+using Avalonia.Headless.XUnit;
 using Avalonia.Input;
 using HyPrism.Desktop.Shell;
 using Xunit;
@@ -11,96 +12,41 @@ namespace HyPrism.Desktop.Tests;
 
 public sealed class MainWindowResizeTests
 {
-    private const double MinWidth = 1024;
-    private const double MinHeight = 700;
-    private const double MaxSize = double.PositiveInfinity;
-    private const double StartWidth = 1280;
-    private const double StartHeight = 800;
-
-    [Fact]
-    public void EastResize_GrowsWithoutMovingTheWindow()
+    [AvaloniaFact]
+    public void CustomChromeUsesAvaloniaDecorationHitTesting()
     {
-        var (size, offset) = MainWindow.CalculateResize(
-            WindowEdge.East, new Size(StartWidth, StartHeight), new Vector(200, 40),
-            MinWidth, MaxSize, MinHeight, MaxSize);
+        var window = new MainWindow();
 
-        Assert.Equal(1480, size.Width);
-        Assert.Equal(StartHeight, size.Height);
-        Assert.Equal(default, offset);
+        try
+        {
+            Assert.True(window.CanResize);
+            Assert.True(window.ExtendClientAreaToDecorationsHint);
+            var expectedDecorations = OperatingSystem.IsWindows()
+                ? WindowDecorations.Full
+                : WindowDecorations.None;
+            Assert.Equal(expectedDecorations, window.WindowDecorations);
+
+            AssertElementRole(window, "ResizeNorth", WindowDecorationsElementRole.ResizeN);
+            AssertElementRole(window, "ResizeSouth", WindowDecorationsElementRole.ResizeS);
+            AssertElementRole(window, "ResizeWest", WindowDecorationsElementRole.ResizeW);
+            AssertElementRole(window, "ResizeEast", WindowDecorationsElementRole.ResizeE);
+            AssertElementRole(window, "ResizeNorthWest", WindowDecorationsElementRole.ResizeNW);
+            AssertElementRole(window, "ResizeNorthEast", WindowDecorationsElementRole.ResizeNE);
+            AssertElementRole(window, "ResizeSouthWest", WindowDecorationsElementRole.ResizeSW);
+            AssertElementRole(window, "ResizeSouthEast", WindowDecorationsElementRole.ResizeSE);
+        }
+        finally
+        {
+            window.Close();
+        }
     }
 
-    [Fact]
-    public void WestResize_MovesTheWindowByTheActualDelta()
+    private static void AssertElementRole(
+        MainWindow window,
+        string name,
+        WindowDecorationsElementRole expectedRole)
     {
-        var (size, offset) = MainWindow.CalculateResize(
-            WindowEdge.West, new Size(StartWidth, StartHeight), new Vector(96, 0),
-            MinWidth, MaxSize, MinHeight, MaxSize);
-
-        Assert.Equal(StartWidth - 96, size.Width);
-        Assert.Equal(96, offset.X);
-        Assert.Equal(0, offset.Y);
-    }
-
-    [Fact]
-    public void WestResize_StopsAtMinimumWithoutFurtherMovement()
-    {
-        // Dragging 900 DIPs past the minimum width: the window size clamps at
-        // MinWidth and the position offset must stay fixed instead of following
-        // the cursor (the native modal loop drifted the window in this case)
-        var (size, offset) = MainWindow.CalculateResize(
-            WindowEdge.West, new Size(StartWidth, StartHeight), new Vector(900, 0),
-            MinWidth, MaxSize, MinHeight, MaxSize);
-
-        Assert.Equal(MinWidth, size.Width);
-        Assert.Equal(StartWidth - MinWidth, offset.X);
-    }
-
-    [Fact]
-    public void NorthResize_StopsAtMinimumWithoutFurtherMovement()
-    {
-        var (size, offset) = MainWindow.CalculateResize(
-            WindowEdge.North, new Size(StartWidth, StartHeight), new Vector(0, 500),
-            MinWidth, MaxSize, MinHeight, MaxSize);
-
-        Assert.Equal(MinHeight, size.Height);
-        Assert.Equal(StartHeight - MinHeight, offset.Y);
-        Assert.Equal(StartWidth, size.Width);
-    }
-
-    [Fact]
-    public void SouthEastResize_GrowsWithoutMovingTheWindow()
-    {
-        var (size, offset) = MainWindow.CalculateResize(
-            WindowEdge.SouthEast, new Size(StartWidth, StartHeight), new Vector(-150, 220),
-            MinWidth, MaxSize, MinHeight, MaxSize);
-
-        // Upward drag on the south edge shrinks the height but cannot move the window
-        Assert.Equal(StartWidth - 150, size.Width);
-        Assert.Equal(StartHeight + 220, size.Height);
-        Assert.Equal(default, offset);
-    }
-
-    [Fact]
-    public void NorthWestResize_ClampsBothAxesIndependently()
-    {
-        var (size, offset) = MainWindow.CalculateResize(
-            WindowEdge.NorthWest, new Size(StartWidth, StartHeight), new Vector(900, 80),
-            MinWidth, MaxSize, MinHeight, MaxSize);
-
-        Assert.Equal(MinWidth, size.Width);
-        Assert.Equal(StartHeight - 80, size.Height);
-        Assert.Equal(StartWidth - MinWidth, offset.X);
-        Assert.Equal(80, offset.Y);
-    }
-
-    [Fact]
-    public void SouthResize_ShrinksClampedAtMinimumHeight()
-    {
-        var (size, offset) = MainWindow.CalculateResize(
-            WindowEdge.South, new Size(StartWidth, StartHeight), new Vector(0, -400),
-            MinWidth, MaxSize, MinHeight, MaxSize);
-
-        Assert.Equal(MinHeight, size.Height);
-        Assert.Equal(default, offset);
+        var element = Assert.IsAssignableFrom<Avalonia.Visual>(window.FindControl<Control>(name));
+        Assert.Equal(expectedRole, WindowDecorationProperties.GetElementRole(element));
     }
 }
