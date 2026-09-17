@@ -14,8 +14,8 @@ Run these commands in a terminal
 ```bash
 git clone https://github.com/hyprismteam/HyPrism.git
 cd HyPrism
-dotnet restore HyPrism.sln
-dotnet build HyPrism.sln
+dotnet restore HyPrism.slnx
+dotnet build HyPrism.slnx
 ```
 
 The solution builds Core, Desktop, Local Node, and their test projects
@@ -48,7 +48,7 @@ The directory must exist before startup. It is retained after exit so you can in
 ## Build a release configuration
 
 ```bash
-dotnet build HyPrism.sln --configuration Release
+dotnet build HyPrism.slnx --configuration Release
 ```
 
 A build creates development binaries. Use [Packaging and releases](/docs/development/packaging) for self-contained applications and installable artifacts
