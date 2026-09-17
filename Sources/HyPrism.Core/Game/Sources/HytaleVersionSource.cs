@@ -1,15 +1,15 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using HyPrism.Core.Models;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Integrations.Hytale;
-using HyPrism.Core.Accounts;
+using Hyprism.Core.Models;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Integrations.Hytale;
+using Hyprism.Core.Accounts;
 
-namespace HyPrism.Core.Game.Sources;
+namespace Hyprism.Core.Game.Sources;
 
 /// <summary>
 /// Exception thrown when Hytale API returns 401/403, indicating token needs refresh

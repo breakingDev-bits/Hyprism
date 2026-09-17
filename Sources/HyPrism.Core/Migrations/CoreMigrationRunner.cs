@@ -1,12 +1,12 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace HyPrism.Core.Migrations;
+namespace Hyprism.Core.Migrations;
 
 /// <summary>
 /// Applies Core-owned data migrations in dependency order before hosts consume launcher data.

@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System;
@@ -15,11 +15,11 @@ using System.Threading.Tasks;
 using System.Web;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
-using HyPrism.Core;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Desktop.Platform;
+using Hyprism.Core;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Desktop.Platform;
 
-namespace HyPrism.Desktop.Features.News;
+namespace Hyprism.Desktop.Features.News;
 
 /// <summary>
 /// Fetches official news from the Hytale blog

@@ -1,15 +1,15 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Game.Sources;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Models;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Game.Sources;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Core.Tests.Game.Sources;
+namespace Hyprism.Core.Tests.Game.Sources;
 
 public sealed class HytaleVersionSourceTests
 {

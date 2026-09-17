@@ -5,7 +5,7 @@ description: Add resource strings and update views when the language changes
 
 # Localization
 
-Launcher translations belong to Desktop. The default resource is `Sources/HyPrism.Desktop/Localization/Resources.resx`; each supported culture has a sibling such as `Resources.ru-RU.resx`
+Launcher translations belong to Desktop. The default resource is `Sources/Hyprism.Desktop/Localization/Resources.resx`; each supported culture has a sibling such as `Resources.ru-RU.resx`
 
 ## Add a string
 
@@ -26,7 +26,7 @@ Example resource entry
 Example access from presentation code
 
 ```csharp
-using HyPrism.Desktop.Localization;
+using Hyprism.Desktop.Localization;
 
 var localizer = new StringLocalizer("en-US");
 var readyLabel = localizer["example.ready"];
@@ -43,10 +43,10 @@ Keep placeholder names and indices aligned between languages. Core publishes dat
 ## Verify
 
 ```bash
-dotnet test Tests/HyPrism.Desktop.Tests/HyPrism.Desktop.Tests.csproj \
+dotnet test Tests/Hyprism.Desktop.Tests/Hyprism.Desktop.Tests.csproj \
   --filter FullyQualifiedName~StringLocalizerTests
 ```
 
 Tests check the complete key set and interpolation placeholders. Documentation uses a separate [two-language MDX model](/docs/development/documentation)
 
-Source: [Localization](../../../../Sources/HyPrism.Desktop/Localization)
+Source: [Localization](../../../../Sources/Hyprism.Desktop/Localization)

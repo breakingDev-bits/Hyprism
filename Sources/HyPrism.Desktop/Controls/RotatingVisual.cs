@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Runtime.CompilerServices;
@@ -8,7 +8,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 
-namespace HyPrism.Desktop.Controls;
+namespace Hyprism.Desktop.Controls;
 
 /// <summary>
 /// Provides reusable continuous rotation for loading visuals.

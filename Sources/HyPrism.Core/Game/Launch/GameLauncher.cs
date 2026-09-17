@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Diagnostics;
@@ -8,16 +8,16 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using HyPrism.Core.Models;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Application.Progress;
-using HyPrism.Core.Application.Ports;
-using HyPrism.Core.Game.Assets;
-using HyPrism.Core.Game.Authentication;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Accounts;
+using Hyprism.Core.Models;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Application.Progress;
+using Hyprism.Core.Application.Ports;
+using Hyprism.Core.Game.Assets;
+using Hyprism.Core.Game.Authentication;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Accounts;
 
-namespace HyPrism.Core.Game.Launch;
+namespace Hyprism.Core.Game.Launch;
 
 /// <summary>
 /// Handles the game launch process including client patching, authentication,

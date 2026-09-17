@@ -1,25 +1,25 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Net;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Application.Ports;
-using HyPrism.Core.Application.Progress;
-using HyPrism.Core.Game;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Game.Launch;
-using HyPrism.Core.Game.Sources;
-using HyPrism.Core.Game.Versions;
-using HyPrism.Core.Models;
-using HyPrism.Desktop.Integrations.GitHub;
-using HyPrism.Desktop.Features.News;
-using HyPrism.Desktop.Features.Settings;
-using HyPrism.Desktop.Localization;
-using HyPrism.Desktop.Platform;
-using HyPrism.Desktop.Shell;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Application.Ports;
+using Hyprism.Core.Application.Progress;
+using Hyprism.Core.Game;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Game.Launch;
+using Hyprism.Core.Game.Sources;
+using Hyprism.Core.Game.Versions;
+using Hyprism.Core.Models;
+using Hyprism.Desktop.Integrations.GitHub;
+using Hyprism.Desktop.Features.News;
+using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Localization;
+using Hyprism.Desktop.Platform;
+using Hyprism.Desktop.Shell;
 using Moq;
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 /// <summary>
 /// Builds a fully mocked <see cref="MainWindowViewModel"/> with realistic sample data

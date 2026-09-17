@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace HyPrism.Core.Game.Launch;
+namespace Hyprism.Core.Game.Launch;
 
 /// <summary>
 /// Parses user-defined environment variable assignments from settings and

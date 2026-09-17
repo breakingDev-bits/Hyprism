@@ -1,12 +1,12 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using HyPrism.Core.Game.Sources;
+using Hyprism.Core.Game.Sources;
 
-namespace HyPrism.Core.Tests.Game.Sources;
+namespace Hyprism.Core.Tests.Game.Sources;
 
 public class MirrorDiscoveryTests
 {

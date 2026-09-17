@@ -1,13 +1,13 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Collections.ObjectModel;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
-using HyPrism.Desktop.Features.Instances;
-using HyPrism.Desktop.Features.News;
+using Hyprism.Desktop.Features.Instances;
+using Hyprism.Desktop.Features.News;
 
-namespace HyPrism.Desktop.Shell;
+namespace Hyprism.Desktop.Shell;
 
 public sealed partial class MainWindowViewModel
 {

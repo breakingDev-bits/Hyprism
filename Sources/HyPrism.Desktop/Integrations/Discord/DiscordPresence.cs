@@ -1,12 +1,12 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using DiscordRPC;
 using DiscordRPC.Logging;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Application.Ports;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Application.Ports;
 
-namespace HyPrism.Desktop.Integrations.Discord;
+namespace Hyprism.Desktop.Integrations.Discord;
 
 /// <summary>
 /// Silent logger for Discord RPC that suppresses connection error spam.

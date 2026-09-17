@@ -1,9 +1,9 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Serilog;
 
-namespace HyPrism.Core.Infrastructure;
+namespace Hyprism.Core.Infrastructure;
 
 /// <summary>
 /// Provides centralized logging functionality with console output and in-memory buffer.

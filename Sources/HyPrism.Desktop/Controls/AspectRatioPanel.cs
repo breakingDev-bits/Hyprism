@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia;
 using Avalonia.Controls;
 
-namespace HyPrism.Desktop.Controls;
+namespace Hyprism.Desktop.Controls;
 
 /// <summary>Arranges one child inside a fixed aspect-ratio surface.</summary>
 public sealed class AspectRatioPanel : Panel

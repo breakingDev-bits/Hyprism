@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Diagnostics;
 using Microsoft.Extensions.Hosting;
 
-namespace HyPrism.LocalNode;
+namespace Hyprism.LocalNode;
 
 /// <summary>
 /// Transfers Local Node ownership from the launcher to the launched game process

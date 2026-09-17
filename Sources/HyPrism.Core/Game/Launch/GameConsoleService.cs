@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Infrastructure;
 using System.Collections.Concurrent;
 
-namespace HyPrism.Core.Game.Launch;
+namespace Hyprism.Core.Game.Launch;
 
 /// <summary>
 /// A single console line produced by a game process or by the launcher on its behalf

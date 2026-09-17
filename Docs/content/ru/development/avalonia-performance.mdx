@@ -44,7 +44,7 @@ Desktop ограничивает кэш ресурсов Skia до 256 МиБ и
 
 ```powershell
 $env:HYPRISM_WIN32_COMPOSITION = 'winui'
-dotnet run --project Sources/HyPrism.Desktop/HyPrism.Desktop.csproj
+dotnet run --project Sources/Hyprism.Desktop/Hyprism.Desktop.csproj
 ```
 
 Поддерживаются `dxgi` по умолчанию, `winui` и `dcomp`. После диагностики удалите переменную
@@ -63,7 +63,7 @@ Remove-Item Env:HYPRISM_WIN32_COMPOSITION
 Запустите существующие тесты Desktop
 
 ```bash
-dotnet test Tests/HyPrism.Desktop.Tests/HyPrism.Desktop.Tests.csproj
+dotnet test Tests/Hyprism.Desktop.Tests/Hyprism.Desktop.Tests.csproj
 ```
 
 `AvaloniaPerformanceTests` проверяет начальное дерево, отложенную реализацию, виртуализацию и пакетные уведомления коллекций. Render-тесты ожидают наблюдаемое итоговое состояние вместо предполагаемой длительности анимации

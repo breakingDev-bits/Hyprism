@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia;
@@ -9,7 +9,7 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Threading;
 
-namespace HyPrism.Desktop.Controls;
+namespace Hyprism.Desktop.Controls;
 
 /// <summary>
 /// Coordinates the phased transition between a content overview and its wizard screen.

@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using HyPrism.Core.Models;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Core.Infrastructure;
+namespace Hyprism.Core.Infrastructure;
 
 /// <summary>
 /// Provides common utility methods for file operations, platform detection, and string manipulation.

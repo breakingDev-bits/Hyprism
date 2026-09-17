@@ -8,9 +8,9 @@ description: Запуск трех наборов тестов и выбор г�
 Запускайте тесты из корня репозитория. Каждый набор имеет отдельный проект и матрицу CI
 
 ```bash
-dotnet test Tests/HyPrism.Core.Tests/HyPrism.Core.Tests.csproj
-dotnet test Tests/HyPrism.LocalNode.Tests/HyPrism.LocalNode.Tests.csproj
-dotnet test Tests/HyPrism.Desktop.Tests/HyPrism.Desktop.Tests.csproj
+dotnet test Tests/Hyprism.Core.Tests/Hyprism.Core.Tests.csproj
+dotnet test Tests/Hyprism.LocalNode.Tests/Hyprism.LocalNode.Tests.csproj
+dotnet test Tests/Hyprism.Desktop.Tests/Hyprism.Desktop.Tests.csproj
 ```
 
 ## Границы покрытия
@@ -30,7 +30,7 @@ dotnet test Tests/HyPrism.Desktop.Tests/HyPrism.Desktop.Tests.csproj
 При разработке используйте фильтр полного имени
 
 ```bash
-dotnet test Tests/HyPrism.Desktop.Tests/HyPrism.Desktop.Tests.csproj \
+dotnet test Tests/Hyprism.Desktop.Tests/Hyprism.Desktop.Tests.csproj \
   --filter FullyQualifiedName~StringLocalizerTests
 ```
 

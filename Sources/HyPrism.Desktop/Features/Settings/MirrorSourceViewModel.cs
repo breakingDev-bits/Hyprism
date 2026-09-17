@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using HyPrism.Core.Game.Sources;
-using HyPrism.Core.Models;
+using Hyprism.Core.Game.Sources;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Desktop.Features.Settings;
+namespace Hyprism.Desktop.Features.Settings;
 
 public sealed partial class MirrorSourceViewModel : ObservableObject
 {

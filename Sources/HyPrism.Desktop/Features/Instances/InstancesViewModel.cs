@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Collections.ObjectModel;
@@ -7,21 +7,21 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HyPrism.Desktop.Controls;
-using HyPrism.Desktop.Localization;
-using HyPrism.Desktop.Platform;
-using HyPrism.Core.Application.Ports;
-using HyPrism.Core.Application.Progress;
-using HyPrism.Core.Game;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Game.Launch;
-using HyPrism.Core.Game.Mods;
-using HyPrism.Core.Game.Sources;
-using HyPrism.Core.Game.Versions;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Models;
+using Hyprism.Desktop.Controls;
+using Hyprism.Desktop.Localization;
+using Hyprism.Desktop.Platform;
+using Hyprism.Core.Application.Ports;
+using Hyprism.Core.Application.Progress;
+using Hyprism.Core.Game;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Game.Launch;
+using Hyprism.Core.Game.Mods;
+using Hyprism.Core.Game.Sources;
+using Hyprism.Core.Game.Versions;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Desktop.Features.Instances;
+namespace Hyprism.Desktop.Features.Instances;
 
 public sealed partial class InstancesViewModel : ObservableObject, IDisposable
 {

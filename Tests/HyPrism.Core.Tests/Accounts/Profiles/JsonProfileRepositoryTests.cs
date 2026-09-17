@@ -1,13 +1,13 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Models;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Accounts;
+using Hyprism.Core.Models;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Accounts;
 using System.Text.Json;
 
-namespace HyPrism.Core.Tests.Accounts.Profiles;
+namespace Hyprism.Core.Tests.Accounts.Profiles;
 
 public class JsonProfileRepositoryTests : IDisposable
 {

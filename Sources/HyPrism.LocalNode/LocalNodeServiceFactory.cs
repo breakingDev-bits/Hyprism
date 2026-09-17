@@ -1,13 +1,13 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Net;
 using System.Net.Sockets;
-using HyPrism.Core;
-using HyPrism.Core.Game.Launch;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core;
+using Hyprism.Core.Game.Launch;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.LocalNode;
+namespace Hyprism.LocalNode;
 
 /// <summary>
 /// Creates independent Local Node processes with unique loopback ports and state directories.

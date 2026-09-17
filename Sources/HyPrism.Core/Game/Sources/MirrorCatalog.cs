@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text.RegularExpressions;
-using HyPrism.Core.Models;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Core.Game.Sources;
+namespace Hyprism.Core.Game.Sources;
 
 /// <summary>
 /// Stores community download source definitions in the application data directory

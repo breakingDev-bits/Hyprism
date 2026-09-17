@@ -1,33 +1,33 @@
 <!--
-Copyright (C) 2026 HyPrism Launcher
+Copyright (C) 2026 Hyprism Launcher
 SPDX-License-Identifier: GPL-3.0-only
 -->
 
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="HyPrism.Desktop.App"
+             x:Class="Hyprism.Desktop.App"
              RequestedThemeVariant="Dark">
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceInclude Source="avares://HyPrism.Desktop/Assets/Icons/MaterialSymbols.axaml" />
-        <ResourceInclude Source="avares://HyPrism.Desktop/Assets/Brands/CurseForge.axaml" />
-        <ResourceInclude Source="avares://HyPrism.Desktop/Assets/Brands/Avalonia.axaml" />
-        <ResourceInclude Source="avares://HyPrism.Desktop/Assets/Brands/DotNet.axaml" />
-        <ResourceInclude Source="avares://HyPrism.Desktop/Assets/Brands/YouTube.axaml" />
-        <ResourceInclude Source="avares://HyPrism.Desktop/Assets/Brands/Hyprism.axaml" />
-        <ResourceInclude Source="avares://HyPrism.Desktop/Styles/Tokens.axaml" />
-        <ResourceInclude Source="avares://HyPrism.Desktop/Styles/WindowDecorations.axaml" />
+        <ResourceInclude Source="avares://Hyprism.Desktop/Assets/Icons/MaterialSymbols.axaml" />
+        <ResourceInclude Source="avares://Hyprism.Desktop/Assets/Brands/CurseForge.axaml" />
+        <ResourceInclude Source="avares://Hyprism.Desktop/Assets/Brands/Avalonia.axaml" />
+        <ResourceInclude Source="avares://Hyprism.Desktop/Assets/Brands/DotNet.axaml" />
+        <ResourceInclude Source="avares://Hyprism.Desktop/Assets/Brands/YouTube.axaml" />
+        <ResourceInclude Source="avares://Hyprism.Desktop/Assets/Brands/Hyprism.axaml" />
+        <ResourceInclude Source="avares://Hyprism.Desktop/Styles/Tokens.axaml" />
+        <ResourceInclude Source="avares://Hyprism.Desktop/Styles/WindowDecorations.axaml" />
       </ResourceDictionary.MergedDictionaries>
 
-      <FontFamily x:Key="GoogleSansFont">avares://HyPrism.Desktop/Assets/Fonts#Google Sans</FontFamily>
-      <FontFamily x:Key="JetBrainsMonoFont">avares://HyPrism.Desktop/Assets/Fonts#JetBrains Mono</FontFamily>
+      <FontFamily x:Key="GoogleSansFont">avares://Hyprism.Desktop/Assets/Fonts#Google Sans</FontFamily>
+      <FontFamily x:Key="JetBrainsMonoFont">avares://Hyprism.Desktop/Assets/Fonts#JetBrains Mono</FontFamily>
     </ResourceDictionary>
   </Application.Resources>
 
   <Application.Styles>
-    <StyleInclude Source="avares://HyPrism.Desktop/Styles/HyPrismTheme.axaml" />
-    <StyleInclude Source="avares://HyPrism.Desktop/Styles/Controls.axaml" />
-    <StyleInclude Source="avares://HyPrism.Desktop/Styles/Styles.axaml" />
+    <StyleInclude Source="avares://Hyprism.Desktop/Styles/HyprismTheme.axaml" />
+    <StyleInclude Source="avares://Hyprism.Desktop/Styles/Controls.axaml" />
+    <StyleInclude Source="avares://Hyprism.Desktop/Styles/Styles.axaml" />
   </Application.Styles>
 </Application>

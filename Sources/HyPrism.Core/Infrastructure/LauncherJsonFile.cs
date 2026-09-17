@@ -1,7 +1,7 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-namespace HyPrism.Core.Infrastructure;
+namespace Hyprism.Core.Infrastructure;
 
 /// <summary>
 /// Resolves launcher-owned JSON files to their canonical PascalCase names and migrates legacy names

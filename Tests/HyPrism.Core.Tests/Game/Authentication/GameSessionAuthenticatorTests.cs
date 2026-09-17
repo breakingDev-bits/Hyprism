@@ -1,12 +1,12 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using HyPrism.Core.Game.Authentication;
+using Hyprism.Core.Game.Authentication;
 
-namespace HyPrism.Core.Tests.Game.Authentication;
+namespace Hyprism.Core.Tests.Game.Authentication;
 
 /// <summary>
 /// Tests for <see cref="GameSessionAuthenticator"/> using a stubbed <see cref="HttpMessageHandler"/>

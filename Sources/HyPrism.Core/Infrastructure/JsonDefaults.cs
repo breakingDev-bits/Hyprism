@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text.Encodings.Web;
 using System.Text.Json;
 
-namespace HyPrism.Core.Infrastructure;
+namespace Hyprism.Core.Infrastructure;
 
 internal static class JsonDefaults
 {

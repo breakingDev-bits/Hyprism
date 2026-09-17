@@ -1,12 +1,12 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.Desktop.Platform;
+namespace Hyprism.Desktop.Platform;
 
 /// <summary>
 /// Presents native file and folder pickers through Avalonia's storage provider

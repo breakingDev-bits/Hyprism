@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 import OriginalHtmlNavbarItem from '@theme-original/NavbarItem/HtmlNavbarItem'

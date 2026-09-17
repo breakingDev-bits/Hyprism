@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2026 HyPrism Launcher
+Copyright (C) 2026 Hyprism Launcher
 SPDX-License-Identifier: GPL-3.0-only
 -->
 
@@ -26,8 +26,8 @@ SPDX-License-Identifier: GPL-3.0-only
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../HyPrism.Core/HyPrism.Core.csproj" />
-    <ProjectReference Include="../HyPrism.LocalNode/HyPrism.LocalNode.csproj" />
+    <ProjectReference Include="../Hyprism.Core/Hyprism.Core.csproj" />
+    <ProjectReference Include="../Hyprism.LocalNode/Hyprism.LocalNode.csproj" />
   </ItemGroup>
 
   <ItemGroup>

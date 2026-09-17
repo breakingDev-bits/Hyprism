@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Diagnostics;
@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.Core.Game.Launch;
+namespace Hyprism.Core.Game.Launch;
 
 /// <summary>
 /// Manages launch prerequisites including Java Runtime Environment and Visual C++ Redistributable.

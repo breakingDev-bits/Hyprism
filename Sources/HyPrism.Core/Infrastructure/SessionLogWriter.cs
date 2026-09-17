@@ -1,9 +1,9 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Collections.Concurrent;
 
-namespace HyPrism.Core.Infrastructure;
+namespace Hyprism.Core.Infrastructure;
 
 /// <summary>
 /// Appends timestamped records to one file in the current log session.

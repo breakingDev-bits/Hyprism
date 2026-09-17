@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia;
@@ -7,11 +7,11 @@ using Avalonia.Controls.Templates;
 using Avalonia.Headless.XUnit;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using HyPrism.Desktop.Controls;
-using HyPrism.Desktop.Shell;
+using Hyprism.Desktop.Controls;
+using Hyprism.Desktop.Shell;
 using Xunit;
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 public sealed class DeferredContentControlTests
 {

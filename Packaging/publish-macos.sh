@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-# Copyright (C) 2026 HyPrism Launcher
+# Copyright (C) 2026 Hyprism Launcher
 # SPDX-License-Identifier: GPL-3.0-only
 
 set -euo pipefail
 
 PACKAGING_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$PACKAGING_DIR/.." && pwd)"
-PROJECT_FILE="$PROJECT_ROOT/Sources/HyPrism.Desktop/HyPrism.Desktop.csproj"
-APP_ICON="$PROJECT_ROOT/Sources/HyPrism.Desktop/Assets/Images/logo.svg"
+PROJECT_FILE="$PROJECT_ROOT/Sources/Hyprism.Desktop/Hyprism.Desktop.csproj"
+APP_ICON="$PROJECT_ROOT/Sources/Hyprism.Desktop/Assets/Images/logo.svg"
 APP_NAME="Hyprism"
 INFO_PLIST="$PACKAGING_DIR/macos/Info.plist"
 OUTPUT_DIR="$PROJECT_ROOT/dist"
@@ -61,7 +61,7 @@ done
 
 VERSION="$(dotnet msbuild "$PROJECT_FILE" -nologo -getProperty:Version | tail -n 1 | tr -d '\r')"
 if [[ ! "$VERSION" =~ ^[0-9]+(\.[0-9]+){0,2}([-.+][0-9A-Za-z.-]+)?$ ]]; then
-    echo "HyPrism.Desktop.csproj contains an invalid Version: $VERSION" >&2
+    echo "Hyprism.Desktop.csproj contains an invalid Version: $VERSION" >&2
     exit 1
 fi
 BUNDLE_VERSION="${VERSION%%[-+]*}"
@@ -90,10 +90,10 @@ dotnet publish "$PROJECT_FILE" \
     -p:PublishReadyToRun=true \
     --output "$APP_DIR/Contents/MacOS"
 
-for host in HyPrism.Desktop HyPrism.LocalNode; do
+for host in Hyprism.Desktop Hyprism.LocalNode; do
     test -x "$APP_DIR/Contents/MacOS/$host"
 done
-file "$APP_DIR/Contents/MacOS/HyPrism.LocalNode" | grep -q 'Mach-O 64-bit executable arm64'
+file "$APP_DIR/Contents/MacOS/Hyprism.LocalNode" | grep -q 'Mach-O 64-bit executable arm64'
 
 cp "$INFO_PLIST" "$APP_DIR/Contents/Info.plist"
 plutil -replace CFBundleShortVersionString -string "$BUNDLE_VERSION" "$APP_DIR/Contents/Info.plist"

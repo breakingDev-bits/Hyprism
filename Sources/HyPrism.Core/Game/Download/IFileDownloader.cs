@@ -1,7 +1,7 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-namespace HyPrism.Core.Game.Download;
+namespace Hyprism.Core.Game.Download;
 
 /// <summary>
 /// Provides file download functionality with progress reporting and HTTP utilities

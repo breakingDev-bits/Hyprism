@@ -1,21 +1,21 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Net;
 using Avalonia.Platform;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Desktop.Features.Settings;
-using HyPrism.Desktop.Localization;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Localization;
 
-namespace HyPrism.Desktop.Platform;
+namespace Hyprism.Desktop.Platform;
 
 internal sealed class OAuthCallbackPageRenderer : IOAuthCallbackPageRenderer
 {
-    private static readonly Uri LogoUri = new(
-        "avares://HyPrism.Desktop/Assets/Images/logo.svg");
+    private static readonly Uri BannerUri = new(
+        "avares://Hyprism.Desktop/Assets/Images/banner.svg");
 
-    private static readonly Lazy<string> LogoMarkup = new(BuildLogoMarkup);
+    private static readonly Lazy<string> BannerMarkup = new(BuildBannerMarkup);
     private readonly IDesktopSettingsStore _settings;
 
     public OAuthCallbackPageRenderer(IDesktopSettingsStore settings)
@@ -104,7 +104,7 @@ internal sealed class OAuthCallbackPageRenderer : IOAuthCallbackPageRenderer
 
                 .brand img {
                   display: block;
-                  width: min(100%, 132px);
+                  width: min(100%, 260px);
                   height: auto;
                 }
 
@@ -112,16 +112,6 @@ internal sealed class OAuthCallbackPageRenderer : IOAuthCallbackPageRenderer
                   font-size: 18px;
                   font-weight: 700;
                   letter-spacing: -0.04em;
-                }
-
-                .brand-fallback small {
-                  display: block;
-                  margin-top: -2px;
-                  font-size: 8px;
-                  font-weight: 500;
-                  letter-spacing: 0.24em;
-                  text-transform: uppercase;
-                  color: #a8a9ae;
                 }
 
                 .status-icon {
@@ -223,27 +213,27 @@ internal sealed class OAuthCallbackPageRenderer : IOAuthCallbackPageRenderer
                   <p class="message">{{encodedMessage}}</p>
                   <p class="close-hint">{{WebUtility.HtmlEncode(closeHint)}}</p>
                 </main>
-                <footer class="brand">{{LogoMarkup.Value}}</footer>
+                <footer class="brand">{{BannerMarkup.Value}}</footer>
               </div>
             </body>
             </html>
             """;
     }
 
-    private static string BuildLogoMarkup()
+    private static string BuildBannerMarkup()
     {
         try
         {
-            using var stream = AssetLoader.Open(LogoUri);
+            using var stream = AssetLoader.Open(BannerUri);
             using var buffer = new MemoryStream();
             stream.CopyTo(buffer);
             var base64 = Convert.ToBase64String(buffer.ToArray());
-            return $"<img src=\"data:image/svg+xml;base64,{base64}\" alt=\"Hyprism Launcher\">";
+            return $"<img src=\"data:image/svg+xml;base64,{base64}\" alt=\"Hyprism\">";
         }
         catch (Exception exception)
         {
-            Logger.Warning("OAuthCallback", $"Could not load callback logo: {exception.Message}");
-            return "<div class=\"brand-fallback\">Hyprism<small>Launcher</small></div>";
+            Logger.Warning("OAuthCallback", $"Could not load callback banner: {exception.Message}");
+            return "<div class=\"brand-fallback\">Hyprism</div>";
         }
     }
 }

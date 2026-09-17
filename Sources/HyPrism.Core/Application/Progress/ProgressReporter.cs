@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Models;
-using HyPrism.Core.Application.Ports;
+using Hyprism.Core.Models;
+using Hyprism.Core.Application.Ports;
 
-namespace HyPrism.Core.Application.Progress;
+namespace Hyprism.Core.Application.Progress;
 
 /// <summary>
 /// Manages progress notifications for downloads and installations.

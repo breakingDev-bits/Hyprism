@@ -1,7 +1,7 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-namespace HyPrism.Core.Models;
+namespace Hyprism.Core.Models;
 
 /// <summary>
 /// Root model for a mirror meta JSON file (*.mirror.json).

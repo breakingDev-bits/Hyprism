@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text.Json;
-using HyPrism.Core.Migrations;
-using HyPrism.Core.Models;
+using Hyprism.Core.Migrations;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Core.Infrastructure;
+namespace Hyprism.Core.Infrastructure;
 
 /// <summary>
 /// Manages launcher configuration persistence including loading, saving, and automatic migrations.

@@ -1,12 +1,12 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text.Json;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Models;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Core.Migrations;
+namespace Hyprism.Core.Migrations;
 
 /// <summary>
 /// Moves an old root-level official session into its selected profile folder.

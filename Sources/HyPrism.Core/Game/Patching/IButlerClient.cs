@@ -1,7 +1,7 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-namespace HyPrism.Core.Game.Patching;
+namespace Hyprism.Core.Game.Patching;
 
 /// <summary>
 /// Provides functionality for managing the Butler patching tool,

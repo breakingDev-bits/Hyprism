@@ -1,4 +1,4 @@
-# Copyright (C) 2026 HyPrism Launcher
+# Copyright (C) 2026 Hyprism Launcher
 # SPDX-License-Identifier: GPL-3.0-only
 
 {
@@ -12,12 +12,12 @@
       systems = [ "x86_64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
       versionSource = builtins.replaceStrings [ "\n" "\r" " " "\t" ] [ "" "" "" "" ] (
-        builtins.readFile (../../.. + "/Sources/HyPrism.Desktop/HyPrism.Desktop.csproj")
+        builtins.readFile (../../.. + "/Sources/Hyprism.Desktop/Hyprism.Desktop.csproj")
       );
       versionMatch = builtins.match ".*<Version>([0-9A-Za-z.+-]+)</Version>.*" versionSource;
       version =
         if versionMatch == null then
-          throw "Unable to read the HyPrism version from HyPrism.Desktop.csproj"
+          throw "Unable to read the HyPrism version from Hyprism.Desktop.csproj"
         else
           builtins.elemAt versionMatch 0;
     in
@@ -53,12 +53,12 @@
             inherit version;
             src = ../../..;
 
-            projectFile = "Sources/HyPrism.Desktop/HyPrism.Desktop.csproj";
+            projectFile = "Sources/Hyprism.Desktop/Hyprism.Desktop.csproj";
             nugetDeps = ./nix/deps.json;
             runtimeId = "linux-x64";
             dotnet-sdk = pkgs.dotnetCorePackages.sdk_10_0;
             dotnet-runtime = pkgs.dotnetCorePackages.runtime_10_0;
-            executables = [ "HyPrism.Desktop" ];
+            executables = [ "Hyprism.Desktop" ];
 
             nativeBuildInputs = [ pkgs.autoPatchelfHook ];
             buildInputs = runtimeLibraries;
@@ -66,10 +66,10 @@
 
             postInstall = ''
               install -d "$out/bin"
-              ln -s HyPrism.Desktop "$out/bin/hyprism"
+              ln -s Hyprism.Desktop "$out/bin/hyprism"
               install -Dm644 Packaging/linux/io.github.hyprismteam.HyPrism.desktop \
                 "$out/share/applications/io.github.hyprismteam.HyPrism.desktop"
-              install -Dm644 Sources/HyPrism.Desktop/Assets/Images/logo.svg \
+              install -Dm644 Sources/Hyprism.Desktop/Assets/Images/logo.svg \
                 "$out/share/icons/hicolor/scalable/apps/io.github.hyprismteam.HyPrism.svg"
             '';
 

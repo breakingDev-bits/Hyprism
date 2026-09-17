@@ -1,19 +1,19 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Application.Progress;
-using HyPrism.Core.Game.Download;
-using HyPrism.Core.Game;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Game.Launch;
-using HyPrism.Core.Game.Patching;
-using HyPrism.Core.Game.Versions;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Models;
+using Hyprism.Core;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Application.Progress;
+using Hyprism.Core.Game.Download;
+using Hyprism.Core.Game;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Game.Launch;
+using Hyprism.Core.Game.Patching;
+using Hyprism.Core.Game.Versions;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Core.Tests.Game;
+namespace Hyprism.Core.Tests.Game;
 
 public sealed class GameInstallationWorkflowTests : IDisposable
 {

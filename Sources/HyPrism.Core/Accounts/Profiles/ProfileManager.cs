@@ -1,14 +1,14 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using HyPrism.Core.Models;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Game;
-using HyPrism.Core.Game.Assets;
+using Hyprism.Core.Models;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Game;
+using Hyprism.Core.Game.Assets;
 
-namespace HyPrism.Core.Accounts;
+namespace Hyprism.Core.Accounts;
 
 /// <summary>
 /// Manages user profiles, avatars, nicknames, and UUIDs.

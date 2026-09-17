@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace HyPrism.Core.Models;
+namespace Hyprism.Core.Models;
 
 /// <summary>
 /// Persistent launcher configuration and compatibility settings

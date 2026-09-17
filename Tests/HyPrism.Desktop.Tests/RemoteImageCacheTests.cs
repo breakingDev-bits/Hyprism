@@ -1,12 +1,12 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Net;
-using HyPrism.Core;
-using HyPrism.Desktop.Platform;
+using Hyprism.Core;
+using Hyprism.Desktop.Platform;
 using Xunit;
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 public sealed class RemoteImageCacheTests
 {

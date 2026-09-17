@@ -1,7 +1,7 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-namespace HyPrism.Desktop.Controls;
+namespace Hyprism.Desktop.Controls;
 
 /// <summary>
 /// Defines semantic motion timings shared by desktop controls and feature views.

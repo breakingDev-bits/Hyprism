@@ -1,16 +1,16 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Application.Progress;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Game.Instances;
+using Hyprism.Core.Application.Progress;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Game.Instances;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using HyPrism.Core.Models;
+using Hyprism.Core.Models;
 using System.Text.RegularExpressions;
 using System.Net.Http.Json;
 
-namespace HyPrism.Core.Game.Mods;
+namespace Hyprism.Core.Game.Mods;
 
 /// <summary>
 /// Manages game modifications including searching, installing, updating, and tracking.

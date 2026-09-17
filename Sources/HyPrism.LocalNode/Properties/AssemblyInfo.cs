@@ -1,6 +1,6 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("HyPrism.LocalNode.Tests")]
+[assembly: InternalsVisibleTo("Hyprism.LocalNode.Tests")]

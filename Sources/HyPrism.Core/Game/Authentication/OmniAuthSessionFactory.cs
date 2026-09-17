@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text;
@@ -7,7 +7,7 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Signers;
 using Org.BouncyCastle.Security;
 
-namespace HyPrism.Core.Game.Authentication;
+namespace Hyprism.Core.Game.Authentication;
 
 /// <summary>
 /// Creates self-contained OmniAuth sessions for autonomous launches

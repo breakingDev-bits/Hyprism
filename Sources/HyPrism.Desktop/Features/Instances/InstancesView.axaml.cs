@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.ComponentModel;
@@ -14,9 +14,9 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using HyPrism.Desktop.Controls;
+using Hyprism.Desktop.Controls;
 
-namespace HyPrism.Desktop.Features.Instances;
+namespace Hyprism.Desktop.Features.Instances;
 
 public sealed partial class InstancesView : UserControl
 {

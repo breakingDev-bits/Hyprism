@@ -29,7 +29,7 @@ npm run dev
 ## Загрузки {/* #downloads */}
 ```
 
-Ссылки документации используют `/docs/...`; компонент MDX добавляет базовый путь публикации. Ссылки на исходники задаются относительно MDX-файла, например `../../../../Sources/HyPrism.Core/Models/Config.cs`. Плагин проверяет наличие цели и при сборке преобразует путь в ссылку на исходник в GitHub
+Ссылки документации используют `/docs/...`; компонент MDX добавляет базовый путь публикации. Ссылки на исходники задаются относительно MDX-файла, например `../../../../Sources/Hyprism.Core/Models/Config.cs`. Плагин проверяет наличие цели и при сборке преобразует путь в ссылку на исходник в GitHub
 
 ## Навигация и иконки
 
@@ -62,7 +62,7 @@ export default {
 
 ```bash
 HYPRISM_DOCS_SCREENSHOTS="$PWD/Docs/static/img/user" \
-  dotnet test Tests/HyPrism.Desktop.Tests/HyPrism.Desktop.Tests.csproj \
+  dotnet test Tests/Hyprism.Desktop.Tests/Hyprism.Desktop.Tests.csproj \
   --filter FullyQualifiedName~DocumentationScreenshotTests
 ```
 
@@ -89,4 +89,4 @@ PAGES_BASE_PATH=/HyPrism npm run build
 
 Опубликованный вход: [сайт документации Hyprism](https://hyprismteam.github.io/HyPrism/docs/). Не добавляйте в коммит `out`, `.docusaurus`, `node_modules` и старые результаты `.next`
 
-Исходники: [AGENTS.md](../../../../AGENTS.md), [DocumentationScreenshotTests](../../../../Tests/HyPrism.Desktop.Tests/DocumentationScreenshotTests.cs)
+Исходники: [AGENTS.md](../../../../AGENTS.md), [DocumentationScreenshotTests](../../../../Tests/Hyprism.Desktop.Tests/DocumentationScreenshotTests.cs)

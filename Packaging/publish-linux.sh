@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright (C) 2026 HyPrism Launcher
+# Copyright (C) 2026 Hyprism Launcher
 # SPDX-License-Identifier: GPL-3.0-only
 
 # Publishes Linux packages for the Avalonia desktop host. Native package targets
@@ -10,12 +10,12 @@ set -euo pipefail
 
 PACKAGING_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$PACKAGING_DIR/.." && pwd)"
-PROJECT_FILE="$PROJECT_ROOT/Sources/HyPrism.Desktop/HyPrism.Desktop.csproj"
+PROJECT_FILE="$PROJECT_ROOT/Sources/Hyprism.Desktop/Hyprism.Desktop.csproj"
 ASSETS_DIR="$PACKAGING_DIR/linux"
 FLAKE_DIR="$ASSETS_DIR/flake"
 APP_ID="io.github.hyprismteam.HyPrism"
 APP_NAME="Hyprism"
-ICON_ASSET="$PROJECT_ROOT/Sources/HyPrism.Desktop/Assets/Images/logo.svg"
+ICON_ASSET="$PROJECT_ROOT/Sources/Hyprism.Desktop/Assets/Images/logo.svg"
 RUNTIME="linux-x64"
 FLATPAK_BRANCH="stable"
 TARGETS=()
@@ -141,7 +141,7 @@ if [[ "$contains_native_target" == true ]]; then
     require_command tar
     VERSION="$(dotnet msbuild "$PROJECT_FILE" -nologo -getProperty:Version | tail -n 1 | tr -d '\r')"
     if [[ -z "$VERSION" ]]; then
-        echo "HyPrism.Desktop.csproj does not define a Version property" >&2
+        echo "Hyprism.Desktop.csproj does not define a Version property" >&2
         exit 1
     fi
     package_versions
@@ -183,8 +183,8 @@ if [[ "$contains_native_target" == true ]]; then
         -p:PublishReadyToRun=true \
         --output "$PUBLISH_DIR"
 
-    test -x "$PUBLISH_DIR/HyPrism.Desktop"
-    test -x "$PUBLISH_DIR/HyPrism.LocalNode"
+    test -x "$PUBLISH_DIR/Hyprism.Desktop"
+    test -x "$PUBLISH_DIR/Hyprism.LocalNode"
 fi
 
 install_desktop_assets() {
@@ -199,7 +199,7 @@ create_system_payload() {
     local root="$1"
     install -d "$root/opt/hyprism" "$root/usr/bin"
     cp -a "$PUBLISH_DIR/." "$root/opt/hyprism/"
-    ln -s /opt/hyprism/HyPrism.Desktop "$root/usr/bin/hyprism"
+    ln -s /opt/hyprism/Hyprism.Desktop "$root/usr/bin/hyprism"
     install_desktop_assets "$root"
 }
 
@@ -265,7 +265,7 @@ EOF
 }
 
 build_appimage() {
-    local app_dir="$BUILD_ROOT/HyPrism.AppDir"
+    local app_dir="$BUILD_ROOT/Hyprism.AppDir"
     install -d "$app_dir/usr/lib/hyprism" "$app_dir/usr/share/applications" "$app_dir/usr/share/icons/hicolor/scalable/apps"
     cp -a "$PUBLISH_DIR/." "$app_dir/usr/lib/hyprism/"
     install -Dm644 "$ASSETS_DIR/$APP_ID.desktop" "$app_dir/$APP_ID.desktop"
@@ -273,7 +273,7 @@ build_appimage() {
     cat >"$app_dir/AppRun" <<'EOF'
 #!/usr/bin/env bash
 set -euo pipefail
-exec "$(dirname "$0")/usr/lib/hyprism/HyPrism.Desktop" "$@"
+exec "$(dirname "$0")/usr/lib/hyprism/Hyprism.Desktop" "$@"
 EOF
     chmod +x "$app_dir/AppRun"
     ARCH=x86_64 APPIMAGE_EXTRACT_AND_RUN="${APPIMAGE_EXTRACT_AND_RUN:-1}" \

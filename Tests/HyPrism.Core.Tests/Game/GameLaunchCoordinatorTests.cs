@@ -1,14 +1,14 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Models;
-using HyPrism.Core.Application.Progress;
-using HyPrism.Core.Game;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Game.Launch;
-using HyPrism.Core.Accounts;
+using Hyprism.Core.Models;
+using Hyprism.Core.Application.Progress;
+using Hyprism.Core.Game;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Game.Launch;
+using Hyprism.Core.Accounts;
 
-namespace HyPrism.Core.Tests.Game;
+namespace Hyprism.Core.Tests.Game;
 
 public sealed class GameLaunchCoordinatorTests
 {

@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Collections.ObjectModel;
@@ -7,13 +7,13 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Models;
-using HyPrism.Desktop.Localization;
-using HyPrism.Desktop.Platform;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Models;
+using Hyprism.Desktop.Localization;
+using Hyprism.Desktop.Platform;
 
-namespace HyPrism.Desktop.Features.Profiles;
+namespace Hyprism.Desktop.Features.Profiles;
 
 /// <summary>
 /// Provides the native profile manager page and its profile creation flows.

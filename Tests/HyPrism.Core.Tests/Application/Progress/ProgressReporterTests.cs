@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Models;
-using HyPrism.Core.Application.Ports;
-using HyPrism.Core.Application.Progress;
+using Hyprism.Core.Models;
+using Hyprism.Core.Application.Ports;
+using Hyprism.Core.Application.Progress;
 
-namespace HyPrism.Core.Tests.Application.Progress;
+namespace Hyprism.Core.Tests.Application.Progress;
 
 public class ProgressReporterTests
 {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright (C) 2026 HyPrism Launcher
+Copyright (C) 2026 Hyprism Launcher
 SPDX-License-Identifier: GPL-3.0-only
 -->
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -11,7 +11,7 @@ SPDX-License-Identifier: GPL-3.0-only
   <key>CFBundleDisplayName</key>
   <string>Hyprism</string>
   <key>CFBundleExecutable</key>
-  <string>HyPrism.Desktop</string>
+  <string>Hyprism.Desktop</string>
   <key>CFBundleIconFile</key>
   <string>Hyprism.icns</string>
   <key>CFBundleIdentifier</key>

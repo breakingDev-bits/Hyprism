@@ -35,7 +35,7 @@ Contracts are colocated with implementations. `Application/Ports` contains only 
 A consumer receives the narrowest interface it needs. For example, this helper lists persisted instances without constructing the entire launch graph
 
 ```csharp
-using HyPrism.Core.Game.Instances;
+using Hyprism.Core.Game.Instances;
 
 static void PrintInstances(IInstanceRepository instances)
 {
@@ -49,8 +49,8 @@ static void PrintInstances(IInstanceRepository instances)
 The host supplies browser presentation. This helper is intended for an already installed instance and uses the current active profile
 
 ```csharp
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Game;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Game;
 
 static Task LaunchInstalledAsync(
     IGameLaunchCoordinator coordinator,
@@ -91,6 +91,6 @@ Never log or copy access, refresh, identity, or game-session tokens into UI diag
 
 `IDesktopSettingsStore` adapts preferences for the UI. `IHytaleNewsClient` and `IGitHubClient` own presentation data. Native file pickers and URI launchers stay in Desktop
 
-The launcher release version comes from `HyPrism.Desktop.csproj` and configures `LauncherUserAgent` once at startup. Consumers use that shared value instead of maintaining their own version strings
+The launcher release version comes from `Hyprism.Desktop.csproj` and configures `LauncherUserAgent` once at startup. Consumers use that shared value instead of maintaining their own version strings
 
-Source: [IGameLaunchCoordinator](../../../../Sources/HyPrism.Core/Game/IGameLaunchCoordinator.cs), [IProfileRepository](../../../../Sources/HyPrism.Core/Accounts/Profiles/IProfileRepository.cs)
+Source: [IGameLaunchCoordinator](../../../../Sources/Hyprism.Core/Game/IGameLaunchCoordinator.cs), [IProfileRepository](../../../../Sources/Hyprism.Core/Accounts/Profiles/IProfileRepository.cs)

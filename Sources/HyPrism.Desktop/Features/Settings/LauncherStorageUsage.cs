@@ -1,9 +1,9 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.Desktop.Features.Settings;
+namespace Hyprism.Desktop.Features.Settings;
 
 /// <summary>
 /// Describes disk space used by launcher and instance files

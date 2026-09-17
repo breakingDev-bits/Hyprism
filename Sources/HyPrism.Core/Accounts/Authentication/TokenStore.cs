@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text.Json;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.Core.Accounts;
+namespace Hyprism.Core.Accounts;
 
 /// <summary>
 /// Provides static helpers for persisting and loading <see cref="HytaleAuthSession"/> data

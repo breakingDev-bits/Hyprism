@@ -1,4 +1,4 @@
-# Copyright (C) 2026 HyPrism Launcher
+# Copyright (C) 2026 Hyprism Launcher
 # SPDX-License-Identifier: GPL-3.0-only
 
 name: Release Hyprism
@@ -36,15 +36,15 @@ jobs:
         run: |
           set -euo pipefail
 
-          VERSION="$(dotnet msbuild Sources/HyPrism.Desktop/HyPrism.Desktop.csproj -nologo -getProperty:Version | tail -n 1 | tr -d '\r')"
+          VERSION="$(dotnet msbuild Sources/Hyprism.Desktop/Hyprism.Desktop.csproj -nologo -getProperty:Version | tail -n 1 | tr -d '\r')"
           if [ -z "$VERSION" ]; then
-            echo "ERROR: HyPrism.Desktop.csproj does not define Version"
+            echo "ERROR: Hyprism.Desktop.csproj does not define Version"
             exit 1
           fi
 
           EXPECTED_TAG="v$VERSION"
           if [[ "${GITHUB_REF:-}" == refs/tags/* ]] && [ "$GITHUB_REF_NAME" != "$EXPECTED_TAG" ]; then
-            echo "ERROR: Tag $GITHUB_REF_NAME does not match HyPrism.Desktop.csproj version $VERSION"
+            echo "ERROR: Tag $GITHUB_REF_NAME does not match Hyprism.Desktop.csproj version $VERSION"
             exit 1
           fi
 

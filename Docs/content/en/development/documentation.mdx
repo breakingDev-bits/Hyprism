@@ -29,7 +29,7 @@ Use explicit, matching heading IDs in both languages when another page links to 
 ## Downloads {/* #downloads */}
 ```
 
-Internal documentation links use `/docs/...`; the MDX theme link applies the deployment base path. Write source links relative to the MDX file, for example `../../../../Sources/HyPrism.Core/Models/Config.cs`. The repository-link plugin verifies each target and converts it to a GitHub source link when building
+Internal documentation links use `/docs/...`; the MDX theme link applies the deployment base path. Write source links relative to the MDX file, for example `../../../../Sources/Hyprism.Core/Models/Config.cs`. The repository-link plugin verifies each target and converts it to a GitHub source link when building
 
 ## Navigation and icons
 
@@ -62,7 +62,7 @@ From the repository root
 
 ```bash
 HYPRISM_DOCS_SCREENSHOTS="$PWD/Docs/static/img/user" \
-  dotnet test Tests/HyPrism.Desktop.Tests/HyPrism.Desktop.Tests.csproj \
+  dotnet test Tests/Hyprism.Desktop.Tests/Hyprism.Desktop.Tests.csproj \
   --filter FullyQualifiedName~DocumentationScreenshotTests
 ```
 
@@ -89,4 +89,4 @@ Check highlighted C#, shell, JSON, and XML examples in the rendered site, plus l
 
 The published entry point is the [Hyprism documentation site](https://hyprismteam.github.io/HyPrism/docs/). Do not commit `out`, `.docusaurus`, `node_modules`, or obsolete `.next` build products
 
-Source: [AGENTS.md](../../../../AGENTS.md), [DocumentationScreenshotTests](../../../../Tests/HyPrism.Desktop.Tests/DocumentationScreenshotTests.cs)
+Source: [AGENTS.md](../../../../AGENTS.md), [DocumentationScreenshotTests](../../../../Tests/Hyprism.Desktop.Tests/DocumentationScreenshotTests.cs)

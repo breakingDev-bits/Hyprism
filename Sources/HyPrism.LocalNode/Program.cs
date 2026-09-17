@@ -1,7 +1,7 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.LocalNode;
+using Hyprism.LocalNode;
 
 var options = LocalNodeOptions.Parse(args);
 var log = new LocalNodeLog(options.DataDirectory, options.LogFilePath);

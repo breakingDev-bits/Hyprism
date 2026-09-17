@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Collections.Specialized;
@@ -6,12 +6,12 @@ using Avalonia.Controls;
 using Avalonia.Headless.XUnit;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using HyPrism.Desktop.Controls;
-using HyPrism.Desktop.Features.Instances;
-using HyPrism.Desktop.Shell;
+using Hyprism.Desktop.Controls;
+using Hyprism.Desktop.Features.Instances;
+using Hyprism.Desktop.Shell;
 using Xunit;
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 public sealed class AvaloniaPerformanceTests
 {

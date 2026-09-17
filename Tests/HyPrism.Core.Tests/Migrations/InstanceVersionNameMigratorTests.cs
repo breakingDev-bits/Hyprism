@@ -1,12 +1,12 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Migrations;
-using HyPrism.Core.Game.Versions;
-using HyPrism.Core.Models;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Migrations;
+using Hyprism.Core.Game.Versions;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Core.Tests.Game.Instances;
+namespace Hyprism.Core.Tests.Game.Instances;
 
 public sealed class InstanceVersionNameMigratorTests
 {

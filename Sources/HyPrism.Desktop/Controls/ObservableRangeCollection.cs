@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace HyPrism.Desktop.Controls;
+namespace Hyprism.Desktop.Controls;
 
 internal sealed class ObservableRangeCollection<T> : ObservableCollection<T>
 {

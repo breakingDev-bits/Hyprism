@@ -1,9 +1,9 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Game.Launch;
+using Hyprism.Core.Game.Launch;
 
-namespace HyPrism.Core.Tests.Game.Launch;
+namespace Hyprism.Core.Tests.Game.Launch;
 
 public sealed class GameConsoleServiceTests
 {

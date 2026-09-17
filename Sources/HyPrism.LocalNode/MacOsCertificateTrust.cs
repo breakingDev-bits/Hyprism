@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 
-namespace HyPrism.LocalNode;
+namespace Hyprism.LocalNode;
 
 /// <summary>
 /// Maintains the Local Node certificate in the current macOS admin trust settings

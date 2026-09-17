@@ -1,13 +1,13 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Desktop.Features.Settings;
+using Hyprism.Core;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Desktop.Features.Settings;
 using Moq;
 using Xunit;
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 public sealed class DesktopSettingsStoreTests : IDisposable
 {

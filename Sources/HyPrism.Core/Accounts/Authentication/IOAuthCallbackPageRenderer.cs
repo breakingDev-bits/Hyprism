@@ -1,7 +1,7 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-namespace HyPrism.Core.Accounts;
+namespace Hyprism.Core.Accounts;
 
 /// <summary>
 /// Renders the browser page returned after an interactive OAuth callback

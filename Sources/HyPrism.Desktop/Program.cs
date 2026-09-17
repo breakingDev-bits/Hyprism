@@ -1,22 +1,22 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia;
 using Avalonia.Skia;
-using HyPrism.Desktop.Integrations.GitHub;
-using HyPrism.Desktop.Features.News;
-using HyPrism.Desktop.Features.Settings;
-using HyPrism.Desktop.Integrations.Discord;
-using HyPrism.Desktop.Platform;
-using HyPrism.Core;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Application.Ports;
-using HyPrism.Core.Game.Launch;
-using HyPrism.LocalNode;
+using Hyprism.Desktop.Integrations.GitHub;
+using Hyprism.Desktop.Features.News;
+using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Integrations.Discord;
+using Hyprism.Desktop.Platform;
+using Hyprism.Core;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Application.Ports;
+using Hyprism.Core.Game.Launch;
+using Hyprism.LocalNode;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace HyPrism.Desktop;
+namespace Hyprism.Desktop;
 
 internal static class Program
 {

@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Windows.Input;
@@ -10,9 +10,9 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
-using HyPrism.Desktop.Platform;
+using Hyprism.Desktop.Platform;
 
-namespace HyPrism.Desktop.Features.News;
+namespace Hyprism.Desktop.Features.News;
 
 /// <summary>Renders the safe inline subset produced by <see cref="NewsContentNode"/>.</summary>
 public sealed class NewsRichTextBlock : TextBlock
@@ -21,7 +21,7 @@ public sealed class NewsRichTextBlock : TextBlock
     private static readonly Color LinkHoverColor = Color.Parse("#E0D8FF");
     private static readonly Cursor LinkCursor = new(StandardCursorType.Hand);
     private static readonly FontFamily CodeFontFamily =
-        new("avares://HyPrism.Desktop/Assets/Fonts#JetBrains Mono");
+        new("avares://Hyprism.Desktop/Assets/Fonts#JetBrains Mono");
 
     private readonly List<LinkInline> _links = [];
     private LinkInline? _hoveredLink;

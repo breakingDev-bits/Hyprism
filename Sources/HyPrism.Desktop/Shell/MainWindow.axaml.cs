@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.ComponentModel;
@@ -9,11 +9,11 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using HyPrism.Desktop.Controls;
-using HyPrism.Desktop.Features.Instances;
-using HyPrism.Desktop.Features.Settings;
+using Hyprism.Desktop.Controls;
+using Hyprism.Desktop.Features.Instances;
+using Hyprism.Desktop.Features.Settings;
 
-namespace HyPrism.Desktop.Shell;
+namespace Hyprism.Desktop.Shell;
 
 public sealed partial class MainWindow : Window
 {

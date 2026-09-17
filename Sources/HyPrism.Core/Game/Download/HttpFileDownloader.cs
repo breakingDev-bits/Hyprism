@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Net.Http.Headers;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Infrastructure;
 using System.Net;
 
-namespace HyPrism.Core.Game.Download;
+namespace Hyprism.Core.Game.Download;
 
 /// <summary>
 /// Provides file download functionality with progress tracking and resume support.

@@ -1,13 +1,13 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using HyPrism.Core.Models;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Models;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.Core.Game.Mods;
+namespace Hyprism.Core.Game.Mods;
 
 /// <summary>
 /// Wraps low-level CurseForge API HTTP communication, including request construction,

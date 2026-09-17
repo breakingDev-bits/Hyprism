@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.ComponentModel;
@@ -7,9 +7,9 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using HyPrism.Desktop.Controls;
+using Hyprism.Desktop.Controls;
 
-namespace HyPrism.Desktop.Features.News;
+namespace Hyprism.Desktop.Features.News;
 
 public sealed partial class NewsView : UserControl
 {

@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Models;
-using HyPrism.Desktop.Features.Settings;
-using HyPrism.Desktop.Localization;
-using HyPrism.Desktop.Platform;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Models;
+using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Localization;
+using Hyprism.Desktop.Platform;
 using Avalonia.Headless.XUnit;
 using Moq;
 using System.Net;
@@ -13,7 +13,7 @@ using System.Net.Http;
 using System.Text;
 using Xunit;
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 public sealed class NetworkSettingsViewModelTests
 {

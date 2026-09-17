@@ -1,28 +1,28 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.ComponentModel;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HyPrism.Desktop.Integrations.GitHub;
-using HyPrism.Desktop.Features.Instances;
-using HyPrism.Desktop.Features.News;
-using HyPrism.Desktop.Features.Profiles;
-using HyPrism.Desktop.Features.Settings;
-using HyPrism.Desktop.Localization;
-using HyPrism.Desktop.Platform;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Application.Ports;
-using HyPrism.Core.Application.Progress;
-using HyPrism.Core.Game;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Game.Launch;
-using HyPrism.Core.Game.Mods;
-using HyPrism.Core.Game.Sources;
-using HyPrism.Core.Game.Versions;
+using Hyprism.Desktop.Integrations.GitHub;
+using Hyprism.Desktop.Features.Instances;
+using Hyprism.Desktop.Features.News;
+using Hyprism.Desktop.Features.Profiles;
+using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Localization;
+using Hyprism.Desktop.Platform;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Application.Ports;
+using Hyprism.Core.Application.Progress;
+using Hyprism.Core.Game;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Game.Launch;
+using Hyprism.Core.Game.Mods;
+using Hyprism.Core.Game.Sources;
+using Hyprism.Core.Game.Versions;
 
-namespace HyPrism.Desktop.Shell;
+namespace Hyprism.Desktop.Shell;
 
 public sealed partial class MainWindowViewModel : ObservableObject, IDisposable, IStartupLoadingState
 {
@@ -159,6 +159,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable,
     public string ProfilesLabel => _localizer["dock.profiles"];
     public string SettingsLabel => _localizer["dock.settings"];
     public string StartupLoadingTitle => _localizer["startup.loading.title"];
+    public string LauncherVersion => DesktopApplicationInfo.Version;
 
     public bool IsInstances => CurrentPage == InstancesPage;
     public bool IsNews => CurrentPage == NewsPage;

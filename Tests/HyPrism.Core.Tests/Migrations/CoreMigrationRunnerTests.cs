@@ -1,16 +1,16 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text.Json;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Game.Versions;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Migrations;
-using HyPrism.Core.Models;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Game.Versions;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Migrations;
+using Hyprism.Core.Models;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace HyPrism.Core.Tests.Migrations;
+namespace Hyprism.Core.Tests.Migrations;
 
 public sealed class CoreMigrationRunnerTests : IDisposable
 {

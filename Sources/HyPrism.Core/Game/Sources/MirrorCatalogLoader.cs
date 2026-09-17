@@ -1,13 +1,13 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using HyPrism.Core.Models;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Models;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.Core.Game.Sources;
+namespace Hyprism.Core.Game.Sources;
 
 /// <summary>
 /// Loads mirror definitions from JSON meta files in the Mirrors directory.

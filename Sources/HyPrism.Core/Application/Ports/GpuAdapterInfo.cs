@@ -1,7 +1,7 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-namespace HyPrism.Core.Application.Ports;
+namespace Hyprism.Core.Application.Ports;
 
 /// <summary>
 /// Describes a graphics adapter detected by the active application host

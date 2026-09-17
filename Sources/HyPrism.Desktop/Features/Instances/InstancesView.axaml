@@ -1,14 +1,14 @@
 <!--
-Copyright (C) 2026 HyPrism Launcher
+Copyright (C) 2026 Hyprism Launcher
 SPDX-License-Identifier: GPL-3.0-only
 -->
 
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:instances="using:HyPrism.Desktop.Features.Instances"
-             xmlns:controls="using:HyPrism.Desktop.Controls"
+             xmlns:instances="using:Hyprism.Desktop.Features.Instances"
+             xmlns:controls="using:Hyprism.Desktop.Controls"
              xmlns:easing="using:Avalonia.Animation.Easings"
-             x:Class="HyPrism.Desktop.Features.Instances.InstancesView"
+             x:Class="Hyprism.Desktop.Features.Instances.InstancesView"
              x:Name="InstancesRoot"
              x:DataType="instances:InstancesViewModel">
   <UserControl.Resources>
@@ -151,7 +151,7 @@ SPDX-License-Identifier: GPL-3.0-only
                               Classes="instancesListIdentity"
                               ColumnDefinitions="Auto,*">
                           <Image Classes="instancesListGameIcon"
-                                 Source="avares://HyPrism.Desktop/Assets/Game/grass.png"
+                                 Source="avares://Hyprism.Desktop/Assets/Game/grass.png"
                                  Stretch="Uniform"
                                  IsHitTestVisible="False" />
                           <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
@@ -243,7 +243,7 @@ SPDX-License-Identifier: GPL-3.0-only
         <Image Width="56"
                Height="56"
                HorizontalAlignment="Center"
-               Source="avares://HyPrism.Desktop/Assets/Fluent/puzzle.png"
+               Source="avares://Hyprism.Desktop/Assets/Fluent/puzzle.png"
                Stretch="Uniform" />
         <TextBlock Text="{Binding CreateInstanceTitle}"
                    HorizontalAlignment="Center"
@@ -304,7 +304,7 @@ SPDX-License-Identifier: GPL-3.0-only
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center">
                   <Image Classes="compactInstanceGameIcon"
-                         Source="avares://HyPrism.Desktop/Assets/Game/grass.png"
+                         Source="avares://Hyprism.Desktop/Assets/Game/grass.png"
                          Stretch="Uniform" />
                   <TextBlock Classes="articleToolbarTitle"
                              Text="{Binding ManagedInstanceName}"
@@ -417,7 +417,7 @@ SPDX-License-Identifier: GPL-3.0-only
                           Spacing="22">
                 <StackPanel Classes="instanceSummary" Spacing="22">
                   <Image Classes="instanceGameIcon"
-                         Source="avares://HyPrism.Desktop/Assets/Game/grass.png"
+                         Source="avares://Hyprism.Desktop/Assets/Game/grass.png"
                          Stretch="Uniform" />
 
                   <Border Classes="wideInstanceSplitAction"
@@ -537,7 +537,7 @@ SPDX-License-Identifier: GPL-3.0-only
                             CommandParameter="mods">
                       <Grid ColumnDefinitions="28,*,Auto" ColumnSpacing="14">
                         <Image Classes="instanceMenuIcon"
-                               Source="avares://HyPrism.Desktop/Assets/Fluent/puzzle.png"
+                               Source="avares://Hyprism.Desktop/Assets/Fluent/puzzle.png"
                                Stretch="Uniform" />
                         <StackPanel Grid.Column="1" Spacing="3">
                           <TextBlock Text="{Binding InstanceModsTitle}" Classes="uiSettingsLabel instanceMenuTitle" />
@@ -552,7 +552,7 @@ SPDX-License-Identifier: GPL-3.0-only
                             CommandParameter="browse">
                       <Grid ColumnDefinitions="28,*,Auto" ColumnSpacing="14">
                         <Image Classes="instanceMenuIcon"
-                               Source="avares://HyPrism.Desktop/Assets/Fluent/compass.png"
+                               Source="avares://Hyprism.Desktop/Assets/Fluent/compass.png"
                                Stretch="Uniform" />
                         <StackPanel Grid.Column="1" Spacing="3">
                           <TextBlock Text="{Binding InstanceBrowseTitle}" Classes="uiSettingsLabel instanceMenuTitle" />
@@ -567,7 +567,7 @@ SPDX-License-Identifier: GPL-3.0-only
                             CommandParameter="worlds">
                       <Grid ColumnDefinitions="28,*,Auto" ColumnSpacing="14">
                         <Image Classes="instanceMenuIcon"
-                               Source="avares://HyPrism.Desktop/Assets/Fluent/map.png"
+                               Source="avares://Hyprism.Desktop/Assets/Fluent/map.png"
                                Stretch="Uniform" />
                         <StackPanel Grid.Column="1" Spacing="3">
                           <TextBlock Text="{Binding InstanceWorldsTitle}" Classes="uiSettingsLabel instanceMenuTitle" />
@@ -582,7 +582,7 @@ SPDX-License-Identifier: GPL-3.0-only
                             CommandParameter="console">
                       <Grid ColumnDefinitions="28,*,Auto" ColumnSpacing="14">
                         <Image Classes="instanceMenuIcon"
-                               Source="avares://HyPrism.Desktop/Assets/Fluent/console.png"
+                               Source="avares://Hyprism.Desktop/Assets/Fluent/console.png"
                                Stretch="Uniform" />
                         <StackPanel Grid.Column="1" Spacing="3">
                           <TextBlock Text="{Binding InstanceConsoleTitle}" Classes="uiSettingsLabel instanceMenuTitle" />
@@ -597,7 +597,7 @@ SPDX-License-Identifier: GPL-3.0-only
                             CommandParameter="logs">
                       <Grid ColumnDefinitions="28,*,Auto" ColumnSpacing="14">
                         <Image Classes="instanceMenuIcon"
-                               Source="avares://HyPrism.Desktop/Assets/Fluent/log.png"
+                               Source="avares://Hyprism.Desktop/Assets/Fluent/log.png"
                                Stretch="Uniform" />
                         <StackPanel Grid.Column="1" Spacing="3">
                           <TextBlock Text="{Binding InstanceLogsTitle}" Classes="uiSettingsLabel instanceMenuTitle" />
@@ -787,7 +787,7 @@ SPDX-License-Identifier: GPL-3.0-only
                     </Grid.RowDefinitions>
                     <ProgressBar IsVisible="{Binding IsInstanceModsLoading}" IsIndeterminate="True" Width="180" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     <StackPanel IsVisible="{Binding IsInstalledModsEmpty}" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="9">
-                      <Image Width="48" Height="48" Source="avares://HyPrism.Desktop/Assets/Fluent/puzzle.png" />
+                      <Image Width="48" Height="48" Source="avares://Hyprism.Desktop/Assets/Fluent/puzzle.png" />
                       <TextBlock Text="{Binding InstanceModsEmptyTitle}" FontSize="19" FontWeight="SemiBold" TextAlignment="Center" />
                       <TextBlock Text="{Binding InstanceModsEmptyHint}" Classes="muted" MaxWidth="390" TextAlignment="Center" TextWrapping="Wrap" />
                       <Button Classes="instanceToolbarAction primarySmall"
@@ -978,7 +978,7 @@ SPDX-License-Identifier: GPL-3.0-only
                       <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <StackPanel IsVisible="{Binding IsModCatalogEmpty}" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="9">
-                      <Image Width="48" Height="48" Source="avares://HyPrism.Desktop/Assets/Fluent/puzzle.png" />
+                      <Image Width="48" Height="48" Source="avares://Hyprism.Desktop/Assets/Fluent/puzzle.png" />
                       <TextBlock Text="{Binding InstanceBrowseEmptyTitle}" FontSize="19" FontWeight="SemiBold" />
                       <TextBlock Text="{Binding InstanceBrowseEmptyHint}" Classes="muted" MaxWidth="400" TextAlignment="Center" TextWrapping="Wrap" />
                     </StackPanel>
@@ -1196,7 +1196,7 @@ SPDX-License-Identifier: GPL-3.0-only
                   <Grid>
                     <ProgressBar IsVisible="{Binding IsInstanceWorldsLoading}" IsIndeterminate="True" Width="180" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     <StackPanel IsVisible="{Binding IsInstanceWorldsEmpty}" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="9">
-                      <Image Width="48" Height="48" Source="avares://HyPrism.Desktop/Assets/Fluent/data.png" />
+                      <Image Width="48" Height="48" Source="avares://Hyprism.Desktop/Assets/Fluent/data.png" />
                       <TextBlock Text="{Binding InstanceWorldsEmptyTitle}" FontSize="19" FontWeight="SemiBold" />
                       <TextBlock Text="{Binding InstanceWorldsEmptyHint}" Classes="muted" MaxWidth="400" TextAlignment="Center" TextWrapping="Wrap" />
                     </StackPanel>
@@ -1529,7 +1529,7 @@ SPDX-License-Identifier: GPL-3.0-only
               Classes="instancesListIdentity"
               ColumnDefinitions="Auto,*">
           <Image Classes="instancesListGameIcon"
-                 Source="avares://HyPrism.Desktop/Assets/Game/grass.png"
+                 Source="avares://Hyprism.Desktop/Assets/Game/grass.png"
                  Stretch="Uniform"
                  IsHitTestVisible="False" />
           <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">

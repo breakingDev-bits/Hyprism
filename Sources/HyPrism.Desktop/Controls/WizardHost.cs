@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia.Controls;
 using Avalonia.Labs.Lottie;
 using Avalonia.Threading;
 
-namespace HyPrism.Desktop.Controls;
+namespace Hyprism.Desktop.Controls;
 
 /// <summary>
 /// Owns the shared lifecycle around a wizard screen, its steps, and reveal animation.

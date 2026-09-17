@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using HyPrism.Core.Game.Mods;
-using HyPrism.Core.Models;
+using Hyprism.Core.Game.Mods;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Desktop.Features.Instances;
+namespace Hyprism.Desktop.Features.Instances;
 
 public sealed partial class ModCatalogFileItemViewModel(
     ModFileInfo file,

@@ -1,11 +1,11 @@
 <!--
-Copyright (C) 2026 HyPrism Launcher
+Copyright (C) 2026 Hyprism Launcher
 SPDX-License-Identifier: GPL-3.0-only
 -->
 
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:HyPrism.Desktop.Controls"
+        xmlns:controls="using:Hyprism.Desktop.Controls"
         xmlns:easing="using:Avalonia.Animation.Easings">
   <Styles.Resources>
     <ControlTheme x:Key="UiComboBoxItemTheme" TargetType="ComboBoxItem">

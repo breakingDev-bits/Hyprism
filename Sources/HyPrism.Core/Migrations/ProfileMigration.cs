@@ -1,12 +1,12 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text.Json;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Models;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Models;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.Core.Migrations;
+namespace Hyprism.Core.Migrations;
 
 /// <summary>
 /// Provides helpers for migrating legacy profile folder structures to the current

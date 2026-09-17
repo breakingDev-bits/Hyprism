@@ -1,7 +1,7 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-namespace HyPrism.Desktop.Integrations.GitHub;
+namespace Hyprism.Desktop.Integrations.GitHub;
 
 /// <summary>
 /// Provides the public GitHub data used by the launcher

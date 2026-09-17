@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Collections.ObjectModel;
@@ -10,21 +10,21 @@ using Avalonia.Platform;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HyPrism.Desktop.Controls;
-using HyPrism.Desktop.Localization;
-using HyPrism.Desktop.Integrations.GitHub;
-using HyPrism.Desktop.Platform;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Application.Ports;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Game.Launch;
-using HyPrism.Core.Game.Authentication;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Game.Sources;
-using HyPrism.Core.Game.Versions;
-using HyPrism.Core.Models;
+using Hyprism.Desktop.Controls;
+using Hyprism.Desktop.Localization;
+using Hyprism.Desktop.Integrations.GitHub;
+using Hyprism.Desktop.Platform;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Application.Ports;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Game.Launch;
+using Hyprism.Core.Game.Authentication;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Game.Sources;
+using Hyprism.Core.Game.Versions;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Desktop.Features.Settings;
+namespace Hyprism.Desktop.Features.Settings;
 
 public sealed partial class SettingsViewModel : ObservableObject, IDisposable
 {
@@ -2150,7 +2150,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string GetMirrorSourceType(HyPrism.Core.Models.MirrorMeta mirror)
+    private string GetMirrorSourceType(Hyprism.Core.Models.MirrorMeta mirror)
         => _localizer[mirror.SourceType == "json-index"
             ? "settings.downloads.sourceTypeJsonIndex"
             : "settings.downloads.sourceTypePattern"];
@@ -2608,7 +2608,7 @@ public sealed partial class SettingCategoryViewModel : ObservableObject
     public SettingCategoryViewModel(string id, string label, string icon)
     {
         Id = id;
-        var iconUri = $"avares://HyPrism.Desktop/Assets/Fluent/{icon}";
+        var iconUri = $"avares://Hyprism.Desktop/Assets/Fluent/{icon}";
         using var iconStream = AssetLoader.Open(new Uri(iconUri));
         Icon = new Bitmap(iconStream);
         _label = label;
@@ -2630,7 +2630,7 @@ public sealed partial class SettingChoiceViewModel : ObservableObject
 
         if (!string.IsNullOrWhiteSpace(flagCountryCode))
         {
-            var iconUri = $"avares://HyPrism.Desktop/Assets/Flags/{flagCountryCode}.png";
+            var iconUri = $"avares://Hyprism.Desktop/Assets/Flags/{flagCountryCode}.png";
             using var iconStream = AssetLoader.Open(new Uri(iconUri));
             Icon = new Bitmap(iconStream);
         }

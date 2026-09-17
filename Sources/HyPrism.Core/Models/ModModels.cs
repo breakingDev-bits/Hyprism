@@ -1,9 +1,9 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Collections.Generic;
 
-namespace HyPrism.Core.Models;
+namespace Hyprism.Core.Models;
 
 /// <summary>Paged result set returned from mod search operations.</summary>
 public class ModSearchResult

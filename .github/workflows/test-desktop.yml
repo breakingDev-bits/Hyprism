@@ -1,4 +1,4 @@
-# Copyright (C) 2026 HyPrism Launcher
+# Copyright (C) 2026 Hyprism Launcher
 # SPDX-License-Identifier: GPL-3.0-only
 
 name: Desktop Tests
@@ -39,7 +39,7 @@ jobs:
           dotnet-quality: ${{ env.DOTNET_QUALITY }}
 
       - name: Run Desktop headless tests
-        run: dotnet test Tests/HyPrism.Desktop.Tests/HyPrism.Desktop.Tests.csproj --configuration Release --logger "trx;LogFileName=desktop-${{ matrix.platform }}.trx" --results-directory "${{ runner.temp }}/hyprism-test-results"
+        run: dotnet test Tests/Hyprism.Desktop.Tests/Hyprism.Desktop.Tests.csproj --configuration Release --logger "trx;LogFileName=desktop-${{ matrix.platform }}.trx" --results-directory "${{ runner.temp }}/hyprism-test-results"
 
       - name: Write test summary
         if: always()

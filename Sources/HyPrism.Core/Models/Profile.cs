@@ -1,9 +1,9 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System;
 
-namespace HyPrism.Core.Models;
+namespace Hyprism.Core.Models;
 
 /// <summary>
 /// A user profile with DDID and display name.

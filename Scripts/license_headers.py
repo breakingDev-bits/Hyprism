@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright (C) 2026 HyPrism Launcher
+# Copyright (C) 2026 Hyprism Launcher
 # SPDX-License-Identifier: GPL-3.0-only
 
 """Add or verify SPDX headers on comment-capable project files."""
@@ -14,7 +14,7 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-COPYRIGHT = "Copyright (C) 2026 HyPrism Launcher"
+COPYRIGHT = "Copyright (C) 2026 Hyprism Launcher"
 LICENSE = "SPDX-License-" "Identifier: GPL-3.0-only"
 
 LINE_SUFFIXES = {".cs", ".js", ".mjs", ".ts", ".tsx"}
@@ -25,23 +25,23 @@ MARKDOWN_SUFFIXES = {".md"}
 HASH_NAMES = {".gitignore"}
 
 THIRD_PARTY_HEADERS = {
-    "Sources/HyPrism.Desktop/Assets/Icons/MaterialSymbols.axaml": (
+    "Sources/Hyprism.Desktop/Assets/Icons/MaterialSymbols.axaml": (
         "Copyright (C) 2026 Google LLC",
         "SPDX-License-" "Identifier: Apache-2.0",
     ),
-    "Sources/HyPrism.Desktop/Assets/Brands/CurseForge.axaml": (
+    "Sources/Hyprism.Desktop/Assets/Brands/CurseForge.axaml": (
         "CurseForge and the CurseForge logo are trademarks of Overwolf Ltd.",
         "SPDX-License-" "Identifier: LicenseRef-CurseForge",
     ),
-    "Sources/HyPrism.Desktop/Assets/Brands/Avalonia.axaml": (
+    "Sources/Hyprism.Desktop/Assets/Brands/Avalonia.axaml": (
         "Avalonia and the Avalonia logo are registered trademarks of AvaloniaUI OÜ",
         "SPDX-License-" "Identifier: LicenseRef-Avalonia",
     ),
-    "Sources/HyPrism.Desktop/Assets/Brands/DotNet.axaml": (
+    "Sources/Hyprism.Desktop/Assets/Brands/DotNet.axaml": (
         "Copyright (C) .NET authors",
         "SPDX-License-" "Identifier: CC0-1.0",
     ),
-    "Sources/HyPrism.Desktop/Assets/Brands/YouTube.axaml": (
+    "Sources/Hyprism.Desktop/Assets/Brands/YouTube.axaml": (
         "YouTube and the YouTube logo are trademarks of Google LLC",
         "SPDX-License-" "Identifier: LicenseRef-YouTube",
     ),

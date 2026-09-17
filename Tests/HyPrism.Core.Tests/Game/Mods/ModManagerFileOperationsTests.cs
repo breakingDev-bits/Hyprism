@@ -1,17 +1,17 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Application.Progress;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Game.Mods;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Models;
+using Hyprism.Core.Application.Progress;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Game.Mods;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Models;
 using Moq;
 using System.IO.Compression;
 using System.Net;
 using System.Text;
 
-namespace HyPrism.Core.Tests.Game.Mods;
+namespace Hyprism.Core.Tests.Game.Mods;
 
 public class ModManagerFileOperationsTests : IDisposable
 {

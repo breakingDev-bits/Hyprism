@@ -1,14 +1,14 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Collections;
 using System.Globalization;
 using System.Resources;
 using System.Text.RegularExpressions;
-using HyPrism.Desktop.Localization;
+using Hyprism.Desktop.Localization;
 using Xunit;
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 public sealed class StringLocalizerTests
 {
@@ -61,7 +61,7 @@ public sealed class StringLocalizerTests
         using var culture = new CultureScope();
         var localizer = new StringLocalizer("en-US");
         var resourceManager = new ResourceManager(
-            "HyPrism.Desktop.Localization.Resources",
+            "Hyprism.Desktop.Localization.Resources",
             typeof(StringLocalizer).Assembly);
         var defaultValues = ReadResourceSet(resourceManager, CultureInfo.InvariantCulture);
         var expectedKeys = defaultValues.Keys

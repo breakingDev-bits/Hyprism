@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.Desktop.Platform;
+namespace Hyprism.Desktop.Platform;
 
 /// <summary>
 /// Selects the Win32 composition mode used by Avalonia for frame presentation.

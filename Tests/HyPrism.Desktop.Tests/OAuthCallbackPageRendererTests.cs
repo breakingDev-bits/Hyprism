@@ -1,14 +1,14 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia.Headless.XUnit;
-using HyPrism.Desktop.Features.Settings;
-using HyPrism.Desktop.Platform;
+using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Platform;
 using Moq;
 using System.Net;
 using Xunit;
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 public sealed class OAuthCallbackPageRendererTests
 {
@@ -30,7 +30,8 @@ public sealed class OAuthCallbackPageRendererTests
         Assert.Contains("window.close()", html, StringComparison.Ordinal);
         Assert.Contains("@media (max-width: 520px)", html, StringComparison.Ordinal);
         Assert.Contains("<footer class=\"brand\">", html, StringComparison.Ordinal);
-        Assert.Contains("width: min(100%, 132px)", html, StringComparison.Ordinal);
+        Assert.Contains("width: min(100%, 260px)", html, StringComparison.Ordinal);
+        Assert.Contains("alt=\"Hyprism\"", html, StringComparison.Ordinal);
         Assert.DoesNotContain("gradient(", html, StringComparison.Ordinal);
         Assert.DoesNotContain("class=\"card\"", html, StringComparison.Ordinal);
     }

@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia.Media.Imaging;
-using HyPrism.Desktop.Platform;
+using Hyprism.Desktop.Platform;
 
-namespace HyPrism.Desktop.Controls;
+namespace Hyprism.Desktop.Controls;
 
 internal static class RemoteBitmapLoader
 {

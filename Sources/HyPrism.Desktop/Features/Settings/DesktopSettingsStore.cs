@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Buffers;
-using HyPrism.Core;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.Desktop.Features.Settings;
+namespace Hyprism.Desktop.Features.Settings;
 
 /// <summary>
 /// Persists Avalonia preferences through the shared configuration store
@@ -217,7 +217,7 @@ public sealed class DesktopSettingsStore : IDesktopSettingsStore
         set => Save(config => config.ShowAlphaMods = value);
     }
 
-    private void Save(Action<HyPrism.Core.Models.Config> update)
+    private void Save(Action<Hyprism.Core.Models.Config> update)
     {
         update(_configStore.Configuration);
         _configStore.SaveConfig();

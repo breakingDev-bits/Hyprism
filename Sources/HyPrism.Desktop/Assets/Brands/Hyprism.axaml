@@ -6,52 +6,84 @@ SPDX-License-Identifier: GPL-3.0-only
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <LinearGradientBrush x:Key="HyprismLogoTopLeftBrush"
-                       StartPoint="0%,100%"
-                       EndPoint="100%,0%">
+                       StartPoint="188.066,314.32"
+                       EndPoint="442.882,142.495">
     <GradientStop Offset="0" Color="#6818FF" />
     <GradientStop Offset="0.48" Color="#4C20F3" />
     <GradientStop Offset="1" Color="#2920E7" />
   </LinearGradientBrush>
 
   <LinearGradientBrush x:Key="HyprismLogoTopRightBrush"
-                       StartPoint="0%,25%"
-                       EndPoint="100%,75%">
+                       StartPoint="455.738,217.303"
+                       EndPoint="754.971,314.32">
     <GradientStop Offset="0" Color="#1472FF" />
     <GradientStop Offset="0.52" Color="#029FFB" />
     <GradientStop Offset="1" Color="#00C9EE" />
   </LinearGradientBrush>
 
   <LinearGradientBrush x:Key="HyprismLogoLeftBrush"
-                       StartPoint="0%,0%"
-                       EndPoint="100%,100%">
+                       StartPoint="172.871,310.813"
+                       EndPoint="322.487,682.517">
     <GradientStop Offset="0" Color="#4124FF" />
     <GradientStop Offset="0.48" Color="#175DFF" />
     <GradientStop Offset="1" Color="#0C6CFF" />
   </LinearGradientBrush>
 
   <LinearGradientBrush x:Key="HyprismLogoFacetBrush"
-                       StartPoint="0%,0%"
-                       EndPoint="100%,100%">
+                       StartPoint="177.546,294.449"
+                       EndPoint="341.189,503.678">
     <GradientStop Offset="0" Color="#2122C6" />
     <GradientStop Offset="1" Color="#0837D1" />
   </LinearGradientBrush>
 
   <LinearGradientBrush x:Key="HyprismLogoBottomBrush"
-                       StartPoint="0%,100%"
-                       EndPoint="100%,0%">
+                       StartPoint="337.681,701.219"
+                       EndPoint="557.43,600.695">
     <GradientStop Offset="0" Color="#086FFF" />
     <GradientStop Offset="1" Color="#117DFF" />
   </LinearGradientBrush>
 
   <LinearGradientBrush x:Key="HyprismLogoBeamBrush"
-                       StartPoint="0%,50%"
-                       EndPoint="100%,50%">
+                       StartPoint="408.986,474.456"
+                       EndPoint="769.001,530.563">
     <GradientStop Offset="0" Color="#0757FF" />
     <GradientStop Offset="0.33" Color="#2145FF" />
     <GradientStop Offset="0.5" Color="#4D28FB" />
     <GradientStop Offset="0.63" Color="#BD20B9" />
     <GradientStop Offset="0.77" Color="#FF4264" />
     <GradientStop Offset="1" Color="#FF9013" />
+  </LinearGradientBrush>
+
+  <RadialGradientBrush x:Key="HyprismLogoCyanHighlightBrush"
+                       Center="703.543,277.243"
+                       GradientOrigin="703.543,277.243"
+                       RadiusX="287.544"
+                       RadiusY="241.537">
+    <GradientStop Offset="0" Color="#FF00F3CB" />
+    <GradientStop Offset="0.43" Color="#FA00E7D6" />
+    <GradientStop Offset="0.76" Color="#C208BFE7" />
+    <GradientStop Offset="1" Color="#0008BFE7" />
+  </RadialGradientBrush>
+
+  <RadialGradientBrush x:Key="HyprismLogoYellowHighlightBrush"
+                       Center="793.546,372.857"
+                       GradientOrigin="793.546,372.857"
+                       RadiusX="150.785"
+                       RadiusY="232.21">
+    <GradientStop Offset="0" Color="#FFFFFF00" />
+    <GradientStop Offset="0.29" Color="#FFFFEF00" />
+    <GradientStop Offset="0.56" Color="#E8FFD61A" />
+    <GradientStop Offset="1" Color="#00D4F136" />
+  </RadialGradientBrush>
+
+  <LinearGradientBrush x:Key="HyprismLogoYellowOpacityMaskBrush"
+                       StartPoint="-119.348,290.942"
+                       EndPoint="-119.348,560.953">
+    <GradientStop Offset="0" Color="#00000000" />
+    <GradientStop Offset="0.2" Color="#77000000" />
+    <GradientStop Offset="0.4" Color="#FFFFFFFF" />
+    <GradientStop Offset="0.72" Color="#EE000000" />
+    <GradientStop Offset="1" Color="#00000000" />
   </LinearGradientBrush>
 
   <DrawingImage x:Key="HyprismBrandLogo">
@@ -69,6 +101,15 @@ SPDX-License-Identifier: GPL-3.0-only
                          Brush="{StaticResource HyprismLogoBottomBrush}" />
         <GeometryDrawing Geometry="M371.582 560.72L769.001 266.162V540.03L579.759 654.698L371.582 560.72Z"
                          Brush="{StaticResource HyprismLogoBeamBrush}" />
+        <GeometryDrawing Geometry="M371.582 560.72L769.001 266.162V540.03L579.759 654.698L371.582 560.72Z"
+                         Brush="{StaticResource HyprismLogoCyanHighlightBrush}" />
+        <DrawingGroup>
+          <DrawingGroup.OpacityMask>
+            <StaticResource ResourceKey="HyprismLogoYellowOpacityMaskBrush" />
+          </DrawingGroup.OpacityMask>
+          <GeometryDrawing Geometry="M371.582 560.72L769.001 266.162V540.03L579.759 654.698L371.582 560.72Z"
+                           Brush="{StaticResource HyprismLogoYellowHighlightBrush}" />
+        </DrawingGroup>
       </DrawingGroup>
     </DrawingImage.Drawing>
   </DrawingImage>

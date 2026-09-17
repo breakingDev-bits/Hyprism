@@ -1,9 +1,9 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text;
 
-namespace HyPrism.Desktop.Features.Settings;
+namespace Hyprism.Desktop.Features.Settings;
 
 internal static class JavaArgumentTokenizer
 {

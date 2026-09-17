@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text.Json;
-using HyPrism.Core.Models;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Models;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.Core.Tests.Core.Infrastructure;
+namespace Hyprism.Core.Tests.Core.Infrastructure;
 
 /// <summary>
 /// Tests loading, saving, resetting, and migration behavior in <see cref="JsonConfigStore"/>

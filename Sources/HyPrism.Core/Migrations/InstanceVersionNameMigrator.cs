@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Game.Versions;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Game.Versions;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.Core.Migrations;
+namespace Hyprism.Core.Migrations;
 
 /// <summary>
 /// Backfills human-readable version names for instances created before version names were stored

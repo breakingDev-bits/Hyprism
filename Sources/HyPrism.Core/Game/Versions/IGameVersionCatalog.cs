@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Models;
-using HyPrism.Core.Game.Sources;
+using Hyprism.Core.Models;
+using Hyprism.Core.Game.Sources;
 
-namespace HyPrism.Core.Game.Versions;
+namespace Hyprism.Core.Game.Versions;
 
 /// <summary>
 /// Provides explicit version discovery, patch planning, and source selection

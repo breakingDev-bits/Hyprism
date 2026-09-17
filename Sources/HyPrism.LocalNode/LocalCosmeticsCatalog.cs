@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.IO.Compression;
 using System.Text.Json;
 
-namespace HyPrism.LocalNode;
+namespace Hyprism.LocalNode;
 
 /// <summary>
 /// Loads the character creator item IDs exposed by the installed game assets

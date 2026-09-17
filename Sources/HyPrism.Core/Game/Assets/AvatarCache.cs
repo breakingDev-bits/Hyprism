@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Game.Instances;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Game.Instances;
 
-namespace HyPrism.Core.Game.Assets;
+namespace Hyprism.Core.Game.Assets;
 
 /// <summary>
 /// Manages user avatar cache and preview images for game instances.

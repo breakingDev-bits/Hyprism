@@ -1,15 +1,15 @@
 <!--
-Copyright (C) 2026 HyPrism Launcher
+Copyright (C) 2026 Hyprism Launcher
 SPDX-License-Identifier: GPL-3.0-only
 -->
 
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:news="using:HyPrism.Desktop.Features.News"
-             xmlns:controls="using:HyPrism.Desktop.Controls"
+             xmlns:news="using:Hyprism.Desktop.Features.News"
+             xmlns:controls="using:Hyprism.Desktop.Controls"
              xmlns:easing="using:Avalonia.Animation.Easings"
              xmlns:lottie="clr-namespace:Avalonia.Labs.Lottie;assembly=Avalonia.Labs.Lottie"
-             x:Class="HyPrism.Desktop.Features.News.NewsView"
+             x:Class="Hyprism.Desktop.Features.News.NewsView"
              x:DataType="news:NewsViewModel">
 
   <UserControl.Resources>

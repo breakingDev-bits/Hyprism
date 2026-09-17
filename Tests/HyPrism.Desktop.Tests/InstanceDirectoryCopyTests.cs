@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Runtime.InteropServices;
-using HyPrism.Desktop.Features.Settings;
+using Hyprism.Desktop.Features.Settings;
 using Xunit;
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 public sealed class InstanceDirectoryCopyTests
 {

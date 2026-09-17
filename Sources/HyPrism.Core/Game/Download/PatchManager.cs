@@ -1,13 +1,13 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Application.Progress;
-using HyPrism.Core.Game.Patching;
-using HyPrism.Core.Game.Versions;
-using HyPrism.Core.Migrations;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Application.Progress;
+using Hyprism.Core.Game.Patching;
+using Hyprism.Core.Game.Versions;
+using Hyprism.Core.Migrations;
 
-namespace HyPrism.Core.Game.Download;
+namespace Hyprism.Core.Game.Download;
 
 /// <summary>
 /// Manages differential game updates by downloading and applying Butler PWR patches.

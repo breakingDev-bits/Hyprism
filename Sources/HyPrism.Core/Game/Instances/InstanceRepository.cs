@@ -1,7 +1,7 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Infrastructure;
 using System.IO.Compression;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
@@ -9,9 +9,9 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-using HyPrism.Core.Models;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Core.Game.Instances;
+namespace Hyprism.Core.Game.Instances;
 
 /// <summary>
 /// Manages game instance paths, versioning, and data organization.

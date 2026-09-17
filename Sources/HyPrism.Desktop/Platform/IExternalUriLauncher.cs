@@ -1,7 +1,7 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-namespace HyPrism.Desktop.Platform;
+namespace Hyprism.Desktop.Platform;
 
 /// <summary>
 /// Opens external URIs through the platform services owned by the desktop host

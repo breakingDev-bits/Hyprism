@@ -1,4 +1,4 @@
-# Copyright (C) 2026 HyPrism Launcher
+# Copyright (C) 2026 Hyprism Launcher
 # SPDX-License-Identifier: GPL-3.0-only
 
 name: Local Node Tests
@@ -41,20 +41,20 @@ jobs:
       - name: Run Local Node integration tests
         env:
           HYPRISM_LOCAL_NODE_SKIP_MACOS_TRUST: '1'
-        run: dotnet test Tests/HyPrism.LocalNode.Tests/HyPrism.LocalNode.Tests.csproj --configuration Release --logger "trx;LogFileName=local-node-${{ matrix.platform }}.trx" --results-directory "${{ runner.temp }}/hyprism-test-results"
+        run: dotnet test Tests/Hyprism.LocalNode.Tests/Hyprism.LocalNode.Tests.csproj --configuration Release --logger "trx;LogFileName=local-node-${{ matrix.platform }}.trx" --results-directory "${{ runner.temp }}/hyprism-test-results"
 
       - name: Publish macOS apphosts for trust smoke
         if: matrix.platform == 'macOS'
         run: |
-          dotnet publish Sources/HyPrism.Desktop/HyPrism.Desktop.csproj \
+          dotnet publish Sources/Hyprism.Desktop/Hyprism.Desktop.csproj \
             --configuration Release \
             --runtime osx-arm64 \
             --self-contained true \
             --output "$RUNNER_TEMP/hyprism-osx-arm64"
-          test -x "$RUNNER_TEMP/hyprism-osx-arm64/HyPrism.Desktop"
-          test -x "$RUNNER_TEMP/hyprism-osx-arm64/HyPrism.LocalNode"
-          file "$RUNNER_TEMP/hyprism-osx-arm64/HyPrism.Desktop" | grep -q 'Mach-O 64-bit executable arm64'
-          file "$RUNNER_TEMP/hyprism-osx-arm64/HyPrism.LocalNode" | grep -q 'Mach-O 64-bit executable arm64'
+          test -x "$RUNNER_TEMP/hyprism-osx-arm64/Hyprism.Desktop"
+          test -x "$RUNNER_TEMP/hyprism-osx-arm64/Hyprism.LocalNode"
+          file "$RUNNER_TEMP/hyprism-osx-arm64/Hyprism.Desktop" | grep -q 'Mach-O 64-bit executable arm64'
+          file "$RUNNER_TEMP/hyprism-osx-arm64/Hyprism.LocalNode" | grep -q 'Mach-O 64-bit executable arm64'
 
       - name: Verify trusted Local Node HTTPS
         id: macos_trust
@@ -66,7 +66,7 @@ jobs:
           LOG_FILE="$RUNNER_TEMP/local-node.log"
 
           HYPRISM_LOCAL_NODE_SKIP_MACOS_TRUST=1 \
-          "$RUNNER_TEMP/hyprism-osx-arm64/HyPrism.LocalNode" \
+          "$RUNNER_TEMP/hyprism-osx-arm64/Hyprism.LocalNode" \
             --port "$PORT" \
             --data-directory "$DATA_DIR" \
             >"$LOG_FILE" 2>&1 &

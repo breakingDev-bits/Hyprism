@@ -1,12 +1,12 @@
 <!--
-Copyright (C) 2026 HyPrism Launcher
+Copyright (C) 2026 Hyprism Launcher
 SPDX-License-Identifier: GPL-3.0-only
 -->
 
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:easing="using:Avalonia.Animation.Easings"
-             x:Class="HyPrism.Desktop.Controls.OverlayModal"
+             x:Class="Hyprism.Desktop.Controls.OverlayModal"
              x:Name="OverlayRoot"
              Focusable="True"
              IsVisible="False"

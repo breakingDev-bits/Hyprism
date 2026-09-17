@@ -1,20 +1,20 @@
 <!--
-Copyright (C) 2026 HyPrism Launcher
+Copyright (C) 2026 Hyprism Launcher
 SPDX-License-Identifier: GPL-3.0-only
 -->
 
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:shell="using:HyPrism.Desktop.Shell"
-        xmlns:instances="using:HyPrism.Desktop.Features.Instances"
-        xmlns:controls="using:HyPrism.Desktop.Controls"
-        xmlns:news="using:HyPrism.Desktop.Features.News"
-        xmlns:profiles="using:HyPrism.Desktop.Features.Profiles"
-        xmlns:settings="using:HyPrism.Desktop.Features.Settings"
+        xmlns:shell="using:Hyprism.Desktop.Shell"
+        xmlns:instances="using:Hyprism.Desktop.Features.Instances"
+        xmlns:controls="using:Hyprism.Desktop.Controls"
+        xmlns:news="using:Hyprism.Desktop.Features.News"
+        xmlns:profiles="using:Hyprism.Desktop.Features.Profiles"
+        xmlns:settings="using:Hyprism.Desktop.Features.Settings"
         xmlns:animation="using:Avalonia.Animation"
         xmlns:easing="using:Avalonia.Animation.Easings"
         xmlns:lottie="clr-namespace:Avalonia.Labs.Lottie;assembly=Avalonia.Labs.Lottie"
-        x:Class="HyPrism.Desktop.Shell.MainWindow"
+        x:Class="Hyprism.Desktop.Shell.MainWindow"
         x:DataType="shell:MainWindowViewModel"
         Title="Hyprism"
         Width="1280"
@@ -75,13 +75,12 @@ SPDX-License-Identifier: GPL-3.0-only
                  Height="48"
                  Source="{StaticResource HyprismBrandLogo}"
                  Stretch="Uniform" />
-          <StackPanel VerticalAlignment="Center" Spacing="-3">
-            <TextBlock Text="Hyprism" FontSize="25" FontWeight="Bold" />
-            <TextBlock Text="LAUNCHER"
-                       Foreground="{DynamicResource TextSecondaryBrush}"
-                       FontSize="10"
-                       FontWeight="Bold"
-                       LetterSpacing="2" />
+          <StackPanel VerticalAlignment="Center" Spacing="1">
+            <TextBlock Text="Hyprism" FontSize="25" FontWeight="SemiBold" />
+            <Border Classes="aboutLicenseValue"
+                    HorizontalAlignment="Left">
+              <TextBlock Text="{Binding LauncherVersion}" />
+            </Border>
           </StackPanel>
         </StackPanel>
 
@@ -337,22 +336,33 @@ SPDX-License-Identifier: GPL-3.0-only
                    FontSize="15" />
       </Grid>
 
-      <Image x:Name="StartupBrand"
-             Grid.Row="1"
-             Width="132"
-             Margin="0,32,0,0"
-             HorizontalAlignment="Center"
-             Opacity="0"
-             Source="{StaticResource HyprismBrandLogo}"
-             Stretch="Uniform">
-        <Image.Transitions>
+      <StackPanel x:Name="StartupBrand"
+                  Grid.Row="1"
+                  Orientation="Horizontal"
+                  Spacing="12"
+                  Margin="0,32,0,0"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Opacity="0">
+        <Image Width="34"
+               Height="39"
+               Source="{StaticResource HyprismBrandLogo}"
+               Stretch="Uniform" />
+        <TextBlock x:Name="StartupBrandLabel"
+                   Text="Hyprism Launcher"
+                   FontFamily="{DynamicResource GoogleSansFont}"
+                   FontSize="21"
+                   FontWeight="SemiBold"
+                   Foreground="White"
+                   VerticalAlignment="Center" />
+        <StackPanel.Transitions>
           <Transitions>
             <DoubleTransition Property="Opacity" Duration="0:0:0.52">
               <DoubleTransition.Easing><easing:CubicEaseOut /></DoubleTransition.Easing>
             </DoubleTransition>
           </Transitions>
-        </Image.Transitions>
-      </Image>
+        </StackPanel.Transitions>
+      </StackPanel>
     </Grid>
   </Border>
 

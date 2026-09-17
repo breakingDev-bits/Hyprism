@@ -1,9 +1,9 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Runtime.InteropServices;
 
-namespace HyPrism.Desktop.Platform;
+namespace Hyprism.Desktop.Platform;
 
 /// <summary>
 /// Provides platform memory information used by the Desktop settings UI

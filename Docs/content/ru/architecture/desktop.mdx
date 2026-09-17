@@ -1,9 +1,9 @@
 ---
-title: HyPrism.Desktop
+title: Hyprism.Desktop
 description: Композиция Avalonia, ответственность функций и общие элементы UI
 ---
 
-# HyPrism.Desktop
+# Hyprism.Desktop
 
 Desktop служит хостом приложения Avalonia. Он собирает сервисы Core, предоставляет системные возможности и преобразует их состояние в представления и команды
 
@@ -25,9 +25,9 @@ Desktop служит хостом приложения Avalonia. Он собир
 
 ## Рамка окна
 
-Shell использует модель [WindowDrawnDecorations](https://docs.avaloniaui.net/controls/primitives/windowdrawndecorations) из Avalonia 12. Главное окно расширяет клиентскую область в область оформления. В Windows выбирается `WindowDecorations="Full"`, чтобы сохранить нативные переходы DWM и привязку окна к областям Snap, а [WindowDecorations.axaml](../../../../Sources/HyPrism.Desktop/Styles/WindowDecorations.axaml) заменяет стандартное содержимое отрисованного оформления Avalonia
+Shell использует модель [WindowDrawnDecorations](https://docs.avaloniaui.net/controls/primitives/windowdrawndecorations) из Avalonia 12. Главное окно расширяет клиентскую область в область оформления. В Windows выбирается `WindowDecorations="Full"`, чтобы сохранить нативные переходы DWM и привязку окна к областям Snap, а [WindowDecorations.axaml](../../../../Sources/Hyprism.Desktop/Styles/WindowDecorations.axaml) заменяет стандартное содержимое отрисованного оформления Avalonia
 
-На остальных платформах через платформенное значение сохраняется `WindowDecorations="None"` и используется та же оболочка. [Главное окно](../../../../Sources/HyPrism.Desktop/Shell/MainWindow.axaml) помечает область заголовка, кнопки управления и зоны изменения размера через `WindowDecorationProperties.ElementRole`; сохраняйте эти роли на интерактивных элементах chrome и не возвращайте ручное изменение позиции окна через Win32
+На остальных платформах через платформенное значение сохраняется `WindowDecorations="None"` и используется та же оболочка. [Главное окно](../../../../Sources/Hyprism.Desktop/Shell/MainWindow.axaml) помечает область заголовка, кнопки управления и зоны изменения размера через `WindowDecorationProperties.ElementRole`; сохраняйте эти роли на интерактивных элементах chrome и не возвращайте ручное изменение позиции окна через Win32
 
 Кнопки управления используют векторные ресурсы из `Assets/Icons/MaterialSymbols.axaml`. Иконки сворачивания и закрытия постоянны, а центральная кнопка переключается между `MaximizeIcon` и `RestoreIcon` при изменении `WindowState`. Для них сохраняйте стандартный курсор-стрелку отдельно от курсора-руки обычных кнопок действий, чтобы нативное определение зон заголовка не конфликтовало со стилями Avalonia
 
@@ -42,7 +42,7 @@ Shell использует модель [WindowDrawnDecorations](https://docs.av
 ```xml
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:settings="using:HyPrism.Desktop.Features.Settings"
+             xmlns:settings="using:Hyprism.Desktop.Features.Settings"
              x:DataType="settings:SettingsViewModel">
   <ToggleSwitch IsChecked="{Binding CloseAfterLaunch}" />
 </UserControl>
@@ -52,7 +52,7 @@ Shell использует модель [WindowDrawnDecorations](https://docs.av
 
 ## Общая основа UI
 
-`Styles/HyPrismTheme.axaml` предоставляет шаблоны окна, прокрутки, ввода текста, выделения, списков, выпадающих списков, прогресса, подсказок и всплывающих поверхностей. Он должен оставаться перед общими стилями, чтобы стили функций могли переопределять значения по умолчанию. `Styles/Tokens.axaml` определяет цвета и семантические токены темы, а `Styles/Controls.axaml` общие стили. Используйте их классы вместо копирования вариантов в отдельные функции
+`Styles/HyprismTheme.axaml` предоставляет шаблоны окна, прокрутки, ввода текста, выделения, списков, выпадающих списков, прогресса, подсказок и всплывающих поверхностей. Он должен оставаться перед общими стилями, чтобы стили функций могли переопределять значения по умолчанию. `Styles/Tokens.axaml` определяет цвета и семантические токены темы, а `Styles/Controls.axaml` общие стили. Используйте их классы вместо копирования вариантов в отдельные функции
 
 | Элемент | Ответственность |
 | --- | --- |
@@ -77,4 +77,4 @@ Shell использует модель [WindowDrawnDecorations](https://docs.av
 
 Выбор файлов использует Avalonia `StorageProvider`. Обработчик ссылок сохраняет экранированные абсолютные URI, включая параметры OAuth. Эти возможности не принадлежат Core
 
-Исходники: [MainWindowViewModel](../../../../Sources/HyPrism.Desktop/Shell/MainWindowViewModel.cs), [InstancesViewModel](../../../../Sources/HyPrism.Desktop/Features/Instances/InstancesViewModel.cs), [NewsViewModel](../../../../Sources/HyPrism.Desktop/Features/News/NewsViewModel.cs), [Shared controls](../../../../Sources/HyPrism.Desktop/Controls)
+Исходники: [MainWindowViewModel](../../../../Sources/Hyprism.Desktop/Shell/MainWindowViewModel.cs), [InstancesViewModel](../../../../Sources/Hyprism.Desktop/Features/Instances/InstancesViewModel.cs), [NewsViewModel](../../../../Sources/Hyprism.Desktop/Features/News/NewsViewModel.cs), [Shared controls](../../../../Sources/Hyprism.Desktop/Controls)

@@ -31,7 +31,7 @@ description: Правила языка, XML-документации и стру
 
 ```csharp
 using System.IO;
-using HyPrism.Core.Models;
+using Hyprism.Core.Models;
 
 public interface IProfileReader
 {
@@ -49,8 +49,8 @@ public interface IProfileReader
 
 ## Структура
 
-- храните независимое от UI поведение в `HyPrism.Core`
-- храните Avalonia-ресурсы и presentation state в `HyPrism.Desktop`
+- храните независимое от UI поведение в `Hyprism.Core`
+- храните Avalonia-ресурсы и presentation state в `Hyprism.Desktop`
 - используйте интерфейсы на границах хоста
 - применяйте async I/O и передавайте cancellation token через сетевые и долгие операции
 - не добавляйте зависимости представления в Core

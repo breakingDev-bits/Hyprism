@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia.Controls;
@@ -6,15 +6,15 @@ using Avalonia.Headless.XUnit;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Models;
-using HyPrism.Desktop.Features.Profiles;
-using HyPrism.Desktop.Localization;
-using HyPrism.Desktop.Platform;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Models;
+using Hyprism.Desktop.Features.Profiles;
+using Hyprism.Desktop.Localization;
+using Hyprism.Desktop.Platform;
 using Moq;
 using Xunit;
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 public sealed class ProfileWizardLifecycleTests
 {

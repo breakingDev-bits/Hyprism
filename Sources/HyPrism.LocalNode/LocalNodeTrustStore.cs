@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
-using HyPrism.Core.Game.Launch;
+using Hyprism.Core.Game.Launch;
 
-namespace HyPrism.LocalNode;
+namespace Hyprism.LocalNode;
 
 /// <summary>
 /// Prepares narrowly scoped client trust for the Local Node certificate
@@ -93,12 +93,12 @@ public sealed class LocalNodeTrustStore
             store.Add(trustedCertificate);
         }
 
-        var obsoleteCertificates = FindObsoleteHyPrismRootCertificates(store.Certificates, certificate);
+        var obsoleteCertificates = FindObsoleteHyprismRootCertificates(store.Certificates, certificate);
         if (obsoleteCertificates.Count > 0)
             store.RemoveRange(obsoleteCertificates);
     }
 
-    internal static X509Certificate2Collection FindObsoleteHyPrismRootCertificates(
+    internal static X509Certificate2Collection FindObsoleteHyprismRootCertificates(
         X509Certificate2Collection certificates,
         X509Certificate2 currentCertificate)
     {

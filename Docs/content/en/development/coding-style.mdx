@@ -31,7 +31,7 @@ This illustrative interface shows the documentation format; it is not a launcher
 
 ```csharp
 using System.IO;
-using HyPrism.Core.Models;
+using Hyprism.Core.Models;
 
 public interface IProfileReader
 {
@@ -49,8 +49,8 @@ Use `<inheritdoc/>` on an implementation only when the interface documents the c
 
 ## Structure
 
-- keep UI-independent behavior in `HyPrism.Core`
-- keep Avalonia resources and presentation state in `HyPrism.Desktop`
+- keep UI-independent behavior in `Hyprism.Core`
+- keep Avalonia resources and presentation state in `Hyprism.Desktop`
 - depend on interfaces at host boundaries
 - use async I/O and pass cancellation tokens through network or long-running work
 - keep presentation-specific dependencies out of Core

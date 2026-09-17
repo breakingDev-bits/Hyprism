@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Net;
@@ -10,11 +10,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using HyPrism.Core.Models;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Integrations.Hytale;
+using Hyprism.Core.Models;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Integrations.Hytale;
 
-namespace HyPrism.Core.Accounts;
+namespace Hyprism.Core.Accounts;
 
 /// <summary>
 /// Handles Hytale OAuth 2.0 Authorization Code flow with PKCE.

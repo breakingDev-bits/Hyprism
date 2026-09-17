@@ -1,13 +1,13 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Application.Progress;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Game.Launch;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Application.Progress;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Game.Launch;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.Core.Game;
+namespace Hyprism.Core.Game;
 
 /// <summary>
 /// UI-neutral entry point for the complete game launch workflow.

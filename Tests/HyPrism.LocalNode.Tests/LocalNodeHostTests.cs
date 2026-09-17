@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Diagnostics;
@@ -9,13 +9,13 @@ using System.Net.Http.Json;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
-using HyPrism.Core;
-using HyPrism.Core.Game.Authentication;
-using HyPrism.Core.Game.Launch;
-using HyPrism.Core.Infrastructure;
-using HyPrism.LocalNode;
+using Hyprism.Core;
+using Hyprism.Core.Game.Authentication;
+using Hyprism.Core.Game.Launch;
+using Hyprism.Core.Infrastructure;
+using Hyprism.LocalNode;
 
-namespace HyPrism.LocalNode.Tests;
+namespace Hyprism.LocalNode.Tests;
 
 public sealed class LocalNodeHostTests
 {
@@ -111,7 +111,7 @@ public sealed class LocalNodeHostTests
             var certificates = new X509Certificate2Collection();
             certificates.AddRange(new X509Certificate2[] { currentRoot, obsoleteRoot, serverCertificate });
 
-            var obsoleteCertificates = LocalNodeTrustStore.FindObsoleteHyPrismRootCertificates(
+            var obsoleteCertificates = LocalNodeTrustStore.FindObsoleteHyprismRootCertificates(
                 certificates,
                 currentRoot);
 

@@ -1,15 +1,15 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Net;
 using System.Reflection;
 using System.Text.Json;
-using HyPrism.Core;
-using HyPrism.Desktop.Features.News;
-using HyPrism.Desktop.Platform;
+using Hyprism.Core;
+using Hyprism.Desktop.Features.News;
+using Hyprism.Desktop.Platform;
 using Xunit;
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 public sealed class HytaleNewsClientTests
 {

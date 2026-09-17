@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.IO.Compression;
 using System.Text.RegularExpressions;
-using HyPrism.Core.Models;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Core.Game.Mods;
+namespace Hyprism.Core.Game.Mods;
 
 /// <summary>
 /// Compatibility status of a mod for a game version

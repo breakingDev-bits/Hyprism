@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Migrations;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Migrations;
 
-namespace HyPrism.Core.Tests.Infrastructure;
+namespace Hyprism.Core.Tests.Infrastructure;
 
 public sealed class LauncherCachePathsTests
 {

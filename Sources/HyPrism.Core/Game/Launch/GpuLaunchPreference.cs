@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Globalization;
-using HyPrism.Core.Application.Ports;
+using Hyprism.Core.Application.Ports;
 
-namespace HyPrism.Core.Game.Launch;
+namespace Hyprism.Core.Game.Launch;
 
 /// <summary>
 /// Resolves the stored GPU preference into a concrete adapter. Stored values are

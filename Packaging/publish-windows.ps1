@@ -1,4 +1,4 @@
-# Copyright (C) 2026 HyPrism Launcher
+# Copyright (C) 2026 Hyprism Launcher
 # SPDX-License-Identifier: GPL-3.0-only
 
 [CmdletBinding()]
@@ -10,7 +10,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $packagingDirectory = Split-Path -Parent $PSCommandPath
 $projectRoot = Split-Path -Parent $packagingDirectory
-$projectFile = Join-Path $projectRoot 'Sources/HyPrism.Desktop/HyPrism.Desktop.csproj'
+$projectFile = Join-Path $projectRoot 'Sources/Hyprism.Desktop/Hyprism.Desktop.csproj'
 $wixSource = Join-Path $packagingDirectory 'windows'
 $wixVersion = '6.0.2'
 $targets = [System.Collections.Generic.List[string]]::new()
@@ -53,7 +53,7 @@ if ($targets.Count -eq 0 -or $targets.Contains('all')) {
 
 $version = (& dotnet msbuild $projectFile -nologo -getProperty:Version | Select-Object -Last 1).Trim()
 if ([string]::IsNullOrWhiteSpace($version)) {
-    throw 'HyPrism.Desktop.csproj does not define a Version property'
+    throw 'Hyprism.Desktop.csproj does not define a Version property'
 }
 
 $artifactVersion = $version -replace '[^0-9A-Za-z._+-]', '-'
@@ -81,7 +81,7 @@ try {
         -p:PublishReadyToRun=true `
         --output $publishDirectory
 
-    foreach ($appHost in 'HyPrism.Desktop.exe', 'HyPrism.LocalNode.exe') {
+    foreach ($appHost in 'Hyprism.Desktop.exe', 'Hyprism.LocalNode.exe') {
         if (-not (Test-Path (Join-Path $publishDirectory $appHost))) {
             throw "Expected Windows apphost was not published: $appHost"
         }
@@ -103,9 +103,9 @@ try {
         $msiPath = if ($targets.Contains('msi')) {
             Join-Path $outputDirectory "Hyprism-win-x64-$artifactVersion.msi"
         } else {
-            Join-Path $buildRoot 'HyPrism.msi'
+            Join-Path $buildRoot 'Hyprism.msi'
         }
-        & $wix build (Join-Path $wixSource 'HyPrism.msi.wxs') `
+        & $wix build (Join-Path $wixSource 'Hyprism.msi.wxs') `
             -arch x64 `
             -d "PublishDir=$publishDirectory" `
             -d "ProductVersion=$installerVersion" `
@@ -113,7 +113,7 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'WiX could not build the MSI package' }
 
         if ($targets.Contains('exe')) {
-            & $wix build (Join-Path $wixSource 'HyPrism.bundle.wxs') `
+            & $wix build (Join-Path $wixSource 'Hyprism.bundle.wxs') `
                 -arch x64 `
                 -ext WixToolset.BootstrapperApplications.wixext `
                 -d "MsiPath=$msiPath" `

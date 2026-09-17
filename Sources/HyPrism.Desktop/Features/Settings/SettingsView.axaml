@@ -1,14 +1,14 @@
 <!--
-Copyright (C) 2026 HyPrism Launcher
+Copyright (C) 2026 Hyprism Launcher
 SPDX-License-Identifier: GPL-3.0-only
 -->
 
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="using:HyPrism.Desktop.Features.Settings"
-             xmlns:controls="using:HyPrism.Desktop.Controls"
+             xmlns:vm="using:Hyprism.Desktop.Features.Settings"
+             xmlns:controls="using:Hyprism.Desktop.Controls"
              xmlns:easing="clr-namespace:Avalonia.Animation.Easings;assembly=Avalonia.Base"
-             x:Class="HyPrism.Desktop.Features.Settings.SettingsView"
+             x:Class="Hyprism.Desktop.Features.Settings.SettingsView"
              x:Name="SettingsRoot"
              x:DataType="vm:SettingsViewModel"
              SizeChanged="OnSettingsViewSizeChanged">

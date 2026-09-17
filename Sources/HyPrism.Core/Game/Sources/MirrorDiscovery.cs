@@ -1,13 +1,13 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using HyPrism.Core.Models;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Integrations.Hytale;
+using Hyprism.Core.Models;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Integrations.Hytale;
 
-namespace HyPrism.Core.Game.Sources;
+namespace Hyprism.Core.Game.Sources;
 
 /// <summary>
 /// Service for automatically discovering mirror configuration from a URL.

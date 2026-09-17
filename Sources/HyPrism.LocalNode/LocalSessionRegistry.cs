@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Collections.Concurrent;
 using System.Text.Json;
-using HyPrism.Core.Game.Authentication;
+using Hyprism.Core.Game.Authentication;
 
-namespace HyPrism.LocalNode;
+namespace Hyprism.LocalNode;
 
 /// <summary>
 /// Keeps ephemeral OmniAuth signing keys in memory for active local profiles

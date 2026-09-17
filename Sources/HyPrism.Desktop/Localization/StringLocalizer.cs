@@ -1,18 +1,18 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Resources;
 
-namespace HyPrism.Desktop.Localization;
+namespace Hyprism.Desktop.Localization;
 
 public sealed class StringLocalizer
 {
     private const string DefaultLanguage = "en-US";
     private static readonly CultureInfo DefaultCulture = CultureInfo.GetCultureInfo(DefaultLanguage);
     private static readonly ResourceManager Resources = new(
-        "HyPrism.Desktop.Localization.Resources",
+        "Hyprism.Desktop.Localization.Resources",
         typeof(StringLocalizer).Assembly);
     private static readonly IReadOnlyDictionary<string, string> Languages = LoadAvailableLanguages();
 

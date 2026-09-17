@@ -1,12 +1,12 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia;
 using Avalonia.Headless;
 
-[assembly: AvaloniaTestApplication(typeof(HyPrism.Desktop.Tests.TestAppBuilder))]
+[assembly: AvaloniaTestApplication(typeof(Hyprism.Desktop.Tests.TestAppBuilder))]
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 public static class TestAppBuilder
 {

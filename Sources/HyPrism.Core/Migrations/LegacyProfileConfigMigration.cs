@@ -1,13 +1,13 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Models;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Core.Migrations;
+namespace Hyprism.Core.Migrations;
 
 /// <summary>
 /// Moves profile identity out of legacy config fields into Profiles/Profiles.json

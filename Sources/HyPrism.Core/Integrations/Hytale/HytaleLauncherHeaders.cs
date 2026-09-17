@@ -1,9 +1,9 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text.Json;
 
-namespace HyPrism.Core.Integrations.Hytale;
+namespace Hyprism.Core.Integrations.Hytale;
 
 internal static class HytaleLauncherHeaders
 {

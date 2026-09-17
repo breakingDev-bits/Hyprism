@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia.Controls;
@@ -6,7 +6,7 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 
-namespace HyPrism.Desktop.Controls;
+namespace Hyprism.Desktop.Controls;
 
 /// <summary>
 /// Routes wheel input from the content presenter to its owning smooth scroll viewer.

@@ -1,7 +1,7 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-namespace HyPrism.Desktop.Features.News;
+namespace Hyprism.Desktop.Features.News;
 
 /// <summary>
 /// Provides official Hytale news for the Avalonia interface

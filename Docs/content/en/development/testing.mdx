@@ -8,9 +8,9 @@ description: Run the three test suites and choose the right verification boundar
 Run tests from the repository root. Each suite has its own project and CI matrix
 
 ```bash
-dotnet test Tests/HyPrism.Core.Tests/HyPrism.Core.Tests.csproj
-dotnet test Tests/HyPrism.LocalNode.Tests/HyPrism.LocalNode.Tests.csproj
-dotnet test Tests/HyPrism.Desktop.Tests/HyPrism.Desktop.Tests.csproj
+dotnet test Tests/Hyprism.Core.Tests/Hyprism.Core.Tests.csproj
+dotnet test Tests/Hyprism.LocalNode.Tests/Hyprism.LocalNode.Tests.csproj
+dotnet test Tests/Hyprism.Desktop.Tests/Hyprism.Desktop.Tests.csproj
 ```
 
 ## Coverage boundaries
@@ -30,7 +30,7 @@ Desktop tests share an Avalonia application, dispatcher, and compositor and run 
 Use a fully qualified name filter during development
 
 ```bash
-dotnet test Tests/HyPrism.Desktop.Tests/HyPrism.Desktop.Tests.csproj \
+dotnet test Tests/Hyprism.Desktop.Tests/Hyprism.Desktop.Tests.csproj \
   --filter FullyQualifiedName~StringLocalizerTests
 ```
 

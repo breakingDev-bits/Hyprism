@@ -1,12 +1,12 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Models;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Accounts;
+using Hyprism.Core.Models;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Accounts;
 using System.Text.Json;
 
-namespace HyPrism.Core.Tests.Accounts.Authentication;
+namespace Hyprism.Core.Tests.Accounts.Authentication;
 
 public sealed class HytaleAuthenticatorTests
 {

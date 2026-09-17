@@ -57,7 +57,7 @@ The publisher installs pinned WiX tooling in a temporary directory for MSI and E
 pwsh Packaging/publish-windows.ps1 all --output dist
 ```
 
-It verifies both `HyPrism.Desktop.exe` and `HyPrism.LocalNode.exe` before producing artifacts. ZIP contains the same application payload as the installers
+It verifies both `Hyprism.Desktop.exe` and `Hyprism.LocalNode.exe` before producing artifacts. ZIP contains the same application payload as the installers
 
 ## macOS
 
@@ -71,10 +71,10 @@ It builds an Apple Silicon app bundle, checks the Local Node apphost architectur
 
 ## Version source
 
-`Version` in `Sources/HyPrism.Desktop/HyPrism.Desktop.csproj` is the release version source. Publishers query it through MSBuild
+`Version` in `Sources/Hyprism.Desktop/Hyprism.Desktop.csproj` is the release version source. Publishers query it through MSBuild
 
 ```bash
-dotnet msbuild Sources/HyPrism.Desktop/HyPrism.Desktop.csproj \
+dotnet msbuild Sources/Hyprism.Desktop/Hyprism.Desktop.csproj \
   -nologo -getProperty:Version
 ```
 

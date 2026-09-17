@@ -1,11 +1,11 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Application.Ports;
-using HyPrism.Core.Game.Launch;
+using Hyprism.Core.Application.Ports;
+using Hyprism.Core.Game.Launch;
 using Xunit;
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 public sealed class GpuLaunchPreferenceTests
 {

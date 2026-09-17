@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Security.Cryptography.X509Certificates;
-using HyPrism.LocalNode;
+using Hyprism.LocalNode;
 
-namespace HyPrism.LocalNode.Tests;
+namespace Hyprism.LocalNode.Tests;
 
 public sealed class MacOsCertificateTrustTests
 {

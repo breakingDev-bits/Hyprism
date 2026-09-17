@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright (C) 2026 HyPrism Launcher
+# Copyright (C) 2026 Hyprism Launcher
 # SPDX-License-Identifier: GPL-3.0-only
 
 """Validate documentation prose, bilingual routes, and Core service contracts"""
@@ -14,7 +14,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / "Docs" / "content"
-CORE = ROOT / "Sources" / "HyPrism.Core"
+CORE = ROOT / "Sources" / "Hyprism.Core"
 PROSE_FILES = [ROOT / "README.md", *sorted(CONTENT.rglob("*.mdx"))]
 METHOD_PATTERN = re.compile(r"(?:public\s+)?(.+?)\s+(\w+)\((.*)\);$")
 XML_END_TAGS = "summary|param|returns|exception|remarks"

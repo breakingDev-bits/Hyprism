@@ -1,14 +1,14 @@
 <!--
-Copyright (C) 2026 HyPrism Launcher
+Copyright (C) 2026 Hyprism Launcher
 SPDX-License-Identifier: GPL-3.0-only
 -->
 
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:profiles="using:HyPrism.Desktop.Features.Profiles"
-             xmlns:controls="using:HyPrism.Desktop.Controls"
+             xmlns:profiles="using:Hyprism.Desktop.Features.Profiles"
+             xmlns:controls="using:Hyprism.Desktop.Controls"
              xmlns:easing="using:Avalonia.Animation.Easings"
-             x:Class="HyPrism.Desktop.Features.Profiles.ProfilesView"
+             x:Class="Hyprism.Desktop.Features.Profiles.ProfilesView"
              x:Name="ProfilesRoot"
              x:DataType="profiles:ProfilesViewModel"
              SizeChanged="OnProfilesViewSizeChanged">

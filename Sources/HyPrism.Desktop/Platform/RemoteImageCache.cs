@@ -1,13 +1,13 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Collections.Concurrent;
 using System.Security.Cryptography;
 using System.Text;
-using HyPrism.Core;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.Desktop.Platform;
+namespace Hyprism.Desktop.Platform;
 
 /// <summary>
 /// Shares remote image downloads and persists their encoded bytes between launcher runs

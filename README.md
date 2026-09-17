@@ -1,16 +1,16 @@
 <!--
-Copyright (C) 2026 HyPrism Launcher
+Copyright (C) 2026 Hyprism Launcher
 SPDX-License-Identifier: GPL-3.0-only
 -->
 
-<img src="https://raw.githubusercontent.com/hyprismteam/HyPrism/refs/heads/main/Sources/HyPrism.Desktop/Assets/Images/banner.svg" alt="Hyprism Banner" height="256" />
+<img src="https://raw.githubusercontent.com/hyprismteam/Hyprism/refs/heads/main/Sources/Hyprism.Desktop/Assets/Images/banner.svg" alt="Hyprism Banner" height="128" />
 
   *A multiplatform Hytale launcher with mod manager and more!*
 
-  [![Downloads](https://img.shields.io/github/downloads/hyprismteam/HyPrism/total?style=flat&logo=github&label=Downloads&color=2d3748&logoWidth=20)](https://github.com/hyprismteam/HyPrism/releases)
-  [![CI](https://img.shields.io/github/actions/workflow/status/hyprismteam/HyPrism/ci.yml?branch=main&style=flat&label=CI&logo=github&logoWidth=20)](https://github.com/hyprismteam/HyPrism/actions/workflows/ci.yml)
+  [![Downloads](https://img.shields.io/github/downloads/hyprismteam/Hyprism/total?style=flat&logo=github&label=Downloads&color=2d3748&logoWidth=20)](https://github.com/hyprismteam/Hyprism/releases)
+  [![CI](https://img.shields.io/github/actions/workflow/status/hyprismteam/Hyprism/ci.yml?branch=main&style=flat&label=CI&logo=github&logoWidth=20)](https://github.com/hyprismteam/Hyprism/actions/workflows/ci.yml)
   [![Website](https://img.shields.io/badge/Website-hyprism-207e5c?style=flat&logo=google-chrome&logoColor=white&logoWidth=20)](https://hyprismteam.github.io/hyprism-site/)
-  [![GitLab](https://img.shields.io/badge/GitLab-yyyumeniku-FC6D26?style=flat&logo=gitlab&logoColor=white&logoWidth=20)](https://gitlab.com/yyyumeniku/HyPrism)
+  [![GitLab](https://img.shields.io/badge/GitLab-yyyumeniku-FC6D26?style=flat&logo=gitlab&logoColor=white&logoWidth=20)](https://gitlab.com/yyyumeniku/Hyprism)
   [![Discord](https://img.shields.io/badge/Discord-Join-5865F2?style=flat&logo=discord&logoColor=white&logoWidth=20)](https://discord.com/invite/ekZqTtynjp)
   [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support-FFDD00?style=flat&logo=buy-me-a-coffee&logoColor=black&logoWidth=20)](https://buymeacoffee.com/yyyumeniku)
 
@@ -19,7 +19,7 @@ SPDX-License-Identifier: GPL-3.0-only
 
 ## Installation
 
-Downloads are available in [Releases](https://github.com/hyprismteam/HyPrism/releases)
+Downloads are available in [Releases](https://github.com/hyprismteam/Hyprism/releases)
 
 ## Build
 
@@ -32,28 +32,28 @@ Downloads are available in [Releases](https://github.com/hyprismteam/HyPrism/rel
 
 ```bash
 # Clone the repository
-git clone https://github.com/hyprismteam/HyPrism.git
-cd HyPrism
+git clone https://github.com/hyprismteam/Hyprism.git
+cd Hyprism
 
 # Build the application and tests
-dotnet build HyPrism.slnx
+dotnet build Hyprism.slnx
 
 # Run the launcher
-dotnet run --project Sources/HyPrism.Desktop/HyPrism.Desktop.csproj
+dotnet run --project Sources/Hyprism.Desktop/Hyprism.Desktop.csproj
 ```
 
 Hyprism uses a .NET 10 Core library and a native Avalonia 12 desktop application
 
 ## Docs
 
-The English and Russian documentation is available on the [Hyprism documentation site](https://hyprismteam.github.io/HyPrism/docs/). Its Docusaurus sources live in [`Docs/content`](Docs/content)
+The English and Russian documentation is available on the [Hyprism documentation site](https://hyprismteam.github.io/Hyprism/docs/). Its Docusaurus sources live in [`Docs/content`](Docs/content)
 
 ## Credits & Contributors
 
 Special thanks to **Sanasol** for maintaining and creating the [auth server](https://github.com/sanasol/hytale-auth-server)
 
-<a href="https://github.com/hyprismteam/HyPrism/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=hyprismteam/HyPrism" alt="Contributors" />
+<a href="https://github.com/hyprismteam/Hyprism/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=hyprismteam/Hyprism" alt="Contributors" />
 </a>
 
 ## Donate

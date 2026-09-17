@@ -1,9 +1,9 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Desktop.Localization;
+using Hyprism.Desktop.Localization;
 
-namespace HyPrism.Desktop.Shell;
+namespace Hyprism.Desktop.Shell;
 
 /// <summary>
 /// Provides the existing startup screen while Core migrates local data.

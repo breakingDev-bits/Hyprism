@@ -1,16 +1,16 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Diagnostics;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using HyPrism.Core;
-using HyPrism.Core.Game.Authentication;
-using HyPrism.Core.Game.Launch;
-using LauncherLogger = HyPrism.Core.Infrastructure.Logger;
+using Hyprism.Core;
+using Hyprism.Core.Game.Authentication;
+using Hyprism.Core.Game.Launch;
+using LauncherLogger = Hyprism.Core.Infrastructure.Logger;
 
-namespace HyPrism.LocalNode;
+namespace Hyprism.LocalNode;
 
 /// <summary>
 /// Controls the dedicated Local Node process and exposes its control plane to Core
@@ -218,8 +218,8 @@ public sealed class LocalNodeHost : ILocalNodeService, IAsyncDisposable
     private Process StartNodeProcess(string? assetsPath)
     {
         var executableName = OperatingSystem.IsWindows()
-            ? "HyPrism.LocalNode.exe"
-            : "HyPrism.LocalNode";
+            ? "Hyprism.LocalNode.exe"
+            : "Hyprism.LocalNode";
         var executablePath = Path.Combine(AppContext.BaseDirectory, executableName);
         var startInfo = new ProcessStartInfo
         {
@@ -232,7 +232,7 @@ public sealed class LocalNodeHost : ILocalNodeService, IAsyncDisposable
 
         if (!File.Exists(executablePath))
         {
-            var assemblyPath = Path.Combine(AppContext.BaseDirectory, "HyPrism.LocalNode.dll");
+            var assemblyPath = Path.Combine(AppContext.BaseDirectory, "Hyprism.LocalNode.dll");
             if (!File.Exists(assemblyPath))
                 throw new FileNotFoundException("The Local Node executable is missing", executablePath);
             startInfo.FileName = "dotnet";

@@ -1,13 +1,13 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text;
 using System.Text.Json;
-using HyPrism.Core.Game.Authentication;
+using Hyprism.Core.Game.Authentication;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Signers;
 
-namespace HyPrism.Core.Tests.Game.Authentication;
+namespace Hyprism.Core.Tests.Game.Authentication;
 
 public sealed class OmniAuthSessionFactoryTests
 {

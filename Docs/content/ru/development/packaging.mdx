@@ -57,7 +57,7 @@ nix build ./Packaging/linux/flake#hyprism.fetch-deps
 pwsh Packaging/publish-windows.ps1 all --output dist
 ```
 
-Перед созданием пакетов проверяется наличие `HyPrism.Desktop.exe` и `HyPrism.LocalNode.exe`. ZIP содержит те же файлы приложения, что и установщики
+Перед созданием пакетов проверяется наличие `Hyprism.Desktop.exe` и `Hyprism.LocalNode.exe`. ZIP содержит те же файлы приложения, что и установщики
 
 ## macOS
 
@@ -71,10 +71,10 @@ pwsh Packaging/publish-windows.ps1 all --output dist
 
 ## Источник версии
 
-Версия релиза задается в `Version` файла `Sources/HyPrism.Desktop/HyPrism.Desktop.csproj`. Сценарии получают ее через MSBuild
+Версия релиза задается в `Version` файла `Sources/Hyprism.Desktop/Hyprism.Desktop.csproj`. Сценарии получают ее через MSBuild
 
 ```bash
-dotnet msbuild Sources/HyPrism.Desktop/HyPrism.Desktop.csproj \
+dotnet msbuild Sources/Hyprism.Desktop/Hyprism.Desktop.csproj \
   -nologo -getProperty:Version
 ```
 

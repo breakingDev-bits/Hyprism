@@ -1,13 +1,13 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Collections.Concurrent;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Desktop.Platform;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Desktop.Platform;
 
-namespace HyPrism.Desktop.Integrations.GitHub;
+namespace Hyprism.Desktop.Integrations.GitHub;
 
 /// <summary>
 /// Represents a public GitHub account returned by the contributors API

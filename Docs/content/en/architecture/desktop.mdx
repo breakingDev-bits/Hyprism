@@ -1,9 +1,9 @@
 ---
-title: HyPrism.Desktop
+title: Hyprism.Desktop
 description: Avalonia composition, feature ownership, and reusable controls
 ---
 
-# HyPrism.Desktop
+# Hyprism.Desktop
 
 Desktop is the Avalonia application host. It composes Core services, provides native capabilities, and adapts their state into views and commands
 
@@ -25,9 +25,9 @@ Desktop is the Avalonia application host. It composes Core services, provides na
 
 ## Window chrome
 
-The shell uses Avalonia 12's [WindowDrawnDecorations](https://docs.avaloniaui.net/controls/primitives/windowdrawndecorations) model. The main window extends its client area into the decoration region. Windows selects `WindowDecorations="Full"` so native DWM state transitions and snap behavior remain available, while [WindowDecorations.axaml](../../../../Sources/HyPrism.Desktop/Styles/WindowDecorations.axaml) replaces Avalonia's default drawn decoration content
+The shell uses Avalonia 12's [WindowDrawnDecorations](https://docs.avaloniaui.net/controls/primitives/windowdrawndecorations) model. The main window extends its client area into the decoration region. Windows selects `WindowDecorations="Full"` so native DWM state transitions and snap behavior remain available, while [WindowDecorations.axaml](../../../../Sources/Hyprism.Desktop/Styles/WindowDecorations.axaml) replaces Avalonia's default drawn decoration content
 
-Other platforms keep `WindowDecorations="None"` through the platform-specific value and use the same custom shell. The [main window](../../../../Sources/HyPrism.Desktop/Shell/MainWindow.axaml) marks the title bar, caption buttons, and resize hit regions with `WindowDecorationProperties.ElementRole`; keep those roles on interactive chrome elements and do not reintroduce manual Win32 position updates
+Other platforms keep `WindowDecorations="None"` through the platform-specific value and use the same custom shell. The [main window](../../../../Sources/Hyprism.Desktop/Shell/MainWindow.axaml) marks the title bar, caption buttons, and resize hit regions with `WindowDecorationProperties.ElementRole`; keep those roles on interactive chrome elements and do not reintroduce manual Win32 position updates
 
 Caption buttons render vector resources from `Assets/Icons/MaterialSymbols.axaml`. The minimize and close buttons use fixed glyphs, while the maximize button switches between `MaximizeIcon` and `RestoreIcon` when `WindowState` changes. Keep their standard arrow cursor separate from the hand cursor used by ordinary action buttons so native caption hit testing remains stable
 
@@ -42,7 +42,7 @@ The following fragment illustrates a compiled binding to the existing settings v
 ```xml
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:settings="using:HyPrism.Desktop.Features.Settings"
+             xmlns:settings="using:Hyprism.Desktop.Features.Settings"
              x:DataType="settings:SettingsViewModel">
   <ToggleSwitch IsChecked="{Binding CloseAfterLaunch}" />
 </UserControl>
@@ -52,7 +52,7 @@ Publish observable collection changes on the UI dispatcher. Unsubscribe from ser
 
 ## Shared UI foundation
 
-`Styles/HyPrismTheme.axaml` provides the application-owned templates for the window, scrolling, text input, selection, list, combo box, progress, tooltip, and popup surfaces. It must remain before the shared styles so feature-specific selectors can override its defaults. `Styles/Tokens.axaml` defines the colors and semantic tokens used by the theme, while `Styles/Controls.axaml` defines shared control styles. Reuse their classes instead of copying feature-specific variants
+`Styles/HyprismTheme.axaml` provides the application-owned templates for the window, scrolling, text input, selection, list, combo box, progress, tooltip, and popup surfaces. It must remain before the shared styles so feature-specific selectors can override its defaults. `Styles/Tokens.axaml` defines the colors and semantic tokens used by the theme, while `Styles/Controls.axaml` defines shared control styles. Reuse their classes instead of copying feature-specific variants
 
 | Control | Responsibility |
 | --- | --- |
@@ -77,4 +77,4 @@ News and GitHub clients use the shared HTTP identity. Parsed news lives in `Cach
 
 Native file selection uses Avalonia's `StorageProvider`. External links preserve escaped absolute URIs, including OAuth parameters. Neither capability belongs in Core
 
-Source: [MainWindowViewModel](../../../../Sources/HyPrism.Desktop/Shell/MainWindowViewModel.cs), [InstancesViewModel](../../../../Sources/HyPrism.Desktop/Features/Instances/InstancesViewModel.cs), [NewsViewModel](../../../../Sources/HyPrism.Desktop/Features/News/NewsViewModel.cs), [Shared controls](../../../../Sources/HyPrism.Desktop/Controls)
+Source: [MainWindowViewModel](../../../../Sources/Hyprism.Desktop/Shell/MainWindowViewModel.cs), [InstancesViewModel](../../../../Sources/Hyprism.Desktop/Features/Instances/InstancesViewModel.cs), [NewsViewModel](../../../../Sources/Hyprism.Desktop/Features/News/NewsViewModel.cs), [Shared controls](../../../../Sources/Hyprism.Desktop/Controls)

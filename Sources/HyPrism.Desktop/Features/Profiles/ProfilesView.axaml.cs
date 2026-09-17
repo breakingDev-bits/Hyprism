@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.ComponentModel;
@@ -8,9 +8,9 @@ using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using HyPrism.Desktop.Controls;
+using Hyprism.Desktop.Controls;
 
-namespace HyPrism.Desktop.Features.Profiles;
+namespace Hyprism.Desktop.Features.Profiles;
 
 /// <summary>
 /// Hosts the responsive master-detail layout for the profile manager.

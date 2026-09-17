@@ -44,7 +44,7 @@ To compare a Windows composition backend in PowerShell
 
 ```powershell
 $env:HYPRISM_WIN32_COMPOSITION = 'winui'
-dotnet run --project Sources/HyPrism.Desktop/HyPrism.Desktop.csproj
+dotnet run --project Sources/Hyprism.Desktop/Hyprism.Desktop.csproj
 ```
 
 Supported values are `dxgi` (default), `winui`, and `dcomp`. Remove the variable after diagnosis
@@ -63,7 +63,7 @@ Remove-Item Env:HYPRISM_WIN32_COMPOSITION
 Run the existing Desktop suite
 
 ```bash
-dotnet test Tests/HyPrism.Desktop.Tests/HyPrism.Desktop.Tests.csproj
+dotnet test Tests/Hyprism.Desktop.Tests/Hyprism.Desktop.Tests.csproj
 ```
 
 `AvaloniaPerformanceTests` checks initial visual count, deferred realization, virtualization, and batched collection notifications. Render tests wait for observable final state instead of relying on an assumed animation duration

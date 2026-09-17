@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Diagnostics;
@@ -9,21 +9,21 @@ using Avalonia.Headless.XUnit;
 using Avalonia.Labs.Lottie;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Application.Ports;
-using HyPrism.Core.Application.Progress;
-using HyPrism.Core.Game;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Game.Launch;
-using HyPrism.Desktop.Features.News;
-using HyPrism.Desktop.Features.Settings;
-using HyPrism.Desktop.Localization;
-using HyPrism.Desktop.Platform;
-using HyPrism.Desktop.Shell;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Application.Ports;
+using Hyprism.Core.Application.Progress;
+using Hyprism.Core.Game;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Game.Launch;
+using Hyprism.Desktop.Features.News;
+using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Localization;
+using Hyprism.Desktop.Platform;
+using Hyprism.Desktop.Shell;
 using Moq;
 using Xunit;
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 public sealed class StartupLoadingTests
 {
@@ -98,7 +98,8 @@ public sealed class StartupLoadingTests
             window.FindControl<Border>("StartupLoadingScreen"));
         var launcherShell = Assert.IsType<Grid>(window.FindControl<Grid>("LauncherShell"));
         var startupAnimation = Assert.IsType<Lottie>(window.FindControl<Lottie>("StartupAnimation"));
-        var startupBrand = Assert.IsType<Image>(window.FindControl<Image>("StartupBrand"));
+        var startupBrand = Assert.IsType<StackPanel>(window.FindControl<StackPanel>("StartupBrand"));
+        var startupBrandLabel = Assert.IsType<TextBlock>(window.FindControl<TextBlock>("StartupBrandLabel"));
         var windowChrome = Assert.IsType<Grid>(window.FindControl<Grid>("WindowChrome"));
         var minimizeButton = Assert.IsType<Button>(window.FindControl<Button>("MinimizeWindowButton"));
         var resizeEast = Assert.IsType<Border>(window.FindControl<Border>("ResizeEast"));
@@ -110,6 +111,7 @@ public sealed class StartupLoadingTests
         Assert.Equal(96, startupAnimation.Height);
         Assert.NotNull(startupAnimation.OpacityMask);
         Assert.Equal(1, Grid.GetRow(startupBrand));
+        Assert.Equal("Hyprism Launcher", startupBrandLabel.Text);
         Assert.True(startupBrand.Bounds.Top > startupAnimation.Bounds.Top);
         Assert.True(windowChrome.IsEffectivelyVisible);
         Assert.True(minimizeButton.IsEffectivelyVisible);

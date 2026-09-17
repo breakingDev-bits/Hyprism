@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2026 HyPrism Launcher
+Copyright (C) 2026 Hyprism Launcher
 SPDX-License-Identifier: GPL-3.0-only
 -->
 
@@ -9,12 +9,12 @@ SPDX-License-Identifier: GPL-3.0-only
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>HyPrism.LocalNode</AssemblyName>
-    <RootNamespace>HyPrism.LocalNode</RootNamespace>
+    <AssemblyName>Hyprism.LocalNode</AssemblyName>
+    <RootNamespace>Hyprism.LocalNode</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../HyPrism.Core/HyPrism.Core.csproj" />
+    <ProjectReference Include="../Hyprism.Core/Hyprism.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia;
@@ -12,17 +12,17 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Game.Launch;
-using HyPrism.Core.Models;
-using HyPrism.Desktop.Controls;
-using HyPrism.Desktop.Features.Settings;
-using HyPrism.Desktop.Localization;
-using HyPrism.Desktop.Platform;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Game.Launch;
+using Hyprism.Core.Models;
+using Hyprism.Desktop.Controls;
+using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Localization;
+using Hyprism.Desktop.Platform;
 using Moq;
 using Xunit;
 
-namespace HyPrism.Desktop.Tests;
+namespace Hyprism.Desktop.Tests;
 
 public sealed class DataSettingsViewModelTests
 {

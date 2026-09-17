@@ -1,10 +1,10 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HyPrism.Desktop.Features.Instances;
+namespace Hyprism.Desktop.Features.Instances;
 
 public sealed partial class InstanceModItemViewModel(
     string id,

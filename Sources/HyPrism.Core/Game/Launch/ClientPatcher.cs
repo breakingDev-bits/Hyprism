@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Buffers.Binary;
@@ -6,9 +6,9 @@ using System.Text;
 using System.Text.Json;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using HyPrism.Core.Infrastructure;
+using Hyprism.Core.Infrastructure;
 
-namespace HyPrism.Core.Game.Launch;
+namespace Hyprism.Core.Game.Launch;
 
 /// <summary>
 /// Patches the HytaleClient binary to replace hytale.com domain references

@@ -1,25 +1,25 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.DependencyInjection;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Application.Ports;
-using HyPrism.Core.Application.Progress;
-using HyPrism.Core.Accounts;
-using HyPrism.Core.Game;
-using HyPrism.Core.Game.Assets;
-using HyPrism.Core.Game.Patching;
-using HyPrism.Core.Game.Download;
-using HyPrism.Core.Game.Instances;
-using HyPrism.Core.Game.Launch;
-using HyPrism.Core.Game.Mods;
-using HyPrism.Core.Game.Sources;
-using HyPrism.Core.Game.Versions;
-using HyPrism.Core.Migrations;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Application.Ports;
+using Hyprism.Core.Application.Progress;
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Game;
+using Hyprism.Core.Game.Assets;
+using Hyprism.Core.Game.Patching;
+using Hyprism.Core.Game.Download;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Game.Launch;
+using Hyprism.Core.Game.Mods;
+using Hyprism.Core.Game.Sources;
+using Hyprism.Core.Game.Versions;
+using Hyprism.Core.Migrations;
 
-namespace HyPrism.Core;
+namespace Hyprism.Core;
 
 /// <summary>
 /// Builds and initializes the shared launcher service graph

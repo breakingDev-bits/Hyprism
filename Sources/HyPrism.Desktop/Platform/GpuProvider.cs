@@ -1,12 +1,12 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using HyPrism.Core.Infrastructure;
-using HyPrism.Core.Application.Ports;
+using Hyprism.Core.Infrastructure;
+using Hyprism.Core.Application.Ports;
 
-namespace HyPrism.Desktop.Platform;
+namespace Hyprism.Desktop.Platform;
 
 /// <summary>
 /// Detects graphics adapters through the platform tools available to Desktop

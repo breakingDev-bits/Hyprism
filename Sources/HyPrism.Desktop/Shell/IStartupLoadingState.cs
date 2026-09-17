@@ -1,7 +1,7 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-namespace HyPrism.Desktop.Shell;
+namespace Hyprism.Desktop.Shell;
 
 /// <summary>
 /// Minimal state required by the startup loading screen before launcher data is available.

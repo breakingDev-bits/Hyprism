@@ -1,9 +1,9 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Models;
+using Hyprism.Core.Models;
 
-namespace HyPrism.Core.Game.Mods;
+namespace Hyprism.Core.Game.Mods;
 
 /// <summary>
 /// Provides mod management functionality including search, installation, and update checking

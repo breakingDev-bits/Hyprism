@@ -1,4 +1,4 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
 using System.Collections.ObjectModel;
@@ -10,11 +10,11 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HyPrism.Desktop.Controls;
-using HyPrism.Desktop.Localization;
-using HyPrism.Desktop.Platform;
+using Hyprism.Desktop.Controls;
+using Hyprism.Desktop.Localization;
+using Hyprism.Desktop.Platform;
 
-namespace HyPrism.Desktop.Features.News;
+namespace Hyprism.Desktop.Features.News;
 
 public sealed class NewsArticleViewModel : ObservableObject, IDisposable
 {

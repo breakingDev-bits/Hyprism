@@ -1,9 +1,9 @@
-// Copyright (C) 2026 HyPrism Launcher
+// Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using HyPrism.Core.Accounts;
+using Hyprism.Core.Accounts;
 
-namespace HyPrism.Core.Game;
+namespace Hyprism.Core.Game;
 
 /// <summary>
 /// Coordinates a user-initiated game launch independently from any UI transport
