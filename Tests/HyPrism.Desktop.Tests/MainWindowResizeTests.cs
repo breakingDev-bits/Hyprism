@@ -43,6 +43,40 @@ public sealed class MainWindowResizeTests
         }
     }
 
+    [AvaloniaFact]
+    public void CaptionIconsUseMaterialSymbolsAndFollowWindowState()
+    {
+        var window = new MainWindow();
+
+        try
+        {
+            var minimizeIcon = Assert.IsAssignableFrom<Avalonia.Controls.Shapes.Path>(
+                window.FindControl<Control>("MinimizeWindowIcon"));
+            var maximizeIcon = Assert.IsAssignableFrom<Avalonia.Controls.Shapes.Path>(
+                window.FindControl<Control>("MaximizeWindowIcon"));
+            var restoreIcon = Assert.IsAssignableFrom<Avalonia.Controls.Shapes.Path>(
+                window.FindControl<Control>("RestoreWindowIcon"));
+
+            Assert.Same(window.FindResource("MinimizeIcon"), minimizeIcon.Data);
+            Assert.Same(window.FindResource("MaximizeIcon"), maximizeIcon.Data);
+            Assert.Same(window.FindResource("RestoreIcon"), restoreIcon.Data);
+            Assert.True(maximizeIcon.IsVisible);
+            Assert.False(restoreIcon.IsVisible);
+
+            window.WindowState = WindowState.Maximized;
+            Assert.False(maximizeIcon.IsVisible);
+            Assert.True(restoreIcon.IsVisible);
+
+            window.WindowState = WindowState.Normal;
+            Assert.True(maximizeIcon.IsVisible);
+            Assert.False(restoreIcon.IsVisible);
+        }
+        finally
+        {
+            window.Close();
+        }
+    }
+
     private static void AssertElementRole(
         MainWindow window,
         string name,

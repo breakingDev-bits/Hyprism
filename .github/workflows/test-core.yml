@@ -39,4 +39,20 @@ jobs:
           dotnet-quality: ${{ env.DOTNET_QUALITY }}
 
       - name: Run Core tests
-        run: dotnet test Tests/HyPrism.Core.Tests/HyPrism.Core.Tests.csproj --configuration Release
+        run: dotnet test Tests/HyPrism.Core.Tests/HyPrism.Core.Tests.csproj --configuration Release --logger "trx;LogFileName=core-${{ matrix.platform }}.trx" --results-directory "${{ runner.temp }}/hyprism-test-results"
+
+      - name: Write test summary
+        if: always()
+        shell: pwsh
+        run: >
+          pwsh -NoProfile -File ./Scripts/write-test-summary.ps1
+          -ResultsDirectory "${{ runner.temp }}/hyprism-test-results"
+          -Title "Core tests (${{ matrix.platform }})"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-test-results-${{ matrix.platform }}
+          path: ${{ runner.temp }}/hyprism-test-results/*.trx
+          if-no-files-found: ignore

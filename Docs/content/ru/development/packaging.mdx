@@ -87,11 +87,13 @@ dotnet msbuild Sources/HyPrism.Desktop/HyPrism.Desktop.csproj \
 | `ci.yml` | Группы проверок Core, Desktop, Local Node и Packaging |
 | `test-core.yml`, `test-desktop.yml`, `test-local-node.yml` | Отдельные матрицы Ubuntu, Windows и macOS |
 | `build.yml` | Выбор платформ |
-| `build-linux.yml`, `build-nix.yml`, `build-windows.yml`, `build-macos.yml` | Зависимости платформ и вызов упаковщиков |
+| `build-linux.yml`, `build-windows.yml`, `build-macos.yml` | Зависимости платформ, проверка Nix и вызов упаковщиков |
 | `release.yml` | Проверка версии, общие сборки пакетов, релизные файлы |
 | `docs-pages.yml` | Проверка документации и GitHub Pages |
 | `reuse.yml` | Лицензионные заголовки и REUSE |
 
 Отдельный workflow Flathub и `Scripts/update-flathub-manifest.sh` содержат старые пути Electron/frontend. Они не являются поддерживаемым входом нативной упаковки и требуют миграции перед использованием
+
+Linux workflow создает нативные Linux-пакеты и в том же job запускает `nix flake check --print-build-logs` для Nix-пакета. В `ci.yml` группа Packaging ожидает завершения workflow тестов Core, Desktop и Local Node
 
 Исходники: [Packaging](../../../../Packaging), [GitHub Actions](../../../../.github/workflows)

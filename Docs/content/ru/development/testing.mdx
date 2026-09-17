@@ -38,9 +38,11 @@ dotnet test Tests/HyPrism.Desktop.Tests/HyPrism.Desktop.Tests.csproj \
 
 ## CI и ручные проверки
 
-Core, Desktop и Local Node отдельно запускаются в Ubuntu, Windows и macOS с `fail-fast: false`. Упаковка образует отдельную группу
+Core, Desktop и Local Node запускаются в отдельных reusable workflow, каждый с матрицей Ubuntu, Windows и macOS и `fail-fast: false`. Каждый job матрицы записывает GitHub Step Summary из TRX-файла с общим количеством, пройденными, пропущенными и ошибками. При падении запуска в сводку добавляется последняя ошибка в текстовом кодовом блоке, а TRX-файл загружается как artifact job
 
-Workflow Local Node для macOS также публикует apphost и проверяет HTTPS health с созданным центром в одноразовой связке ключей runner. Это не проверяет интерактивный запрос доверия на компьютере игрока или полноценный запуск Hytale
+Элемент macOS матрицы Local Node также публикует apphost и проверяет HTTPS health с созданным центром в одноразовой связке ключей runner. Это шаг macOS job Local Node, а не отдельный test job. Он не проверяет интерактивный запрос доверия на компьютере игрока или полноценный запуск Hytale
+
+Упаковка образует отдельную группу проверок. В `ci.yml` она запускается только после успешного завершения reusable workflow Core, Desktop и Local Node
 
 При изменении соответствующей границы проверяйте системный композитор, диалоги и совместимость с игрой вручную. Для изменения документации выполняйте [проверку контента и статический экспорт](/docs/development/documentation)
 

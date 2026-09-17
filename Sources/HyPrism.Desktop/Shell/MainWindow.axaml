@@ -371,21 +371,34 @@ SPDX-License-Identifier: GPL-3.0-only
               VerticalContentAlignment="Stretch"
               Click="OnMinimizeClicked"
               WindowDecorationProperties.ElementRole="MinimizeButton">
-        <Border Classes="windowMinimize"
-                Width="11"
-                Height="1.5"
-                Margin="0,0,0,10"
-                VerticalAlignment="Bottom" />
+        <Path x:Name="MinimizeWindowIcon"
+              Classes="windowIcon"
+              Width="11"
+              Height="1.5"
+              Margin="0,0,0,10"
+              VerticalAlignment="Bottom"
+              Stretch="Uniform"
+              Data="{StaticResource MinimizeIcon}" />
       </Button>
       <Button x:Name="MaximizeWindowButton"
               Classes="window"
               Click="OnMaximizeClicked"
               WindowDecorationProperties.ElementRole="MaximizeButton">
-        <Path Classes="windowIcon"
-              Width="11"
-              Height="11"
-              Stretch="Uniform"
-              Data="{StaticResource MaximizeIcon}" />
+        <Grid Width="11" Height="11">
+          <Path x:Name="MaximizeWindowIcon"
+                Classes="windowIcon"
+                Width="11"
+                Height="11"
+                Stretch="Uniform"
+                Data="{StaticResource MaximizeIcon}" />
+          <Path x:Name="RestoreWindowIcon"
+                Classes="windowIcon"
+                Width="11"
+                Height="11"
+                Stretch="Uniform"
+                IsVisible="False"
+                Data="{StaticResource RestoreIcon}" />
+        </Grid>
       </Button>
       <Button x:Name="CloseWindowButton"
               Classes="window"

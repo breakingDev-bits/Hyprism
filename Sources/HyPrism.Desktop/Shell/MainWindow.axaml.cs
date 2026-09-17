@@ -34,7 +34,22 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        PropertyChanged += OnWindowPropertyChanged;
+        UpdateWindowStateIcon();
         DataContextChanged += OnDataContextChanged;
+    }
+
+    private void OnWindowPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == WindowStateProperty)
+            UpdateWindowStateIcon();
+    }
+
+    private void UpdateWindowStateIcon()
+    {
+        var isRestored = WindowState is WindowState.Maximized or WindowState.FullScreen;
+        MaximizeWindowIcon.IsVisible = !isRestored;
+        RestoreWindowIcon.IsVisible = isRestored;
     }
 
     private void OnDataContextChanged(object? sender, EventArgs e)

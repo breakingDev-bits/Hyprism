@@ -29,6 +29,8 @@ The shell uses Avalonia 12's [WindowDrawnDecorations](https://docs.avaloniaui.ne
 
 Other platforms keep `WindowDecorations="None"` through the platform-specific value and use the same custom shell. The [main window](../../../../Sources/HyPrism.Desktop/Shell/MainWindow.axaml) marks the title bar, caption buttons, and resize hit regions with `WindowDecorationProperties.ElementRole`; keep those roles on interactive chrome elements and do not reintroduce manual Win32 position updates
 
+Caption buttons render vector resources from `Assets/Icons/MaterialSymbols.axaml`. The minimize and close buttons use fixed glyphs, while the maximize button switches between `MaximizeIcon` and `RestoreIcon` when `WindowState` changes. Keep their standard arrow cursor separate from the hand cursor used by ordinary action buttons so native caption hit testing remains stable
+
 ## Views and state
 
 Compiled bindings are enabled for the Desktop project. Views declare `x:DataType`; view models expose observable state and commands. Code-behind handles behavior tied to input, layout, focus, or animation

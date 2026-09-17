@@ -43,6 +43,7 @@ jobs:
 
   packaging:
     name: Packaging
+    needs: [core, desktop, local-node]
     uses: ./.github/workflows/build.yml
     with:
       platforms: all

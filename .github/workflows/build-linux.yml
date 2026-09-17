@@ -28,6 +28,13 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           dotnet-quality: ${{ env.DOTNET_QUALITY }}
 
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            access-tokens = github.com=${{ github.token }}
+
       - name: Install Linux packaging tools
         run: |
           retry() {
@@ -64,6 +71,10 @@ jobs:
         run: |
           ./Packaging/publish-linux.sh all \
             --output dist
+
+      - name: Check and build Nix flake
+        run: nix flake check --print-build-logs
+        working-directory: Packaging/linux/flake
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
