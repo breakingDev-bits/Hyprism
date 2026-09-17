@@ -71,6 +71,9 @@
                 "$out/share/applications/io.github.hyprismteam.HyPrism.desktop"
               install -Dm644 Sources/Hyprism.Desktop/Assets/Images/logo.svg \
                 "$out/share/icons/hicolor/scalable/apps/io.github.hyprismteam.HyPrism.svg"
+              # Keep the source viewBox and make the packaged icon viewport square
+              sed -E -i '0,/<svg[[:space:]]/{s/(<svg[^>]*width=")([^"]+)("[^>]*height=")[^"]+/\1\2\3\2/}' \
+                "$out/share/icons/hicolor/scalable/apps/io.github.hyprismteam.HyPrism.svg"
             '';
 
             meta = {

@@ -96,6 +96,15 @@ require_command() {
     fi
 }
 
+install_icon_asset() {
+    local destination="$1"
+
+    # Flatpak requires square icon dimensions. Keep the original viewBox so the artwork is preserved
+    install -Dm644 "$ICON_ASSET" "$destination"
+    sed -E -i '0,/<svg[[:space:]]/{s/(<svg[^>]*width=")([^"]+)("[^>]*height=")[^"]+/\1\2\3\2/}' \
+        "$destination"
+}
+
 contains_target() {
     local expected="$1"
     local target
@@ -191,7 +200,7 @@ install_desktop_assets() {
     local root="$1"
     install -Dm644 "$ASSETS_DIR/$APP_ID.desktop" \
         "$root/usr/share/applications/$APP_ID.desktop"
-    install -Dm644 "$ICON_ASSET" \
+    install_icon_asset \
         "$root/usr/share/icons/hicolor/scalable/apps/$APP_ID.svg"
 }
 
@@ -269,7 +278,7 @@ build_appimage() {
     install -d "$app_dir/usr/lib/hyprism" "$app_dir/usr/share/applications" "$app_dir/usr/share/icons/hicolor/scalable/apps"
     cp -a "$PUBLISH_DIR/." "$app_dir/usr/lib/hyprism/"
     install -Dm644 "$ASSETS_DIR/$APP_ID.desktop" "$app_dir/$APP_ID.desktop"
-    install -Dm644 "$ICON_ASSET" "$app_dir/$APP_ID.svg"
+    install_icon_asset "$app_dir/$APP_ID.svg"
     cat >"$app_dir/AppRun" <<'EOF'
 #!/usr/bin/env bash
 set -euo pipefail
@@ -286,7 +295,7 @@ build_flatpak() {
     install -d "$root/repo" "$root/source"
     cp -a "$PUBLISH_DIR" "$root/source/publish"
     cp "$ASSETS_DIR/$APP_ID.desktop" "$root/source/$APP_ID.desktop"
-    cp "$ICON_ASSET" "$root/source/$APP_ID.svg"
+    install_icon_asset "$root/source/$APP_ID.svg"
     cp "$manifest" "$root/source/manifest.yml"
     (
         cd "$root/source"
