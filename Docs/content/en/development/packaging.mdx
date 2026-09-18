@@ -28,6 +28,8 @@ Install the tools needed by your selected targets: `dpkg-deb`, `rpmbuild`, `appi
 
 AppImage tooling can be selected with `--appimagetool` or `APPIMAGETOOL`. Flatpak exports and bundles use the `stable` branch
 
+The Flatpak bundle currently uses Avalonia's X11 backend through XWayland, so its manifest grants `--socket=x11` and does not grant the conditional `fallback-x11` or native `wayland` sockets. This keeps KDE Plasma Wayland launches working until native Wayland is enabled in the desktop host
+
 Linux packages preserve the source artwork from `logo.svg` and publish it in a square SVG viewport required by application icon validators
 
 ## NixOS

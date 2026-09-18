@@ -28,6 +28,8 @@ description: Платформенные пакеты, CI, целевые арт�
 
 Инструмент AppImage можно задать через `--appimagetool` или `APPIMAGETOOL`. Экспорт Flatpak и bundle используют ветку `stable`
 
+Flatpak сейчас использует бэкенд Avalonia X11 через XWayland, поэтому его манифест выдаёт `--socket=x11` и не выдаёт условный `fallback-x11` или нативный сокет `wayland`. Это позволяет запускать KDE Plasma Wayland до включения нативного Wayland в настольном хосте
+
 Linux-пакеты сохраняют исходный рисунок из `logo.svg` и публикуют его в квадратном SVG viewport, который требуется валидаторам иконок приложений
 
 ## NixOS
