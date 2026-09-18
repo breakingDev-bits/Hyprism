@@ -29,6 +29,16 @@ SPDX-FileCopyrightText = "2026 Hyprism Launcher"
 SPDX-License-Identifier = "GPL-3.0-only"
 
 [[annotations]]
+path = [
+    "Sources/Hyprism.Desktop/Assets/Images/logo.svg",
+    "Sources/Hyprism.Desktop/Assets/Images/banner.svg",
+    "Sources/Hyprism.Desktop/Assets/Brands/Hyprism*"
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Hyprism Launcher"
+SPDX-License-Identifier = "CC-BY-SA-4.0"
+
+[[annotations]]
 path = "Sources/Hyprism.Desktop/Assets/Fonts/GoogleSans-*.ttf"
 precedence = "aggregate"
 SPDX-FileCopyrightText = "Google LLC"

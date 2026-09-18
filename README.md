@@ -69,6 +69,7 @@ Hyprism is licensed under the **GNU General Public License v3.0 (GPL-3.0)**
 - Full license text: [LICENSE](LICENSE)
 - License texts used by project assets: [Licenses](Licenses)
 - Machine-readable licensing and CI compliance: [REUSE.toml](REUSE.toml)
+- Project logo and banner assets: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), with the license text in [Licenses/CC-BY-SA-4.0.txt](Licenses/CC-BY-SA-4.0.txt)
 
 ### Unofficial Product
 **Hyprism** is an unofficial, open-source launcher for Hytale. This project is **not** affiliated with, endorsed by, sponsored by, or approved by **Hypixel Studios**, **Riot Games**, or any of their affiliates

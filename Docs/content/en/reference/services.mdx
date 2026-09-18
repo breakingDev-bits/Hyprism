@@ -83,6 +83,8 @@ Where a contract accepts `CancellationToken`, forward it through network and fil
 
 `IHytaleAuthenticator.LoginAsync` creates an OAuth PKCE challenge and passes an authorization URI to the host. The callback renderer returns success or failure HTML to the browser. Session storage is profile-scoped through `TokenStore`
 
+`LoginAsync` completes the loopback HTTP response before continuing with token exchange, so the browser can render the callback page while the launcher finishes authentication
+
 Switching profiles reloads the current session. Version discovery may request a valid session from any official profile, while game launch uses the selected profile. Do not confuse download authorization with active player identity
 
 Never log or copy access, refresh, identity, or game-session tokens into UI diagnostics. Official account concurrency is coordinated by `OfficialLaunchGate` and the persistent process registry

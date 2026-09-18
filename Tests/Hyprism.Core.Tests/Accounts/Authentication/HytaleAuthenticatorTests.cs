@@ -4,6 +4,7 @@
 using Hyprism.Core.Models;
 using Hyprism.Core.Infrastructure;
 using Hyprism.Core.Accounts;
+using System.Net;
 using System.Text.Json;
 
 namespace Hyprism.Core.Tests.Accounts.Authentication;
@@ -183,6 +184,58 @@ public sealed class HytaleAuthenticatorTests
     }
 
     [Fact]
+    public async Task LoginAsync_DeliversCallbackPageBeforeCompletingAuthentication()
+    {
+        var appDir = Path.Combine(Path.GetTempPath(), $"hyprism-auth-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(appDir);
+
+        try
+        {
+            var config = new Mock<IConfigStore>();
+            config.SetupGet(service => service.Configuration).Returns(new Config());
+            var renderer = new Mock<IOAuthCallbackPageRenderer>();
+            renderer
+                .Setup(value => value.Render(true, It.IsAny<string>()))
+                .Returns("<!doctype html><html><body>branded-success-page</body></html>");
+            using var httpClient = new HttpClient(new SuccessfulOAuthHandler());
+            var auth = new HytaleAuthenticator(httpClient, appDir, config.Object, renderer.Object);
+            using var callbackClient = new HttpClient();
+            Task<string>? callbackResponseTask = null;
+
+            var session = await auth.LoginAsync((uri, _) =>
+            {
+                var state = GetQueryValue(uri, "state");
+                using var stateDocument = JsonDocument.Parse(Convert.FromBase64String(state));
+                var port = stateDocument.RootElement.GetProperty("port").GetString();
+                var callbackState = stateDocument.RootElement.GetProperty("state").GetString();
+                Assert.False(string.IsNullOrWhiteSpace(port));
+                Assert.False(string.IsNullOrWhiteSpace(callbackState));
+
+                callbackResponseTask = callbackClient.GetStringAsync(
+                    $"http://127.0.0.1:{port}/authorization-callback" +
+                    $"?code=test-code&state={Uri.EscapeDataString(callbackState!)}");
+                return Task.FromResult(true);
+            });
+
+            Assert.NotNull(session);
+            Assert.Equal("TestPlayer", session.Username);
+            Assert.NotNull(callbackResponseTask);
+            var responseHtml = await callbackResponseTask;
+
+            Assert.Contains("branded-success-page", responseHtml, StringComparison.Ordinal);
+            renderer.Verify(
+                value => value.Render(
+                    true,
+                    "Authorization completed successfully"),
+                Times.Once);
+        }
+        finally
+        {
+            Directory.Delete(appDir, recursive: true);
+        }
+    }
+
+    [Fact]
     public async Task LoginAsync_RejectsMissingHostCallback()
     {
         var appDir = Path.Combine(Path.GetTempPath(), $"hyprism-auth-{Guid.NewGuid():N}");
@@ -218,5 +271,35 @@ public sealed class HytaleAuthenticatorTests
         }
 
         throw new InvalidOperationException($"Query parameter '{name}' was not found");
+    }
+
+    private sealed class SuccessfulOAuthHandler : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            var responseBody = request.RequestUri?.Host switch
+            {
+                "oauth.accounts.hytale.com" => """
+                    {"access_token":"access-token","refresh_token":"refresh-token","expires_in":3600}
+                    """,
+                "account-data.hytale.com" => """
+                    {"owner":"owner","profiles":[{"username":"TestPlayer","uuid":"550e8400-e29b-41d4-a716-446655440000"}]}
+                    """,
+                "sessions.hytale.com" => """
+                    {"sessionToken":"session-token","identityToken":"identity-token"}
+                    """,
+                "launcher.hytale.com" => """
+                    {"version":"test"}
+                    """,
+                _ => throw new InvalidOperationException($"Unexpected HTTP request: {request.RequestUri}")
+            };
+
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(responseBody)
+            });
+        }
     }
 }

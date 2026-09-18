@@ -372,7 +372,6 @@ public sealed partial class ProfilesViewModel : ObservableObject, IDisposable
         ActiveProfileChanged?.Invoke(
             this,
             new ActiveProfileChangedEventArgs(profile.Name, profile.IsOfficial));
-        SetStatus(_localizer["profiles.saved"], isError: false);
     }
 
     [RelayCommand(AllowConcurrentExecutions = true)]
@@ -447,7 +446,6 @@ public sealed partial class ProfilesViewModel : ObservableObject, IDisposable
             ActiveProfileChanged?.Invoke(
                 this,
                 new ActiveProfileChangedEventArgs(firstProfile.Name, firstProfile.IsOfficial));
-            SetStatus(_localizer["profiles.saved"], isError: false);
         }
         catch (OperationCanceledException) when (authenticationCancellation.IsCancellationRequested)
         {

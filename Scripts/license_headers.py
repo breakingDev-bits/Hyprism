@@ -41,6 +41,10 @@ THIRD_PARTY_HEADERS = {
         "Copyright (C) .NET authors",
         "SPDX-License-" "Identifier: CC0-1.0",
     ),
+    "Sources/Hyprism.Desktop/Assets/Brands/Hyprism.axaml": (
+        "Copyright (C) 2026 Hyprism Launcher",
+        "SPDX-License-" "Identifier: CC-BY-SA-4.0",
+    ),
     "Sources/Hyprism.Desktop/Assets/Brands/YouTube.axaml": (
         "YouTube and the YouTube logo are trademarks of Google LLC",
         "SPDX-License-" "Identifier: LicenseRef-YouTube",

@@ -195,12 +195,71 @@ public sealed class ProfilesViewModelTests
         Assert.Equal(1, profileChanged);
         Assert.False(viewModel.IsCreationVisible);
         Assert.True(viewModel.IsOfflineCreationVisible);
+        Assert.False(viewModel.HasStatusMessage);
 
         viewModel.CompleteCreationTransition();
 
         Assert.False(viewModel.IsCreateChoiceVisible);
         Assert.False(viewModel.IsOfflineCreationVisible);
         Assert.False(viewModel.IsOfficialCreationVisible);
+    }
+
+    [AvaloniaFact]
+    public async Task OfficialSignInDoesNotShowSuccessStatusAfterCreatingProfile()
+    {
+        const string profileUuid = "11111111-1111-1111-1111-111111111111";
+        var profiles = new List<Profile>();
+        var activeProfileId = string.Empty;
+        var profileManager = new Mock<IProfileManager>();
+        var profileRepository = new Mock<IProfileRepository>();
+        var uriLauncher = new Mock<IExternalUriLauncher>();
+        var authenticator = new Mock<IHytaleAuthenticator>();
+        profileRepository.Setup(repository => repository.GetProfiles())
+            .Returns(() => profiles.ToList());
+        profileRepository.Setup(repository => repository.GetSelectedProfileId())
+            .Returns(() => activeProfileId);
+        profileRepository.Setup(repository => repository.CreateProfile(
+                "Official_Player",
+                profileUuid,
+                true))
+            .Returns((string name, string uuid, bool _) =>
+            {
+                var profile = new Profile
+                {
+                    Id = "official-player",
+                    Name = name,
+                    UUID = uuid,
+                    IsOfficial = true
+                };
+                profiles.Add(profile);
+                return profile;
+            });
+        profileRepository.Setup(repository => repository.SwitchProfile("official-player"))
+            .Callback(() => activeProfileId = "official-player")
+            .Returns(true);
+        authenticator.Setup(service => service.LoginAsync(
+                It.IsAny<AuthUriPresenter>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new HytaleAuthSession
+            {
+                Username = "Official_Player",
+                UUID = profileUuid,
+                AccountProfiles = [("Official_Player", profileUuid)]
+            });
+
+        using var viewModel = new ProfilesViewModel(
+            profileManager.Object,
+            profileRepository.Object,
+            uriLauncher.Object,
+            new StringLocalizer("en-US"),
+            authenticator.Object);
+
+        viewModel.ShowCreateChoiceCommand.Execute(null);
+        viewModel.BeginOfficialCreationCommand.Execute(null);
+        await viewModel.SignInWithHytaleCommand.ExecuteAsync(null);
+
+        Assert.Equal("official-player", viewModel.SelectedProfile?.Id);
+        Assert.False(viewModel.HasStatusMessage);
     }
 
     [Fact]

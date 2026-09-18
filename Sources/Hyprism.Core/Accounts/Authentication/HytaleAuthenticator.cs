@@ -147,7 +147,8 @@ public class HytaleAuthenticator : IHytaleAuthenticator
             }
             finally
             {
-                listener.Stop();
+                if (_authCodeTcs?.Task.IsCanceled == true)
+                    listener.Stop();
                 await callbackTask;
                 callbackTask = null;
                 _callbackListener = null;
@@ -337,6 +338,8 @@ public class HytaleAuthenticator : IHytaleAuthenticator
                 var returnedState = query["state"];
 
                 string responseHtml;
+                string? callbackCode = null;
+                Exception? callbackException = null;
                 if (string.IsNullOrEmpty(returnedState) ||
                     !string.Equals(returnedState, _pendingState, StringComparison.Ordinal))
                 {
@@ -344,21 +347,22 @@ public class HytaleAuthenticator : IHytaleAuthenticator
                     responseHtml = _callbackPageRenderer.Render(
                         success: false,
                         "Invalid or missing OAuth state");
-                    _authCodeTcs?.TrySetException(
-                        new HytaleAuthException("invalid_oauth_state", "Invalid or missing OAuth state"));
+                    callbackException = new HytaleAuthException(
+                        "invalid_oauth_state",
+                        "Invalid or missing OAuth state");
                 }
                 else if (!string.IsNullOrEmpty(code))
                 {
                     responseHtml = _callbackPageRenderer.Render(
                         success: true,
                         "Authorization completed successfully");
-                    _authCodeTcs?.TrySetResult(code);
+                    callbackCode = code;
                 }
                 else if (!string.IsNullOrEmpty(error))
                 {
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     responseHtml = _callbackPageRenderer.Render(success: false, $"OAuth error: {error}");
-                    _authCodeTcs?.TrySetException(new HytaleAuthException(error, $"OAuth error: {error}"));
+                    callbackException = new HytaleAuthException(error, $"OAuth error: {error}");
                 }
                 else
                 {
@@ -366,15 +370,21 @@ public class HytaleAuthenticator : IHytaleAuthenticator
                     responseHtml = _callbackPageRenderer.Render(
                         success: false,
                         "Authorization callback did not contain a code or error");
-                    _authCodeTcs?.TrySetException(
-                        new HytaleAuthException("invalid_oauth_callback", "Authorization callback did not contain a code or error"));
+                    callbackException = new HytaleAuthException(
+                        "invalid_oauth_callback",
+                        "Authorization callback did not contain a code or error");
                 }
 
                 var buffer = Encoding.UTF8.GetBytes(responseHtml);
                 response.ContentType = "text/html; charset=utf-8";
                 response.ContentLength64 = buffer.Length;
-                await response.OutputStream.WriteAsync(buffer, ct);
-                response.Close();
+                response.KeepAlive = false;
+                response.Close(buffer, willBlock: true);
+
+                if (callbackCode is not null)
+                    _authCodeTcs?.TrySetResult(callbackCode);
+                else if (callbackException is not null)
+                    _authCodeTcs?.TrySetException(callbackException);
 
                 break;
             }
