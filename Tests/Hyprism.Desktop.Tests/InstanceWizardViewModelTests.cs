@@ -1,0 +1,204 @@
+// Copyright (C) 2026 Hyprism Launcher
+// SPDX-License-Identifier: GPL-3.0-only
+
+using Hyprism.Core.Accounts;
+using Hyprism.Core.Application.Ports;
+using Hyprism.Core.Application.Progress;
+using Hyprism.Core.Game;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Game.Launch;
+using Hyprism.Core.Game.Versions;
+using Hyprism.Core.Models;
+using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Features.News;
+using Hyprism.Desktop.Localization;
+using Hyprism.Desktop.Platform;
+using Hyprism.Desktop.Shell;
+using Avalonia.Headless.XUnit;
+using Moq;
+using Xunit;
+
+namespace Hyprism.Desktop.Tests;
+
+public sealed class InstanceWizardViewModelTests
+{
+    [AvaloniaFact]
+    public void SwitchingToCachedBranchDoesNotStartVersionLoading()
+    {
+        var instances = new Mock<IInstanceRepository>();
+        var profiles = new Mock<IProfileManager>();
+        var profileRepository = new Mock<IProfileRepository>();
+        var launchCoordinator = new Mock<IGameLaunchCoordinator>();
+        var installationWorkflow = new Mock<IGameInstallationWorkflow>();
+        var gameProcess = new Mock<IGameProcessTracker>();
+        var progress = new Mock<IProgressReporter>();
+        var settings = new Mock<IDesktopSettingsStore>();
+        var news = new Mock<IHytaleNewsClient>();
+        var uriLauncher = new Mock<IExternalUriLauncher>();
+        var versionCatalog = new Mock<IGameVersionCatalog>();
+        var releaseVersions = new List<int> { 20, 19 };
+        var preReleaseVersions = new List<int> { 61, 60 };
+
+        instances.Setup(service => service.GetCachedInstances()).Returns([]);
+        profiles.Setup(service => service.GetNick()).Returns("Wizard Test");
+        versionCatalog
+            .Setup(service => service.TryGetCachedVersions(
+                "release",
+                It.IsAny<TimeSpan>(),
+                out releaseVersions))
+            .Returns(true);
+        versionCatalog
+            .Setup(service => service.TryGetCachedVersions(
+                "pre-release",
+                It.IsAny<TimeSpan>(),
+                out preReleaseVersions))
+            .Returns(true);
+
+        using var viewModel = new MainWindowViewModel(
+            instances.Object,
+            profiles.Object,
+            profileRepository.Object,
+            launchCoordinator.Object,
+            installationWorkflow.Object,
+            gameProcess.Object,
+            progress.Object,
+            settings.Object,
+            news.Object,
+            uriLauncher.Object,
+            new HttpClient(),
+            new StringLocalizer("en-US"),
+            versionCatalog: versionCatalog.Object);
+
+        viewModel.OpenInstanceCreatorCommand.Execute(null);
+        viewModel.SetNewInstanceBranchCommand.Execute("pre-release");
+
+        Assert.False(viewModel.IsInstanceVersionsLoading);
+        Assert.Equal([61, 60], viewModel.AvailableInstanceVersions.Select(item => item.Version));
+        versionCatalog.Verify(
+            service => service.GetVersionListAsync(
+                It.IsAny<string>(),
+                It.IsAny<CancellationToken>()),
+            Times.Never);
+    }
+
+    [AvaloniaFact]
+    public void ClosingCreatorClearsSelectionAndRestoresReleaseBranch()
+    {
+        var instances = new Mock<IInstanceRepository>();
+        var profiles = new Mock<IProfileManager>();
+        var profileRepository = new Mock<IProfileRepository>();
+        var launchCoordinator = new Mock<IGameLaunchCoordinator>();
+        var installationWorkflow = new Mock<IGameInstallationWorkflow>();
+        var gameProcess = new Mock<IGameProcessTracker>();
+        var progress = new Mock<IProgressReporter>();
+        var settings = new Mock<IDesktopSettingsStore>();
+        var news = new Mock<IHytaleNewsClient>();
+        var uriLauncher = new Mock<IExternalUriLauncher>();
+        var versionCatalog = new Mock<IGameVersionCatalog>();
+        var releaseVersions = new List<int> { 20, 19 };
+        var preReleaseVersions = new List<int> { 61, 60 };
+
+        instances.Setup(service => service.GetCachedInstances()).Returns([]);
+        profiles.Setup(service => service.GetNick()).Returns("Wizard Test");
+        versionCatalog
+            .Setup(service => service.TryGetCachedVersions(
+                "release",
+                It.IsAny<TimeSpan>(),
+                out releaseVersions))
+            .Returns(true);
+        versionCatalog
+            .Setup(service => service.TryGetCachedVersions(
+                "pre-release",
+                It.IsAny<TimeSpan>(),
+                out preReleaseVersions))
+            .Returns(true);
+
+        using var viewModel = new MainWindowViewModel(
+            instances.Object,
+            profiles.Object,
+            profileRepository.Object,
+            launchCoordinator.Object,
+            installationWorkflow.Object,
+            gameProcess.Object,
+            progress.Object,
+            settings.Object,
+            news.Object,
+            uriLauncher.Object,
+            new HttpClient(),
+            new StringLocalizer("en-US"),
+            versionCatalog: versionCatalog.Object);
+
+        viewModel.OpenInstanceCreatorCommand.Execute(null);
+        viewModel.SetNewInstanceBranchCommand.Execute("pre-release");
+        Assert.NotNull(viewModel.SelectedNewInstanceVersion);
+
+        viewModel.CloseInstanceCreatorCommand.Execute(null);
+
+        Assert.False(viewModel.IsInstanceCreatorOpen);
+        Assert.Equal("release", viewModel.NewInstanceBranch);
+        Assert.Null(viewModel.SelectedNewInstanceVersion);
+        Assert.Empty(viewModel.AvailableInstanceVersions);
+        Assert.False(viewModel.IsInstanceVersionsLoading);
+        Assert.Empty(viewModel.InstanceCreationError);
+
+        viewModel.OpenInstanceCreatorCommand.Execute(null);
+
+        Assert.True(viewModel.IsInstanceCreatorOpen);
+        Assert.Equal("release", viewModel.NewInstanceBranch);
+        Assert.Equal([20, 19], viewModel.AvailableInstanceVersions.Select(item => item.Version));
+    }
+
+    [AvaloniaFact]
+    public void VersionNamesAreDisplayedWithoutPrefixAndBuildEntriesAreListedLast()
+    {
+        var instances = new Mock<IInstanceRepository>();
+        var profiles = new Mock<IProfileManager>();
+        var profileRepository = new Mock<IProfileRepository>();
+        var launchCoordinator = new Mock<IGameLaunchCoordinator>();
+        var installationWorkflow = new Mock<IGameInstallationWorkflow>();
+        var gameProcess = new Mock<IGameProcessTracker>();
+        var progress = new Mock<IProgressReporter>();
+        var settings = new Mock<IDesktopSettingsStore>();
+        var news = new Mock<IHytaleNewsClient>();
+        var uriLauncher = new Mock<IExternalUriLauncher>();
+        var versionCatalog = new Mock<IGameVersionCatalog>();
+        var cachedVersions = new List<CachedVersionEntry>
+        {
+            new() { Version = 100, VersionName = "build-100" },
+            new() { Version = 102, VersionName = "2026.09.08-e1d69dd" },
+            new() { Version = 101, VersionName = "0.6.4" }
+        };
+
+        instances.Setup(service => service.GetCachedInstances()).Returns([]);
+        profiles.Setup(service => service.GetNick()).Returns("Wizard Test");
+        versionCatalog
+            .Setup(service => service.TryGetCachedVersionEntries(
+                "release",
+                It.IsAny<TimeSpan>(),
+                out cachedVersions))
+            .Returns(true);
+
+        using var viewModel = new MainWindowViewModel(
+            instances.Object,
+            profiles.Object,
+            profileRepository.Object,
+            launchCoordinator.Object,
+            installationWorkflow.Object,
+            gameProcess.Object,
+            progress.Object,
+            settings.Object,
+            news.Object,
+            uriLauncher.Object,
+            new HttpClient(),
+            new StringLocalizer("en-US"),
+            versionCatalog: versionCatalog.Object);
+
+        viewModel.OpenInstanceCreatorCommand.Execute(null);
+
+        Assert.Equal(
+            ["2026.09.08-e1d69dd", "0.6.4", "build-100"],
+            viewModel.AvailableInstanceVersions.Select(item => item.Label));
+        Assert.Equal("2026.09.08-e1d69dd", viewModel.SelectedNewInstanceVersion?.Label);
+    }
+
+}

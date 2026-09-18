@@ -1,0 +1,25 @@
+<!--
+Copyright (C) 2026 Hyprism Launcher
+SPDX-License-Identifier: GPL-3.0-only
+-->
+
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Keep native window semantics while the shell owns the title bar visuals -->
+  <ControlTheme x:Key="{x:Type WindowDrawnDecorations}"
+                TargetType="WindowDrawnDecorations">
+    <Setter Property="Template">
+      <WindowDrawnDecorationsTemplate>
+        <WindowDrawnDecorationsContent>
+          <WindowDrawnDecorationsContent.Overlay>
+            <DockPanel Height="{TemplateBinding TitleBarHeight}"
+                       VerticalAlignment="Top"
+                       Margin="{TemplateBinding ShadowThickness}" />
+          </WindowDrawnDecorationsContent.Overlay>
+        </WindowDrawnDecorationsContent>
+      </WindowDrawnDecorationsTemplate>
+    </Setter>
+  </ControlTheme>
+
+</ResourceDictionary>

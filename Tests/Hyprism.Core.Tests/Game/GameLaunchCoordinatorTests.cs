@@ -1,0 +1,176 @@
+// Copyright (C) 2026 Hyprism Launcher
+// SPDX-License-Identifier: GPL-3.0-only
+
+using Hyprism.Core.Models;
+using Hyprism.Core.Application.Progress;
+using Hyprism.Core.Game;
+using Hyprism.Core.Game.Instances;
+using Hyprism.Core.Game.Launch;
+using Hyprism.Core.Accounts;
+
+namespace Hyprism.Core.Tests.Game;
+
+public sealed class GameLaunchCoordinatorTests
+{
+    private readonly Mock<IGameInstallationWorkflow> _gameSession = new();
+    private readonly Mock<IGameProcessTracker> _gameProcess = new();
+    private readonly Mock<IInstanceRepository> _instances = new();
+    private readonly Mock<IProgressReporter> _progress = new();
+
+    [Fact]
+    public async Task LaunchAsync_UsesRequestedInstanceAndForwardsAuthorizationPresenter()
+    {
+        var instance = CreateInstalledInstance();
+        AuthUriPresenter uriLauncher = (_, _) => Task.FromResult(true);
+        AuthUriPresenter? forwardedUriLauncher = null;
+
+        _gameProcess.Setup(service => service.IsGameRunning()).Returns(false);
+        _instances.Setup(service => service.FindInstanceById(instance.Id)).Returns(instance);
+        _instances.Setup(service => service.GetInstancePathById(instance.Id)).Returns("/game");
+        _instances.Setup(service => service.IsClientPresent("/game")).Returns(true);
+        _gameSession
+            .Setup(service => service.DownloadAndLaunchInstanceAsync(
+                instance.Id,
+                It.IsAny<AuthUriPresenter?>()))
+            .Callback<string, AuthUriPresenter?>((_, launcher) => forwardedUriLauncher = launcher)
+            .ReturnsAsync(new DownloadProgress { Success = true });
+
+        await CreateSubject().LaunchAsync(
+            instance.Id,
+            authorizationUriPresenter: uriLauncher);
+
+        _instances.Verify(service => service.SetSelectedInstance(instance.Id), Times.Never);
+        Assert.Same(uriLauncher, forwardedUriLauncher);
+    }
+
+    [Fact]
+    public async Task LaunchAsync_WhenClientIsMissing_ReportsErrorWithoutStartingSession()
+    {
+        var instance = CreateInstalledInstance();
+
+        _gameProcess.Setup(service => service.IsGameRunning()).Returns(false);
+        _instances.Setup(service => service.GetSelectedInstance()).Returns(instance);
+        _instances.Setup(service => service.GetInstancePathById(instance.Id)).Returns("/game");
+        _instances.Setup(service => service.IsClientPresent("/game")).Returns(false);
+
+        await CreateSubject().LaunchAsync();
+
+        _progress.Verify(
+            service => service.ReportError(
+                "launch",
+                "Game not installed",
+                It.Is<string>(value => value.Contains(instance.Name)),
+                instance.Id),
+            Times.Once);
+        _gameSession.Verify(
+            service => service.DownloadAndLaunchAsync(It.IsAny<AuthUriPresenter?>()),
+            Times.Never);
+    }
+
+    [Fact]
+    public async Task LaunchAsync_WhenAnotherInstanceIsRunning_StillLaunchesRequestedInstance()
+    {
+        var instance = CreateInstalledInstance();
+
+        _gameProcess.Setup(service => service.IsInstanceRunning(instance.Id)).Returns(false);
+        _instances.Setup(service => service.FindInstanceById(instance.Id)).Returns(instance);
+        _instances.Setup(service => service.GetInstancePathById(instance.Id)).Returns("/game");
+        _instances.Setup(service => service.IsClientPresent("/game")).Returns(true);
+        _gameSession
+            .Setup(service => service.DownloadAndLaunchInstanceAsync(instance.Id, It.IsAny<AuthUriPresenter?>()))
+            .ReturnsAsync(new DownloadProgress { Success = true });
+
+        await CreateSubject().LaunchAsync(instance.Id);
+
+        _gameSession.Verify(service => service.DownloadAndLaunchInstanceAsync(
+            instance.Id,
+            It.IsAny<AuthUriPresenter?>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task LaunchAsync_WhenRequestedInstanceIsRunning_DoesNotLaunchItAgain()
+    {
+        var instance = CreateInstalledInstance();
+
+        _gameProcess.Setup(service => service.IsInstanceRunning(instance.Id)).Returns(true);
+        _instances.Setup(service => service.FindInstanceById(instance.Id)).Returns(instance);
+
+        await CreateSubject().LaunchAsync(instance.Id);
+
+        _gameSession.Verify(service => service.DownloadAndLaunchInstanceAsync(
+            It.IsAny<string>(),
+            It.IsAny<AuthUriPresenter?>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task LaunchAsync_MapsMirrorFailureToStableExitCode()
+    {
+        var instance = CreateInstalledInstance();
+
+        _gameProcess.Setup(service => service.IsGameRunning()).Returns(false);
+        _instances.Setup(service => service.GetSelectedInstance()).Returns(instance);
+        _instances.Setup(service => service.GetInstancePathById(instance.Id)).Returns("/game");
+        _instances.Setup(service => service.IsClientPresent("/game")).Returns(true);
+        _gameSession
+            .Setup(service => service.DownloadAndLaunchAsync(It.IsAny<AuthUriPresenter?>()))
+            .ReturnsAsync(new DownloadProgress
+            {
+                Success = false,
+                Error = "Mirror unreachable"
+            });
+
+        LaunchFailedEventArgs? failure = null;
+        var subject = CreateSubject();
+        subject.LaunchFailed += (_, args) => failure = args;
+
+        await subject.LaunchAsync();
+
+        Assert.NotNull(failure);
+        Assert.Equal(instance.Id, failure!.InstanceId);
+        Assert.Equal(14, failure.ExitCode);
+    }
+
+    [Fact]
+    public async Task LaunchAsync_MapsUnknownWorkflowFailureToDownloadExitCode()
+    {
+        var instance = CreateInstalledInstance();
+
+        _gameProcess.Setup(service => service.IsGameRunning()).Returns(false);
+        _instances.Setup(service => service.GetSelectedInstance()).Returns(instance);
+        _instances.Setup(service => service.GetInstancePathById(instance.Id)).Returns("/game");
+        _instances.Setup(service => service.IsClientPresent("/game")).Returns(true);
+        _gameSession
+            .Setup(service => service.DownloadAndLaunchAsync(It.IsAny<AuthUriPresenter?>()))
+            .ReturnsAsync(new DownloadProgress
+            {
+                Success = false,
+                Error = "No explicit game version is selected for this instance"
+            });
+
+        LaunchFailedEventArgs? failure = null;
+        var subject = CreateSubject();
+        subject.LaunchFailed += (_, args) => failure = args;
+
+        await subject.LaunchAsync();
+
+        Assert.NotNull(failure);
+        Assert.Equal(12, failure!.ExitCode);
+    }
+
+    private GameLaunchCoordinator CreateSubject()
+        => new(
+            _gameSession.Object,
+            _gameProcess.Object,
+            _instances.Object,
+            _progress.Object);
+
+    private static InstanceInfo CreateInstalledInstance()
+        => new()
+        {
+            Id = "release-instance",
+            Name = "Hytale Release",
+            Branch = "release",
+            Version = 42,
+            IsInstalled = true
+        };
+}
