@@ -7,7 +7,7 @@ import { themes as prismThemes } from 'prism-react-renderer'
 import path from 'node:path'
 import repositoryLinks from './plugins/remark-repository-links'
 
-const configuredBasePath = process.env.PAGES_BASE_PATH || '/HyPrism'
+const configuredBasePath = process.env.PAGES_BASE_PATH || '/Hyprism'
 const baseUrl = `/${configuredBasePath.replace(/^\/+|\/+$/g, '')}/`
 
 const localeBootstrapScript = `try {
@@ -26,7 +26,7 @@ const config: Config = {
   url: 'https://hyprismteam.github.io',
   baseUrl,
   organizationName: 'hyprismteam',
-  projectName: 'HyPrism',
+  projectName: 'Hyprism Launcher',
   trailingSlash: true,
   onBrokenLinks: 'throw',
   // Public routes render one of two MDX modules at runtime, so Docusaurus cannot statically match their TOC anchors
@@ -123,7 +123,7 @@ const config: Config = {
           className: 'hyprism-language-switch-slot'
         },
         {
-          href: 'https://github.com/hyprismteam/HyPrism',
+          href: 'https://github.com/hyprismteam/Hyprism',
           label: 'GitHub',
           position: 'right'
         }
