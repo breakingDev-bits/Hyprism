@@ -10,12 +10,14 @@ SPDX-License-Identifier: GPL-3.0-only
   [![Downloads](https://img.shields.io/github/downloads/hyprismteam/Hyprism/total?style=flat&logo=github&label=Downloads&color=2d3748&logoWidth=20)](https://github.com/hyprismteam/Hyprism/releases)
   [![CI](https://img.shields.io/github/actions/workflow/status/hyprismteam/Hyprism/ci.yml?branch=main&style=flat&label=CI&logo=github&logoWidth=20)](https://github.com/hyprismteam/Hyprism/actions/workflows/ci.yml)
   [![Website](https://img.shields.io/badge/Website-hyprism-207e5c?style=flat&logo=google-chrome&logoColor=white&logoWidth=20)](https://hyprismteam.github.io/hyprism-site/)
-  [![GitLab](https://img.shields.io/badge/GitLab-yyyumeniku-FC6D26?style=flat&logo=gitlab&logoColor=white&logoWidth=20)](https://gitlab.com/yyyumeniku/Hyprism)
   [![Discord](https://img.shields.io/badge/Discord-Join-5865F2?style=flat&logo=discord&logoColor=white&logoWidth=20)](https://discord.com/invite/ekZqTtynjp)
   [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support-FFDD00?style=flat&logo=buy-me-a-coffee&logoColor=black&logoWidth=20)](https://buymeacoffee.com/yyyumeniku)
 
 > [!IMPORTANT]
 > Hyprism has no any connection to [PrismLauncher](https://github.com/PrismLauncher/PrismLauncher). Hyprism is an application that is being developed **INDEPENDENTLY** of the PrismLauncher project or its team. Thank you for your understanding
+
+> [!NOTE]
+> The launcher is switching to Avalonia UI. The current source code in `main` may contain bugs or errors. If you need the code from a previous version of the launcher, use the latest available [release](https://github.com/hyprismteam/Hyprism/releases)
 
 ## Installation
 
