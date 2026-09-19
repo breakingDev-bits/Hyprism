@@ -136,7 +136,7 @@ SPDX-License-Identifier: GPL-3.0-only
   <!-- ComboBox: box, glyph, popup dropdown -->
   <Style Selector="ComboBox">
     <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
-    <Setter Property="Background" Value="{DynamicResource ControlSurfaceBrush}" />
+    <Setter Property="Background" Value="{DynamicResource SegmentedTrackBrush}" />
     <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="CornerRadius" Value="11" />

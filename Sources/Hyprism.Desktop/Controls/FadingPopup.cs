@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 
@@ -21,12 +22,21 @@ public sealed class FadingPopup : Popup
     public static readonly StyledProperty<bool> IsHoverEnabledProperty =
         AvaloniaProperty.Register<FadingPopup, bool>(nameof(IsHoverEnabled));
 
+    public static readonly StyledProperty<double> PlacementGapProperty =
+        AvaloniaProperty.Register<FadingPopup, double>(nameof(PlacementGap));
+
+    public static readonly StyledProperty<bool> ConstrainToPlacementContextProperty =
+        AvaloniaProperty.Register<FadingPopup, bool>(nameof(ConstrainToPlacementContext));
+
     private CancellationTokenSource? _animationCancellation;
     private TopLevel? _subscribedTopLevel;
     private Window? _subscribedWindow;
     private readonly List<ScrollViewer> _subscribedScrollViewers = [];
     private Control? _hoverTarget;
     private Control? _hoverChild;
+    private Control? _placementChild;
+    private RectangleGeometry? _contextClip;
+    private bool? _placeAbove;
 
     public FadingPopup()
     {
@@ -49,6 +59,18 @@ public sealed class FadingPopup : Popup
         set => SetValue(IsHoverEnabledProperty, value);
     }
 
+    public double PlacementGap
+    {
+        get => GetValue(PlacementGapProperty);
+        set => SetValue(PlacementGapProperty, value);
+    }
+
+    public bool ConstrainToPlacementContext
+    {
+        get => GetValue(ConstrainToPlacementContextProperty);
+        set => SetValue(ConstrainToPlacementContextProperty, value);
+    }
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
@@ -57,8 +79,21 @@ public sealed class FadingPopup : Popup
         {
             if (change.Property == PlacementTargetProperty ||
                 change.Property == ChildProperty ||
-                change.Property == IsHoverEnabledProperty)
+                change.Property == IsHoverEnabledProperty ||
+                change.Property == PlacementGapProperty ||
+                change.Property == ConstrainToPlacementContextProperty)
+            {
+                if (change.Property != IsHoverEnabledProperty)
+                    _placeAbove = null;
+
                 RefreshHoverSubscriptions();
+                RefreshPlacementSubscriptions();
+                UpdatePlacementContext();
+            }
+
+            if (change.Property == IsOpenProperty)
+                RefreshPlacementSubscriptions();
+
             return;
         }
 
@@ -77,6 +112,8 @@ public sealed class FadingPopup : Popup
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         ClearHoverSubscriptions();
+        ClearPlacementSubscriptions();
+        ClearPlacementContextClip();
         CancelPendingAnimation();
         UnsubscribeFromTopLevel();
         SetCurrentValue(IsOpenProperty, false);
@@ -146,6 +183,25 @@ public sealed class FadingPopup : Popup
         _hoverChild = null;
     }
 
+    private void RefreshPlacementSubscriptions()
+    {
+        ClearPlacementSubscriptions();
+
+        if (PlacementGap <= 0 || !IsOpen || Child is not Control child)
+            return;
+
+        _placementChild = child;
+        _placementChild.LayoutUpdated += OnPlacementChildLayoutUpdated;
+    }
+
+    private void ClearPlacementSubscriptions()
+    {
+        if (_placementChild is not null)
+            _placementChild.LayoutUpdated -= OnPlacementChildLayoutUpdated;
+
+        _placementChild = null;
+    }
+
     private void OnHoverPointerEntered(object? sender, PointerEventArgs args)
         => SetCurrentValue(IsRequestedOpenProperty, true);
 
@@ -177,17 +233,27 @@ public sealed class FadingPopup : Popup
     private void ShowPopup()
     {
         CancelPendingAnimation();
+        _placeAbove = null;
+        SetCurrentValue(PlacementProperty, PlacementMode.Bottom);
+        if (PlacementGap > 0)
+            SetCurrentValue(VerticalOffsetProperty, PlacementGap);
+
         if (Child is not null)
             Child.Opacity = 0;
 
         SetCurrentValue(IsOpenProperty, true);
+        RefreshPlacementSubscriptions();
         SubscribeToTopLevel();
+        UpdatePlacementGap();
+        UpdatePlacementContext();
         _animationCancellation = new CancellationTokenSource();
         _ = PlayOpenAnimationAsync(_animationCancellation.Token);
     }
 
     private void BeginHidePopup()
     {
+        ClearPlacementSubscriptions();
+        ClearPlacementContextClip();
         UnsubscribeFromTopLevel();
         if (!IsOpen)
             return;
@@ -252,6 +318,8 @@ public sealed class FadingPopup : Popup
             OnTopLevelKeyDown,
             RoutingStrategies.Tunnel,
             handledEventsToo: true);
+        if (_subscribedTopLevel is not null)
+            _subscribedTopLevel.LayoutUpdated += OnTopLevelLayoutUpdated;
 
         if (topLevel is Window window)
         {
@@ -266,6 +334,8 @@ public sealed class FadingPopup : Popup
     {
         _subscribedTopLevel?.RemoveHandler(PointerPressedEvent, OnTopLevelPointerPressed);
         _subscribedTopLevel?.RemoveHandler(KeyDownEvent, OnTopLevelKeyDown);
+        if (_subscribedTopLevel is not null)
+            _subscribedTopLevel.LayoutUpdated -= OnTopLevelLayoutUpdated;
         if (_subscribedWindow is not null)
             _subscribedWindow.Deactivated -= OnWindowDeactivated;
 
@@ -307,6 +377,142 @@ public sealed class FadingPopup : Popup
         var offset = VerticalOffset;
         SetCurrentValue(VerticalOffsetProperty, offset + 0.001);
         SetCurrentValue(VerticalOffsetProperty, offset);
+        UpdatePlacementContext();
+    }
+
+    private void OnPlacementChildLayoutUpdated(object? sender, EventArgs args)
+    {
+        UpdatePlacementGap();
+        UpdatePlacementContext();
+    }
+
+    private void OnTopLevelLayoutUpdated(object? sender, EventArgs args)
+        => UpdatePlacementContext();
+
+    private void UpdatePlacementGap()
+    {
+        if (!IsOpen || !IsRequestedOpen ||
+            PlacementTarget is not Visual target ||
+            Child is not Visual child ||
+            PlacementGap <= 0)
+        {
+            return;
+        }
+
+        var topLevel = TopLevel.GetTopLevel(target);
+        if (topLevel is null)
+            return;
+
+        var targetOrigin = target.TranslatePoint(new Point(), topLevel);
+        if (targetOrigin is not { } targetPoint || child.Bounds.Height <= 0)
+            return;
+
+        if (_placeAbove is null)
+        {
+            var targetRect = new Rect(targetPoint, target.Bounds.Size);
+            var contextRect = GetPlacementContextRect(target, topLevel);
+            var availableAbove = targetRect.Top - contextRect.Top;
+            var availableBelow = contextRect.Bottom - targetRect.Bottom;
+            var requiredHeight = child.Bounds.Height + PlacementGap;
+            var fitsAbove = availableAbove >= requiredHeight;
+            var fitsBelow = availableBelow >= requiredHeight;
+            _placeAbove = fitsAbove && !fitsBelow ||
+                          !fitsBelow && !fitsAbove && availableAbove > availableBelow;
+        }
+
+        var desiredPlacement = _placeAbove.Value ? PlacementMode.Top : PlacementMode.Bottom;
+        if (Placement != desiredPlacement)
+            SetCurrentValue(PlacementProperty, desiredPlacement);
+
+        var desiredOffset = _placeAbove.Value ? -PlacementGap : PlacementGap;
+        if (Math.Abs(VerticalOffset - desiredOffset) > 0.001)
+            SetCurrentValue(VerticalOffsetProperty, desiredOffset);
+    }
+
+    private void UpdatePlacementContext()
+    {
+        if (!ConstrainToPlacementContext || !IsOpen ||
+            PlacementTarget is not Visual target ||
+            Child is not Visual child)
+        {
+            ClearPlacementContextClip();
+            return;
+        }
+
+        var topLevel = TopLevel.GetTopLevel(target);
+        if (topLevel is null || child.Bounds.Width <= 0 || child.Bounds.Height <= 0)
+            return;
+
+        var contextRect = GetPlacementContextRect(target, topLevel);
+        var childOrigin = child.TranslatePoint(new Point(), topLevel);
+        if (childOrigin is not { } origin)
+            return;
+
+        var visibleRect = contextRect.Intersect(new Rect(origin, child.Bounds.Size));
+        visibleRect = new Rect(
+            visibleRect.X - origin.X,
+            visibleRect.Y - origin.Y,
+            visibleRect.Width,
+            visibleRect.Height);
+        visibleRect = visibleRect.Intersect(new Rect(child.Bounds.Size));
+
+        _contextClip ??= new RectangleGeometry();
+        _contextClip.Rect = visibleRect.Width > 0 && visibleRect.Height > 0
+            ? visibleRect
+            : new Rect();
+        if (!ReferenceEquals(child.Clip, _contextClip))
+            child.Clip = _contextClip;
+    }
+
+    private void ClearPlacementContextClip()
+    {
+        if (Child is Visual child && ReferenceEquals(child.Clip, _contextClip))
+            child.Clip = null;
+
+        _contextClip = null;
+    }
+
+    private static Rect GetPlacementContextRect(Visual target, TopLevel topLevel)
+    {
+        var contextRect = new Rect(topLevel.Bounds.Size);
+        var ancestors = target.GetSelfAndVisualAncestors()
+            .Where(ancestor => !ReferenceEquals(ancestor, target))
+            .ToList();
+
+        var scrollViewerIndex = ancestors.FindIndex(ancestor => ancestor is ScrollViewer);
+        if (scrollViewerIndex >= 0 && ancestors[scrollViewerIndex] is Control scrollViewer)
+        {
+            var origin = scrollViewer.TranslatePoint(new Point(), topLevel);
+            if (origin is { } point)
+                contextRect = contextRect.Intersect(new Rect(point, scrollViewer.Bounds.Size));
+
+            // The page owns the scroll viewport. Ignore clipped cards and rows
+            // below it, but keep the first clipped page surface above it.
+            var pageSurface = ancestors
+                .Skip(scrollViewerIndex + 1)
+                .OfType<Control>()
+                .FirstOrDefault(control => control.ClipToBounds);
+            if (pageSurface is not null)
+            {
+                origin = pageSurface.TranslatePoint(new Point(), topLevel);
+                if (origin is { } pagePoint)
+                    contextRect = contextRect.Intersect(new Rect(pagePoint, pageSurface.Bounds.Size));
+            }
+
+            return contextRect;
+        }
+
+        var clippedAncestor = ancestors
+            .OfType<Control>()
+            .FirstOrDefault(control => control.ClipToBounds);
+        if (clippedAncestor is not null)
+        {
+            var origin = clippedAncestor.TranslatePoint(new Point(), topLevel);
+            if (origin is { } point)
+                contextRect = contextRect.Intersect(new Rect(point, clippedAncestor.Bounds.Size));
+        }
+
+        return contextRect;
     }
 
     private void OnTopLevelPointerPressed(object? sender, PointerPressedEventArgs args)

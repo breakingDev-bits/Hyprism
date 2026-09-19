@@ -1609,7 +1609,7 @@ public sealed class MainWindowRenderTests
         var languagePopup = fadingLanguageComboBox.GetVisualDescendants().OfType<FadingPopup>().Single();
         Assert.True(languagePopup.IsOpen);
         var languagePopupBorder = Assert.IsType<Border>(languagePopup.Child);
-        Assert.Equal(8, languagePopup.VerticalOffset);
+        Assert.Equal(8, Math.Abs(languagePopup.VerticalOffset));
         Assert.False(languagePopup.IsLightDismissEnabled);
         Assert.False(languagePopup.WindowManagerAddShadowHint);
         Assert.True(languagePopup.ShouldUseOverlayLayer);
@@ -1634,6 +1634,12 @@ public sealed class MainWindowRenderTests
         Assert.NotNull(comboPositionAfterScroll);
         Assert.NotNull(popupPositionBeforeScroll);
         Assert.NotNull(popupPositionAfterScroll);
+        var comboBottom = comboPositionBeforeScroll!.Value.Y + fadingLanguageComboBox.Bounds.Height;
+        var popupBottom = popupPositionBeforeScroll!.Value.Y + languagePopupBorder.Bounds.Height;
+        var popupGap = popupPositionBeforeScroll.Value.Y < comboPositionBeforeScroll.Value.Y
+            ? comboPositionBeforeScroll.Value.Y - popupBottom
+            : popupPositionBeforeScroll.Value.Y - comboBottom;
+        Assert.Equal(8, popupGap, precision: 3);
         Assert.InRange(
             comboPositionBeforeScroll!.Value.Y - comboPositionAfterScroll!.Value.Y,
             99,
