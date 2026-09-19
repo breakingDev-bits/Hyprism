@@ -45,6 +45,25 @@ public sealed partial class WizardRevealIcon : Border
         AnimationPlayer.Start();
     }
 
+    internal void ShowInitialFrame(string animationPath)
+    {
+        LastSelectionWasAnimated = false;
+        var autoPlay = AnimationPlayer.AutoPlay;
+        AnimationPlayer.AutoPlay = false;
+        try
+        {
+            AnimationPlayer.Stop();
+            Select(animationPath);
+            AnimationPlayer.Start();
+            AnimationPlayer.SeekToProgress(0);
+            AnimationPlayer.Pause();
+        }
+        finally
+        {
+            AnimationPlayer.AutoPlay = autoPlay;
+        }
+    }
+
     public void ShowFinalFrame(string animationPath)
     {
         LastSelectionWasAnimated = false;

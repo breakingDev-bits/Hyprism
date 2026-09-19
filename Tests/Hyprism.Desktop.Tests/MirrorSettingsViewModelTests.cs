@@ -1,6 +1,7 @@
 // Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Headless;
@@ -57,6 +58,85 @@ public sealed class MirrorSettingsViewModelTests
         Assert.True(viewModel.IsAddSourceChoiceVisible);
         Assert.False(viewModel.IsAutomaticSourceVisible);
         Assert.False(viewModel.IsManualSourceVisible);
+    }
+
+    [AvaloniaFact]
+    public async Task CompactDownloadSourceWizardSlidesIntoSettingsContent()
+    {
+        using var viewModel = new SettingsViewModel(
+            CreateSettingsStore().Object,
+            new Mock<IExternalUriLauncher>().Object,
+            new StringLocalizer("en-US"));
+        var view = new SettingsView
+        {
+            Width = 760,
+            Height = 760,
+            DataContext = viewModel
+        };
+        var window = new Window
+        {
+            Width = 760,
+            Height = 760,
+            Content = view
+        };
+
+        window.Show();
+        Dispatcher.UIThread.RunJobs();
+
+        var downloadsCategory = view.GetVisualDescendants()
+            .OfType<Button>()
+            .Single(button => button.Classes.Contains("settingsRailCategory") &&
+                              button.DataContext is SettingCategoryViewModel { Id: "downloads" });
+        downloadsCategory.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        var settingsMain = Assert.IsType<Grid>(view.FindControl<Grid>("SettingsMain"));
+        var settingsMainTranslation = Assert.IsType<TranslateTransform>(settingsMain.RenderTransform);
+        await WaitForAvaloniaPropertyAsync(
+            settingsMainTranslation,
+            TranslateTransform.XProperty,
+            () => Math.Abs(settingsMainTranslation.X) <= 0.01,
+            "compact settings content to open");
+
+        var wizard = Assert.IsType<Border>(view.FindControl<Border>("DownloadSourceWizardScreen"));
+        var wizardTranslation = Assert.IsType<TranslateTransform>(wizard.RenderTransform);
+        var overview = Assert.IsType<Grid>(view.FindControl<Grid>("SettingsOverview"));
+        var overviewTranslation = Assert.IsType<TranslateTransform>(overview.RenderTransform);
+        var observedIntermediateOffset = false;
+        var maximumOffset = wizardTranslation.X;
+        void OnWizardTranslationChanged(object? sender, AvaloniaPropertyChangedEventArgs args)
+        {
+            if (args.Property == TranslateTransform.XProperty)
+            {
+                maximumOffset = Math.Max(maximumOffset, wizardTranslation.X);
+                if (wizardTranslation.X > 0.5 &&
+                    wizardTranslation.X < settingsMain.Bounds.Width - 0.5)
+                {
+                    observedIntermediateOffset = true;
+                }
+            }
+        }
+
+        wizardTranslation.PropertyChanged += OnWizardTranslationChanged;
+        try
+        {
+            viewModel.ShowAddMirrorCommand.Execute(null);
+            Assert.Equal(1, wizard.Opacity);
+            Assert.Equal(1, overview.Opacity);
+            Assert.Equal(0, overviewTranslation.X);
+            await WaitForRenderStateAsync(
+                () => observedIntermediateOffset,
+                "compact download source wizard opening slide to advance");
+            Assert.True(
+                maximumOffset > settingsMain.Bounds.Width / 2,
+                $"maximum wizard offset {maximumOffset}, content width {settingsMain.Bounds.Width}");
+            await WaitForRenderStateAsync(
+                () => Math.Abs(wizardTranslation.X) <= 0.01,
+                "compact download source wizard opening slide to finish");
+        }
+        finally
+        {
+            wizardTranslation.PropertyChanged -= OnWizardTranslationChanged;
+            window.Close();
+        }
     }
 
     [Fact]
@@ -618,6 +698,21 @@ public sealed class MirrorSettingsViewModelTests
             await Task.Delay(10);
 
         Assert.True(condition());
+    }
+
+    private static async Task WaitForRenderStateAsync(Func<bool> condition, string description)
+    {
+        var startedAt = Stopwatch.GetTimestamp();
+        while (!condition() && Stopwatch.GetElapsedTime(startedAt) < TimeSpan.FromSeconds(5))
+        {
+            AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
+            Dispatcher.UIThread.RunJobs();
+            await Task.Delay(16, TestContext.Current.CancellationToken);
+        }
+
+        AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
+        Dispatcher.UIThread.RunJobs();
+        Assert.True(condition(), $"Timed out waiting for {description}");
     }
 
     private static async Task WaitForAvaloniaPropertyAsync(

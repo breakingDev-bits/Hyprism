@@ -18,6 +18,8 @@ public sealed class WizardScreenTransition
 {
     public static readonly TimeSpan PhaseDuration = MotionDurations.WizardPhase;
     public static readonly TimeSpan AnchorMoveDuration = PhaseDuration;
+    private static readonly TimeSpan CompactOverlaySlideDuration =
+        MotionDurations.CompactSectionSlide;
 
     private readonly Control _overview;
     private readonly Control _wizard;
@@ -52,6 +54,7 @@ public sealed class WizardScreenTransition
             _layoutMotionTarget!.RenderTransform ??= new TranslateTransform();
             _layoutContainer = _layoutAnchor.Parent as Control ?? _wizard;
             _layoutContainer.PropertyChanged += OnLayoutContainerPropertyChanged;
+            _wizard.SizeChanged += OnWizardSizeChanged;
         }
     }
 
@@ -72,6 +75,7 @@ public sealed class WizardScreenTransition
 
             _overview.IsVisible = false;
             PrepareForEntry(_wizard, 28);
+
             await Dispatcher.UIThread.InvokeAsync(static () => { }, DispatcherPriority.Loaded);
             if (cancellationToken.IsCancellationRequested || !shouldRemainOpen())
                 return;
@@ -79,6 +83,40 @@ public sealed class WizardScreenTransition
             _wizard.IsHitTestVisible = true;
             _wizard.Opacity = 1;
             GetTranslation(_wizard).X = 0;
+            InitializeAnchorTarget();
+            onOpened?.Invoke();
+        }
+        catch (OperationCanceledException)
+        {
+            // A reverse navigation replaces the pending transition
+        }
+    }
+
+    public async Task OpenCompactOverlayAsync(
+        Func<bool> shouldRemainOpen,
+        Action? onSlideStarted,
+        Action? onOpened,
+        double horizontalOffset)
+    {
+        var cancellationToken = BeginAnimation();
+        _overview.IsHitTestVisible = false;
+
+        try
+        {
+            PrepareOverlayEntryState(horizontalOffset);
+            _wizard.IsHitTestVisible = true;
+            await Dispatcher.UIThread.InvokeAsync(static () => { }, DispatcherPriority.Loaded);
+            if (cancellationToken.IsCancellationRequested || !shouldRemainOpen())
+                return;
+
+            onSlideStarted?.Invoke();
+            await RunCompactOverlaySlideAsync(
+                GetTranslation(_wizard),
+                0,
+                cancellationToken);
+            if (cancellationToken.IsCancellationRequested || !shouldRemainOpen())
+                return;
+
             InitializeAnchorTarget();
             onOpened?.Invoke();
         }
@@ -117,6 +155,39 @@ public sealed class WizardScreenTransition
             _overview.IsHitTestVisible = true;
             _overview.Opacity = 1;
             GetTranslation(_overview).X = 0;
+            onClosed?.Invoke();
+        }
+        catch (OperationCanceledException)
+        {
+            // Reopening the wizard replaces the pending close transition
+        }
+    }
+
+    public async Task CloseCompactOverlayAsync(
+        Func<bool> shouldRemainClosed,
+        Action? onClosed,
+        double horizontalOffset)
+    {
+        var cancellationToken = BeginAnimation();
+        if (!_wizard.IsVisible)
+        {
+            ShowOverviewImmediately();
+            onClosed?.Invoke();
+            return;
+        }
+
+        _wizard.IsHitTestVisible = false;
+
+        try
+        {
+            await RunCompactOverlaySlideAsync(
+                GetTranslation(_wizard),
+                horizontalOffset,
+                cancellationToken);
+            if (cancellationToken.IsCancellationRequested || !shouldRemainClosed())
+                return;
+
+            ShowOverviewImmediately();
             onClosed?.Invoke();
         }
         catch (OperationCanceledException)
@@ -326,6 +397,47 @@ public sealed class WizardScreenTransition
         translation.X = offset;
     }
 
+    private void PrepareOverlayEntryState(double offset)
+    {
+        var translation = GetTranslation(_wizard);
+        var wizardTransitions = _wizard.Transitions;
+        var translationTransitions = translation.Transitions;
+        _wizard.Transitions = null;
+        translation.Transitions = null;
+        _wizard.Opacity = 1;
+        translation.X = offset;
+        _wizard.IsVisible = true;
+        _wizard.Transitions = wizardTransitions;
+        translation.Transitions = translationTransitions;
+    }
+
+    private static async Task RunCompactOverlaySlideAsync(
+        TranslateTransform translation,
+        double target,
+        CancellationToken cancellationToken)
+    {
+        var transitions = translation.Transitions;
+        translation.Transitions = new Transitions
+        {
+            new DoubleTransition
+            {
+                Property = TranslateTransform.XProperty,
+                Duration = CompactOverlaySlideDuration,
+                Easing = new CubicEaseInOut()
+            }
+        };
+
+        try
+        {
+            translation.X = target;
+            await Task.Delay(MotionDurations.CompactPageSlide, cancellationToken);
+        }
+        finally
+        {
+            translation.Transitions = transitions;
+        }
+    }
+
     private static void RestoreVisibleState(Control control)
     {
         var translation = GetTranslation(control);
@@ -400,6 +512,25 @@ public sealed class WizardScreenTransition
         }
 
         StartAnchorAnimation(translation.Y + layoutOffset);
+    }
+
+    private void OnWizardSizeChanged(object? sender, SizeChangedEventArgs args)
+    {
+        if (!_wizard.IsVisible || _layoutAnchor is null)
+            return;
+
+        // A viewport resize moves the centered wizard as a whole. The reveal icon
+        // must follow that layout pass immediately instead of animating from its
+        // previous position. Step-height changes are handled by the container
+        // bounds listener above and keep their dedicated transition.
+        _anchorTargetY = null;
+        _isPlannedAnchorMove = false;
+        _plannedAnchorLayoutDelta = 0;
+        ResetAnchorTranslation();
+        ResetMotionTranslation();
+        Dispatcher.UIThread.Post(
+            InitializeAnchorTarget,
+            DispatcherPriority.Loaded);
     }
 
     private void BeginPlannedAnchorMove(Control outgoingStep, Control incomingStep)

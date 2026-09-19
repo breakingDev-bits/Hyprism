@@ -72,9 +72,24 @@ public sealed class WizardHost
             });
     }
 
-    public Task CloseAsync(
-        Func<bool> shouldRemainClosed,
-        Action? onClosed = null)
+    public Task OpenCompactOverlayAsync(
+        Func<bool> shouldRemainOpen,
+        double horizontalOffset,
+        Action? onOpened = null)
+    {
+        NormalizeSteps();
+        SelectActiveStepAnimation();
+        return _transition.OpenCompactOverlayAsync(
+            shouldRemainOpen,
+            RestartReveal,
+            () =>
+            {
+                onOpened?.Invoke();
+            },
+            horizontalOffset);
+    }
+
+    public Task CloseAsync(Func<bool> shouldRemainClosed, Action? onClosed = null)
         => _transition.CloseAsync(
             shouldRemainClosed,
             () =>
@@ -82,6 +97,19 @@ public sealed class WizardHost
                 onClosed?.Invoke();
                 NormalizeSteps();
             });
+
+    public Task CloseCompactOverlayAsync(
+        Func<bool> shouldRemainClosed,
+        double horizontalOffset,
+        Action? onClosed = null)
+        => _transition.CloseCompactOverlayAsync(
+            shouldRemainClosed,
+            () =>
+            {
+                onClosed?.Invoke();
+                NormalizeSteps();
+            },
+            horizontalOffset);
 
     public async Task SwitchStepAsync(
         Control outgoingStep,
@@ -146,6 +174,13 @@ public sealed class WizardHost
         if (activeStep is not null && PlayStepAnimation(activeStep))
             return;
 
+        if (_revealIcon is not null &&
+            _revealIcon.AnimationPath is { Length: > 0 } animationPath)
+        {
+            _revealIcon.Play(animationPath);
+            return;
+        }
+
         if (_revealAnimation is null)
             return;
 
@@ -180,7 +215,7 @@ public sealed class WizardHost
         if (activeStep is not null &&
             _stepAnimationPaths.TryGetValue(activeStep, out var animationPath))
         {
-            _revealIcon.Select(animationPath);
+            _revealIcon.ShowInitialFrame(animationPath);
         }
     }
 

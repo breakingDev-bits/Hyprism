@@ -102,6 +102,46 @@ public sealed class WizardScreenTransitionTests
     }
 
     [AvaloniaFact]
+    public async Task WizardHostResetsRevealBeforeReopeningWizard()
+    {
+        var overview = CreateControl();
+        var wizard = CreateControl();
+        var activeStep = CreateControl();
+        activeStep.IsVisible = true;
+        var revealIcon = new WizardRevealIcon
+        {
+            AnimationPath = "/Assets/Lotties/avatar-reveal.json"
+        };
+        var host = new WizardHost(
+            overview,
+            wizard,
+            navigationPane: null,
+            revealIcon,
+            new WizardStepDefinition(activeStep, "/Assets/Lotties/avatar-reveal.json"));
+
+        var window = new Window
+        {
+            Width = 400,
+            Height = 400,
+            Content = wizard
+        };
+        window.Show();
+        Dispatcher.UIThread.RunJobs();
+        host.ShowWizardImmediately();
+        revealIcon.Play("/Assets/Lotties/avatar-reveal.json");
+        host.ShowOverviewImmediately();
+
+        var wizardTranslation = Assert.IsType<TranslateTransform>(wizard.RenderTransform);
+        var openTask = host.OpenCompactOverlayAsync(() => true, 400);
+
+        await WaitForRenderStateAsync(
+            () => revealIcon.LastSelectionWasAnimated && wizardTranslation.X > 0.5,
+            "reveal animation to start during compact wizard slide");
+        await openTask;
+        window.Close();
+    }
+
+    [AvaloniaFact]
     public async Task RotatingVisualRunsOnlyWhileAttachedAndActive()
     {
         var spinner = new Border();
@@ -597,6 +637,64 @@ public sealed class WizardScreenTransitionTests
         Assert.InRange(Math.Abs(translation.Y), 0, 0.01);
         Assert.Null(translation.Transitions);
 
+        window.Close();
+    }
+
+    [AvaloniaFact]
+    public void ResizingWizardViewportMovesRevealAnchorImmediately()
+    {
+        var overview = CreateControl();
+        var anchor = new Border
+        {
+            Width = 64,
+            Height = 64,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            RenderTransform = new TranslateTransform()
+        };
+        var content = new Border
+        {
+            Width = 240,
+            Height = 120
+        };
+        var wizardContent = new StackPanel
+        {
+            VerticalAlignment = VerticalAlignment.Center,
+            Spacing = 20,
+            Children = { anchor, content }
+        };
+        var wizard = new Border
+        {
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            VerticalAlignment = VerticalAlignment.Stretch,
+            Child = wizardContent,
+            RenderTransform = new TranslateTransform()
+        };
+        var window = new Window
+        {
+            Width = 400,
+            Height = 500,
+            Content = wizard
+        };
+
+        var transition = new WizardScreenTransition(
+            overview,
+            wizard,
+            layoutAnchor: anchor);
+        window.Show();
+        Dispatcher.UIThread.RunJobs();
+        transition.ShowWizardImmediately();
+        Dispatcher.UIThread.RunJobs();
+
+        window.Height = 700;
+        Dispatcher.UIThread.RunJobs();
+        AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
+        Dispatcher.UIThread.RunJobs();
+
+        var translation = Assert.IsType<TranslateTransform>(anchor.RenderTransform);
+        Assert.InRange(Math.Abs(translation.Y), 0, 0.01);
+        Assert.Null(translation.Transitions);
+
+        transition.Cancel();
         window.Close();
     }
 

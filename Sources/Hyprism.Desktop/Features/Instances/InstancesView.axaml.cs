@@ -33,6 +33,7 @@ public sealed partial class InstancesView : UserControl
     private readonly ReorderableListController _instanceReorder;
     private INotifyPropertyChanged? _viewModel;
     private bool _creatorOpenedFromCompactList;
+    private bool _creatorTransitionActive;
     private int _creatorNavigationRevision;
     private CancellationTokenSource? _sectionAnimationCancellation;
     private CancellationTokenSource? _versionLoadingCancellation;
@@ -220,7 +221,8 @@ public sealed partial class InstancesView : UserControl
         if (!hasInstances)
         {
             EnsureSingleLayoutRow();
-            _creatorWizard.ResetNavigationPane();
+            if (!_creatorTransitionActive)
+                _creatorWizard.ResetNavigationPane();
             InstancesLayout.RowDefinitions[0].Height = new GridLength(1, GridUnitType.Star);
             Grid.SetRow(InstancesContent, 0);
             Grid.SetRowSpan(InstancesContent, 1);
@@ -237,6 +239,13 @@ public sealed partial class InstancesView : UserControl
 
         if (!_layoutHost.IsCompact)
         {
+            if (_creatorTransitionActive)
+            {
+                if (layoutModeChanged)
+                    ApplySectionStateImmediately();
+                return;
+            }
+
             if (viewModel.IsInstanceCreatorOpen)
                 _creatorWizard.HideNavigationPane(animate: false);
             else
@@ -246,7 +255,8 @@ public sealed partial class InstancesView : UserControl
             return;
         }
 
-        _creatorWizard.ResetNavigationPane();
+        if (!_creatorTransitionActive)
+            _creatorWizard.ResetNavigationPane();
         Grid.SetRowSpan(InstancesContent, 1);
         if (layoutModeChanged)
             ApplySectionStateImmediately();
@@ -373,66 +383,93 @@ public sealed partial class InstancesView : UserControl
     private async Task PlayCreatorOpenAnimationAsync()
     {
         var revision = ++_creatorNavigationRevision;
-        if (_creatorOpenedFromCompactList && _layoutHost.IsCompact)
+        _creatorTransitionActive = true;
+        try
         {
-            await _creatorWizard.ShowWizardForCompactEntryAsync();
-            if (revision != _creatorNavigationRevision ||
-                DataContext is not InstancesViewModel { IsInstanceCreatorOpen: true })
+            if (_creatorOpenedFromCompactList && _layoutHost.IsCompact)
             {
+                await _creatorWizard.ShowWizardForCompactEntryAsync();
+                if (revision != _creatorNavigationRevision ||
+                    DataContext is not InstancesViewModel { IsInstanceCreatorOpen: true })
+                {
+                    return;
+                }
+
+                _layoutHost.OpenDetail();
+                UpdateBranchIndicator(animate: false);
+                await Task.Delay(CompactContentTransitionDuration);
                 return;
             }
 
-            _layoutHost.OpenDetail();
-            UpdateBranchIndicator(animate: false);
-            return;
-        }
+            if (!_layoutHost.IsCompact &&
+                DataContext is InstancesViewModel { HasInstances: true })
+            {
+                _creatorWizard.HideNavigationPane(animate: true);
+            }
 
-        if (!_layoutHost.IsCompact &&
-            DataContext is InstancesViewModel { HasInstances: true })
+            await _creatorWizard.OpenAsync(
+                () => DataContext is InstancesViewModel { IsInstanceCreatorOpen: true },
+                () => UpdateBranchIndicator(animate: false));
+        }
+        finally
         {
-            _creatorWizard.HideNavigationPane(animate: true);
+            if (revision == _creatorNavigationRevision)
+            {
+                _creatorTransitionActive = false;
+                UpdateLayout(Bounds.Width);
+            }
         }
-
-        await _creatorWizard.OpenAsync(
-            () => DataContext is InstancesViewModel { IsInstanceCreatorOpen: true },
-            () => UpdateBranchIndicator(animate: false));
     }
 
     private async Task PlayCreatorCloseAnimationAsync()
     {
         var revision = ++_creatorNavigationRevision;
-        if (_creatorOpenedFromCompactList && _layoutHost.IsCompact)
+        _creatorTransitionActive = true;
+        try
         {
-            _creatorWizard.Cancel();
-            _layoutHost.TryCloseDetail();
-            await Task.Delay(CompactContentTransitionDuration);
-            if (revision == _creatorNavigationRevision &&
-                DataContext is InstancesViewModel { IsInstanceCreatorOpen: false })
+            if (_creatorOpenedFromCompactList && _layoutHost.IsCompact)
             {
-                _creatorWizard.ShowOverviewImmediately();
-                _creatorOpenedFromCompactList = false;
-            }
-
-            return;
-        }
-
-        await _creatorWizard.CloseAsync(
-            () => DataContext is InstancesViewModel { IsInstanceCreatorOpen: false },
-            () =>
-            {
-                if (!_layoutHost.IsCompact &&
-                    DataContext is InstancesViewModel { HasInstances: true })
+                _creatorWizard.Cancel();
+                _layoutHost.TryCloseDetail();
+                await Task.Delay(CompactContentTransitionDuration);
+                if (revision == _creatorNavigationRevision &&
+                    DataContext is InstancesViewModel { IsInstanceCreatorOpen: false })
                 {
-                    _creatorWizard.ShowNavigationPane(animate: true);
+                    _creatorWizard.ShowOverviewImmediately();
+                    _creatorOpenedFromCompactList = false;
                 }
 
-                _creatorOpenedFromCompactList = false;
-            });
+                return;
+            }
+
+            await _creatorWizard.CloseAsync(
+                () => DataContext is InstancesViewModel { IsInstanceCreatorOpen: false },
+                () =>
+                {
+                    if (!_layoutHost.IsCompact &&
+                        DataContext is InstancesViewModel { HasInstances: true })
+                    {
+                        _creatorWizard.ShowNavigationPane(animate: true);
+                    }
+
+                    _creatorOpenedFromCompactList = false;
+                });
+        }
+        finally
+        {
+            if (revision == _creatorNavigationRevision)
+            {
+                _creatorTransitionActive = false;
+                if (_layoutHost.IsCompact)
+                    UpdateLayout(Bounds.Width);
+            }
+        }
     }
 
     private void HideCreatorImmediately()
     {
         ++_creatorNavigationRevision;
+        _creatorTransitionActive = false;
         _creatorOpenedFromCompactList = false;
         _creatorWizard.ShowOverviewImmediately();
         if (!_layoutHost.IsCompact &&
