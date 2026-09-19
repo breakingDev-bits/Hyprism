@@ -1909,7 +1909,7 @@ public sealed class MainWindowRenderTests
             [
                 new NewsItemResponse
                 {
-                    Title = "Hytale launches a new adventure",
+                    Title = "PRE-RELEASE PATCH NOTES (UPDATE 7)",
                     Excerpt = "A closer look at the world, its creatures, and the systems behind exploration.",
                     Url = "https://hytale.com/news/preview",
                     Date = "2026-08-05",
@@ -1943,7 +1943,7 @@ public sealed class MainWindowRenderTests
         news.Setup(service => service.GetNewsArticleAsync(It.IsAny<string>()))
             .ReturnsAsync(new NewsArticleResponse
             {
-                Title = "Hytale launches a new adventure",
+                Title = "PRE-RELEASE PATCH NOTES (UPDATE 7)",
                 Excerpt = "A closer look at the world and its creatures.",
                 Url = "https://hytale.com/news/2026/8/new-adventure",
                 PublishedAt = "2026-08-05",
@@ -3015,7 +3015,7 @@ public sealed class MainWindowRenderTests
         Assert.False(viewModel.IsNewsFeedVisible);
         Assert.True(viewModel.FeaturedNews.IsSelected);
         Assert.Equal(usesWideLayout ? 0 : 1, viewModel.CompactNewsPageIndex);
-        Assert.Equal("Hytale launches a new adventure", viewModel.SelectedNewsArticle?.Title);
+        Assert.Equal("PRE-RELEASE PATCH NOTES (UPDATE 7)", viewModel.SelectedNewsArticle?.Title);
         var selectedArticle = viewModel.SelectedNewsArticle!;
         Assert.False(viewModel.IsNewsArticleSkeletonVisible);
         Assert.Equal(7, viewModel.SelectedNewsArticle?.Blocks.Count);
@@ -3156,6 +3156,8 @@ public sealed class MainWindowRenderTests
             Assert.True(viewModel.IsNewsArticleScrolled);
             Assert.InRange(articleToolbar.Margin.Left, 23.5, 24.5);
             Assert.InRange(toolbarTitle.Opacity, 0.99, 1);
+            Assert.Equal(selectedArticle.Title, toolbarTitle.Text);
+            Assert.True(toolbarTitle.Bounds.Width > 280);
             var scrolledBackPosition = backButton.TranslatePoint(default, activeArticleHost);
             var scrolledOriginalPosition = originalButton.TranslatePoint(default, activeArticleHost);
             var toolbarTitlePosition = toolbarTitle.TranslatePoint(default, articleToolbar);
