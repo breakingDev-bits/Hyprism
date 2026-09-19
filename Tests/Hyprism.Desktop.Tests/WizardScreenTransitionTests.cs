@@ -600,6 +600,64 @@ public sealed class WizardScreenTransitionTests
         window.Close();
     }
 
+    [AvaloniaFact]
+    public void ResizingWizardViewportMovesRevealAnchorImmediately()
+    {
+        var overview = CreateControl();
+        var anchor = new Border
+        {
+            Width = 64,
+            Height = 64,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            RenderTransform = new TranslateTransform()
+        };
+        var content = new Border
+        {
+            Width = 240,
+            Height = 120
+        };
+        var wizardContent = new StackPanel
+        {
+            VerticalAlignment = VerticalAlignment.Center,
+            Spacing = 20,
+            Children = { anchor, content }
+        };
+        var wizard = new Border
+        {
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            VerticalAlignment = VerticalAlignment.Stretch,
+            Child = wizardContent,
+            RenderTransform = new TranslateTransform()
+        };
+        var window = new Window
+        {
+            Width = 400,
+            Height = 500,
+            Content = wizard
+        };
+
+        var transition = new WizardScreenTransition(
+            overview,
+            wizard,
+            layoutAnchor: anchor);
+        window.Show();
+        Dispatcher.UIThread.RunJobs();
+        transition.ShowWizardImmediately();
+        Dispatcher.UIThread.RunJobs();
+
+        window.Height = 700;
+        Dispatcher.UIThread.RunJobs();
+        AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
+        Dispatcher.UIThread.RunJobs();
+
+        var translation = Assert.IsType<TranslateTransform>(anchor.RenderTransform);
+        Assert.InRange(Math.Abs(translation.Y), 0, 0.01);
+        Assert.Null(translation.Transitions);
+
+        transition.Cancel();
+        window.Close();
+    }
+
     private static Border CreateControl()
         => new()
         {

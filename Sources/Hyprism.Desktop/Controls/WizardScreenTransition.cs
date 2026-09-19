@@ -52,6 +52,7 @@ public sealed class WizardScreenTransition
             _layoutMotionTarget!.RenderTransform ??= new TranslateTransform();
             _layoutContainer = _layoutAnchor.Parent as Control ?? _wizard;
             _layoutContainer.PropertyChanged += OnLayoutContainerPropertyChanged;
+            _wizard.SizeChanged += OnWizardSizeChanged;
         }
     }
 
@@ -400,6 +401,25 @@ public sealed class WizardScreenTransition
         }
 
         StartAnchorAnimation(translation.Y + layoutOffset);
+    }
+
+    private void OnWizardSizeChanged(object? sender, SizeChangedEventArgs args)
+    {
+        if (!_wizard.IsVisible || _layoutAnchor is null)
+            return;
+
+        // A viewport resize moves the centered wizard as a whole. The reveal icon
+        // must follow that layout pass immediately instead of animating from its
+        // previous position. Step-height changes are handled by the container
+        // bounds listener above and keep their dedicated transition.
+        _anchorTargetY = null;
+        _isPlannedAnchorMove = false;
+        _plannedAnchorLayoutDelta = 0;
+        ResetAnchorTranslation();
+        ResetMotionTranslation();
+        Dispatcher.UIThread.Post(
+            InitializeAnchorTarget,
+            DispatcherPriority.Loaded);
     }
 
     private void BeginPlannedAnchorMove(Control outgoingStep, Control incomingStep)
