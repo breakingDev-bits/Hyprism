@@ -1,7 +1,6 @@
 // Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Headless.XUnit;
@@ -190,22 +189,10 @@ public sealed class DocumentationScreenshotTests
 
     private static async Task WaitForModalAsync(OverlayModal modal)
     {
-        var startedAt = Stopwatch.GetTimestamp();
-        while (Stopwatch.GetElapsedTime(startedAt) < TimeSpan.FromSeconds(5))
-        {
-            Dispatcher.UIThread.RunJobs();
-            var sheet = modal.FindControl<Grid>("OverlayModalSheet");
-            if (sheet is not null &&
-                sheet.RenderTransform is Avalonia.Media.TranslateTransform transform &&
-                transform.Y == 0)
-            {
-                return;
-            }
-
-            await Task.Delay(16, TestContext.Current.CancellationToken);
-        }
-
-        Assert.Fail("The Java argument dialog did not finish opening within five seconds");
+        await AvaloniaTestWait.UntilAsync(
+            () => modal.FindControl<Grid>("OverlayModalSheet")?.RenderTransform
+                     is Avalonia.Media.TranslateTransform { Y: 0 },
+            "Java argument dialog to finish opening");
     }
 
     private static async Task WaitFramesAsync(int frames)

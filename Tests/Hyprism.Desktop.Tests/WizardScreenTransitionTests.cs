@@ -1,7 +1,6 @@
 // Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using System.Diagnostics;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -71,7 +70,7 @@ public sealed class WizardScreenTransitionTests
                 form.IsVisible = true;
             },
             () => true);
-        await WaitForRenderStateAsync(
+        await AvaloniaTestWait.UntilAsync(
             () => !choice.IsVisible && form.IsVisible,
             "wizard step model state to switch");
 
@@ -134,8 +133,11 @@ public sealed class WizardScreenTransitionTests
         var wizardTranslation = Assert.IsType<TranslateTransform>(wizard.RenderTransform);
         var openTask = host.OpenCompactOverlayAsync(() => true, 400);
 
-        await WaitForRenderStateAsync(
-            () => revealIcon.LastSelectionWasAnimated && wizardTranslation.X > 0.5,
+        await AvaloniaTestWait.PropertyAsync(
+            wizardTranslation,
+            TranslateTransform.XProperty,
+            () => revealIcon.LastSelectionWasAnimated &&
+                  wizardTranslation.IsAnimating(TranslateTransform.XProperty),
             "reveal animation to start during compact wizard slide");
         await openTask;
         window.Close();
@@ -154,7 +156,7 @@ public sealed class WizardScreenTransitionTests
         window.Show();
         Dispatcher.UIThread.RunJobs();
         var rotation = Assert.IsType<RotateTransform>(spinner.RenderTransform);
-        await WaitForRenderStateAsync(
+        await AvaloniaTestWait.UntilAsync(
             () => rotation.Angle is > 0 and < 360,
             "active rotating visual to advance");
         Assert.InRange(rotation.Angle, 1, 359);
@@ -164,7 +166,7 @@ public sealed class WizardScreenTransitionTests
         Assert.Equal(0, rotation.Angle);
 
         RotatingVisual.SetIsActive(spinner, true);
-        await WaitForRenderStateAsync(
+        await AvaloniaTestWait.UntilAsync(
             () => rotation.Angle is > 0 and < 360,
             "reactivated rotating visual to advance");
         Assert.InRange(rotation.Angle, 1, 359);
@@ -174,7 +176,7 @@ public sealed class WizardScreenTransitionTests
         Assert.Equal(0, rotation.Angle);
 
         spinnerHost.IsVisible = true;
-        await WaitForRenderStateAsync(
+        await AvaloniaTestWait.UntilAsync(
             () => rotation.Angle is > 0 and < 360,
             "rotating visual under a restored ancestor to advance");
         Assert.InRange(rotation.Angle, 1, 359);
@@ -325,7 +327,7 @@ public sealed class WizardScreenTransitionTests
         Dispatcher.UIThread.RunJobs();
         Assert.True(translation.IsAnimating(TranslateTransform.XProperty));
 
-        await WaitForRenderStateAsync(
+        await AvaloniaTestWait.UntilAsync(
             () => Math.Abs(translation.X) <= 0.01,
             "detail opening animation to complete");
         Assert.InRange(Math.Abs(translation.X), 0, 0.01);
@@ -334,7 +336,7 @@ public sealed class WizardScreenTransitionTests
         Assert.True(host.TryCloseDetail());
         Dispatcher.UIThread.RunJobs();
         Assert.True(translation.IsAnimating(TranslateTransform.XProperty));
-        await WaitForRenderStateAsync(
+        await AvaloniaTestWait.UntilAsync(
             () => Math.Abs(translation.X - 800) <= 0.01,
             "detail closing animation to complete");
         Assert.InRange(Math.Abs(translation.X - 800), 0, 0.01);
@@ -416,13 +418,14 @@ public sealed class WizardScreenTransitionTests
             forward: true,
             () => stepSwitched = true,
             () => true);
-        await WaitForRenderStateAsync(
-            () => outgoingStep.Opacity is > 0 and < 1,
-            "outgoing wizard step animation to advance");
+        await AvaloniaTestWait.PropertyAsync(
+            outgoingStep,
+            Visual.OpacityProperty,
+            () => outgoingStep.IsAnimating(Visual.OpacityProperty),
+            "outgoing wizard step animation to start");
 
         Assert.False(stepSwitched);
         Assert.True(outgoingStep.IsVisible);
-        Assert.True(outgoingStep.Opacity < 1);
         Assert.False(outgoingStep.IsHitTestVisible);
         Assert.False(transitionTask.IsCompleted);
 
@@ -565,7 +568,7 @@ public sealed class WizardScreenTransitionTests
             $"stack bounds: {wizardContent.Bounds}");
         Assert.InRange(movingY, initialY - 200, initialY);
 
-        await WaitForAvaloniaPropertyAsync(
+        await AvaloniaTestWait.PropertyAsync(
             translation,
             TranslateTransform.YProperty,
             () => Math.Abs(translation.Y) <= 0.01,
@@ -704,52 +707,4 @@ public sealed class WizardScreenTransitionTests
             RenderTransform = new TranslateTransform()
         };
 
-    private static async Task WaitForRenderStateAsync(Func<bool> condition, string description)
-    {
-        var startedAt = Stopwatch.GetTimestamp();
-        while (!condition() && Stopwatch.GetElapsedTime(startedAt) < TimeSpan.FromSeconds(5))
-        {
-            AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
-            Dispatcher.UIThread.RunJobs();
-            await Task.Delay(16, TestContext.Current.CancellationToken);
-        }
-
-        AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
-        Dispatcher.UIThread.RunJobs();
-        Assert.True(condition(), $"Timed out waiting for {description}");
-    }
-
-    private static async Task WaitForAvaloniaPropertyAsync(
-        AvaloniaObject source,
-        AvaloniaProperty property,
-        Func<bool> condition,
-        string description)
-    {
-        if (condition())
-            return;
-
-        var completion = new TaskCompletionSource<bool>(
-            TaskCreationOptions.RunContinuationsAsynchronously);
-
-        void OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs args)
-        {
-            if (args.Property == property && condition())
-                completion.TrySetResult(true);
-        }
-
-        source.PropertyChanged += OnPropertyChanged;
-        try
-        {
-            if (!condition())
-                await completion.Task.WaitAsync(TimeSpan.FromSeconds(5));
-        }
-        catch (TimeoutException)
-        {
-            Assert.True(condition(), $"Timed out waiting for {description}");
-        }
-        finally
-        {
-            source.PropertyChanged -= OnPropertyChanged;
-        }
-    }
 }

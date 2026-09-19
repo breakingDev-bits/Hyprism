@@ -155,16 +155,29 @@ public class ProgressReporterTests
     }
 
     [Fact]
-    public async Task ReportDownloadProgress_AfterInterval_BroadcastsAgain()
+    public void ReportDownloadProgress_AfterInterval_BroadcastsAgain()
     {
         var received = new List<ProgressUpdateMessage>();
-        _svc.DownloadProgressChanged += received.Add;
+        var timeProvider = new ManualTimeProvider();
+        var service = new ProgressReporter(_discordMock.Object, timeProvider);
+        service.DownloadProgressChanged += received.Add;
 
-        _svc.ReportDownloadProgress("download", 10, "downloading");
-        await Task.Delay(150);
-        _svc.ReportDownloadProgress("download", 20, "downloading");
+        service.ReportDownloadProgress("download", 10, "downloading");
+        timeProvider.Advance(TimeSpan.FromMilliseconds(100));
+        service.ReportDownloadProgress("download", 20, "downloading");
 
         Assert.Equal(2, received.Count);
         Assert.Equal(20, received[1].Progress);
+    }
+
+    private sealed class ManualTimeProvider : TimeProvider
+    {
+        private long _timestamp;
+
+        public override long GetTimestamp()
+            => _timestamp;
+
+        public void Advance(TimeSpan duration)
+            => _timestamp += (long)(duration.TotalSeconds * TimestampFrequency);
     }
 }

@@ -415,8 +415,11 @@ public sealed class DataSettingsViewModelTests
             .OfType<Button>()
             .Single(button => button.DataContext is SettingCategoryViewModel { Id: "data" });
         dataCategoryButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-        await Task.Delay(420, TestContext.Current.CancellationToken);
-        Dispatcher.UIThread.RunJobs();
+        await AvaloniaTestWait.UntilAsync(
+            () => storageLegendCard.IsEffectivelyVisible &&
+                  Math.Abs(storageLegendCard.Bounds.Width - launcherFilesCard.Bounds.Width) <= 1 &&
+                  legendItems.All(item => item.Bounds.Width > 250),
+            "compact data settings content to settle");
         Assert.True(storageLegendCard.IsEffectivelyVisible);
         Assert.InRange(
             Math.Abs(storageLegendCard.Bounds.Width - launcherFilesCard.Bounds.Width),

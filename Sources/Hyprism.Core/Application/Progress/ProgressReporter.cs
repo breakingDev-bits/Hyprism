@@ -15,6 +15,7 @@ public sealed class ProgressReporter : IProgressReporter
     private const int BroadcastIntervalMilliseconds = 100;
 
     private readonly IDiscordPresence _discord;
+    private readonly TimeProvider _timeProvider;
     private readonly Lock _broadcastGate = new();
     private readonly AsyncLocal<string?> _operationInstanceId = new();
     private readonly Dictionary<string, BroadcastState> _broadcastStates =
@@ -30,9 +31,11 @@ public sealed class ProgressReporter : IProgressReporter
     /// Initializes a new instance of the <see cref="ProgressReporter"/> class
     /// </summary>
     /// <param name="discord">The Discord service for Rich Presence updates</param>
-    public ProgressReporter(IDiscordPresence discord)
+    /// <param name="timeProvider">The clock used for progress throttling</param>
+    public ProgressReporter(IDiscordPresence discord, TimeProvider? timeProvider = null)
     {
         _discord = discord;
+        _timeProvider = timeProvider ?? TimeProvider.System;
     }
 
     /// <inheritdoc/>
@@ -82,18 +85,19 @@ public sealed class ProgressReporter : IProgressReporter
     {
         lock (_broadcastGate)
         {
-            var nowMs = Environment.TickCount64;
+            var now = _timeProvider.GetTimestamp();
             var operationId = instanceId ?? _operationInstanceId.Value ?? "unscoped";
             _broadcastStates.TryGetValue(operationId, out var previous);
             var stageChanged = !string.Equals(stage, previous?.Stage, StringComparison.Ordinal);
             var isTerminal = progress >= 100;
             var intervalElapsed = previous is null ||
-                                  nowMs - previous.LastBroadcastAtMs >= BroadcastIntervalMilliseconds;
+                                  _timeProvider.GetElapsedTime(previous.LastBroadcastTimestamp) >=
+                                  TimeSpan.FromMilliseconds(BroadcastIntervalMilliseconds);
 
             if (!stageChanged && !isTerminal && !intervalElapsed)
                 return false;
 
-            _broadcastStates[operationId] = new BroadcastState(stage, nowMs);
+            _broadcastStates[operationId] = new BroadcastState(stage, now);
             return true;
         }
     }
@@ -136,5 +140,5 @@ public sealed class ProgressReporter : IProgressReporter
         }
     }
 
-    private sealed record BroadcastState(string Stage, long LastBroadcastAtMs);
+    private sealed record BroadcastState(string Stage, long LastBroadcastTimestamp);
 }

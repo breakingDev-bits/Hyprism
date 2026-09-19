@@ -63,22 +63,31 @@ public sealed class ProfileWizardLifecycleTests
         Dispatcher.UIThread.RunJobs();
 
         viewModel.ShowCreateChoiceCommand.Execute(null);
-        await Task.Delay(420);
-        Dispatcher.UIThread.RunJobs();
+        var choice = view.FindControl<StackPanel>("ProfileCreationChoiceContent");
+        var offline = view.FindControl<StackPanel>("OfflineProfileCreationContent");
+        Assert.NotNull(choice);
+        Assert.NotNull(offline);
+        await AvaloniaTestWait.UntilAsync(
+            () => choice!.IsEffectivelyVisible && choice.Opacity >= 0.99,
+            "profile creation choice to open");
         view.FindControl<Button>("BeginOfflineProfileCreationButton")!
             .RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-        await Task.Delay(240);
-        Dispatcher.UIThread.RunJobs();
+        await AvaloniaTestWait.UntilAsync(
+            () => viewModel.IsOfflineCreationVisible && offline!.IsEffectivelyVisible,
+            "offline profile creation step to open");
         viewModel.OfflineProfileName = "New_Profile";
         viewModel.CreateOfflineProfileCommand.Execute(null);
-        await Task.Delay(420);
-        Dispatcher.UIThread.RunJobs();
+        await AvaloniaTestWait.UntilAsync(
+            () => !viewModel.IsCreationVisible &&
+                  profiles.Count == 1 &&
+                  !offline!.IsEffectivelyVisible,
+            "offline profile creation to complete");
 
         viewModel.ShowCreateChoiceCommand.Execute(null);
-        await Task.Delay(420);
-        Dispatcher.UIThread.RunJobs();
+        await AvaloniaTestWait.UntilAsync(
+            () => viewModel.IsCreateChoiceVisible && choice!.IsEffectivelyVisible && choice.Opacity >= 0.99,
+            "profile creation choice to reopen");
 
-        var choice = view.FindControl<StackPanel>("ProfileCreationChoiceContent");
         Assert.NotNull(choice);
         Assert.True(choice!.IsEffectivelyVisible);
         Assert.Equal(1, choice.Opacity);

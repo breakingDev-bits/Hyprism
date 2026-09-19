@@ -849,17 +849,6 @@ public sealed class FadingComboBoxTests
         return true;
     }
 
-    private static async Task WaitUntilAsync(Func<bool> condition)
-    {
-        for (var attempt = 0; attempt < 100; attempt++)
-        {
-            Dispatcher.UIThread.RunJobs();
-            if (condition())
-                return;
-
-            await Task.Delay(10);
-        }
-
-        Assert.True(condition());
-    }
+    private static Task WaitUntilAsync(Func<bool> condition)
+        => AvaloniaTestWait.UntilAsync(condition, "combo box state to settle");
 }
