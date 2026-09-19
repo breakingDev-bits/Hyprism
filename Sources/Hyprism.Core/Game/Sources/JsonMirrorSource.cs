@@ -538,7 +538,7 @@ public partial class JsonMirrorSource : IVersionSource
             if (versions.Count > 0)
             {
                 _versionCache[cacheKey] = (DateTime.UtcNow, versions);
-                Logger.Success($"Mirror:{SourceId}", $"Discovered {versions.Count} versions for {branch}");
+                Logger.Success($"Mirror:{SourceId}", $" Discovered {versions.Count} versions for {branch}");
             }
 
             return versions;
@@ -670,8 +670,10 @@ public partial class JsonMirrorSource : IVersionSource
                 }
             }
 
-            if (root.TryGetProperty("files", out var filesNode) &&
-                filesNode.ValueKind == JsonValueKind.Object)
+            var hasFileIndex = root.TryGetProperty("files", out var filesNode) &&
+                filesNode.ValueKind == JsonValueKind.Object;
+
+            if (hasFileIndex)
             {
                 var mappedOs = ApplyMapping(_meta.Pattern?.OsMapping, os);
                 var mappedArch = ApplyMapping(_meta.Pattern?.ArchMapping, arch);
@@ -696,10 +698,10 @@ public partial class JsonMirrorSource : IVersionSource
                         versions[toVersion] = fileVersionName;
                     }
                 }
-            }
 
-            if (fileVersions.Count > 0)
-            {
+                // A manifest-level versions list can describe builds for every platform.
+                // Once a file index is present, only files matching the requested platform
+                // prove that a version can actually be downloaded there
                 versions = fileVersions.ToDictionary(
                     pair => pair.Key,
                     pair => string.IsNullOrWhiteSpace(pair.Value)

@@ -67,7 +67,7 @@ For JSON API entries, `JsonPath` points to the version name or numeric build. Wh
 }
 ```
 
-Manifest discovery also reads names from `versions[branch][build].version` and from `gameVersion` in matching file entries. This supports manifests where the file path contains only the numeric build, such as `0_to_27.pwr`
+Manifest discovery also reads names from `versions[branch][build].version` and from `gameVersion` in matching file entries. This supports manifests where the file path contains only the numeric build, such as `0_to_27.pwr`. When a manifest contains a `files` index, only files matching the requested OS, architecture, and branch count as available. The global `versions` section supplies metadata for those files and does not make an unsupported platform available
 
 The official source reads the authenticated `game-assets/version/{branch}.json` manifest and follows its signed JSON URL when necessary. The returned name is paired with the latest numeric build from the patches API
 
