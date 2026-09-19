@@ -1,8 +1,8 @@
 [
   {
     "pname": "AngleSharp",
-    "version": "1.7.0",
-    "hash": "sha256-ltWbyN4Bb993PayYfWQmTLpaPR+8Gf11NrkuLLKMqNU="
+    "version": "1.8.2",
+    "hash": "sha256-sxS0JrUjD7nl0YHHgISh07iwZWFRhZhYXc6bwZYxT3c="
   },
   {
     "pname": "Avalonia",
@@ -76,8 +76,8 @@
   },
   {
     "pname": "BouncyCastle.Cryptography",
-    "version": "2.6.2",
-    "hash": "sha256-Yjk2+x/RcVeccGOQOQcRKCiYzyx1mlFnhS5auCII+Ms="
+    "version": "2.7.0",
+    "hash": "sha256-8JH/zKtNA5k+Zgus4ndlmnne4JcvVNfx9L1G1oCWYkE="
   },
   {
     "pname": "CommunityToolkit.Mvvm",
@@ -121,13 +121,13 @@
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection",
-    "version": "10.0.10",
-    "hash": "sha256-SZDbEORdMQa+Zg9F29lP5By7jaT5b9XLj8LAx7j1EZA="
+    "version": "10.0.12",
+    "hash": "sha256-uXnGMBkfbEi1SMrYZtgiSg7Q5ue+CrqH9FS1dZe2N3k="
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "version": "10.0.10",
-    "hash": "sha256-2r+Qvd0u3zODfQ1NAL+qu+W5XGaqJjm31bG6SGJKZn0="
+    "version": "10.0.12",
+    "hash": "sha256-RmT6sKxLVriTUzP1nunngByKuW3nxXyztuuBkqWmHFU="
   },
   {
     "pname": "Newtonsoft.Json",
