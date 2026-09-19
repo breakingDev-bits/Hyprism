@@ -173,6 +173,8 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
     private string _activityDetail = string.Empty;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsCreateReleaseBranch))]
+    [NotifyPropertyChangedFor(nameof(IsCreatePreReleaseBranch))]
     private string _newInstanceBranch = "release";
 
     [ObservableProperty]

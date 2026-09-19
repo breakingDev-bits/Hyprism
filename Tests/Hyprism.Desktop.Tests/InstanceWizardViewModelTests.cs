@@ -69,10 +69,21 @@ public sealed class InstanceWizardViewModelTests
             new StringLocalizer("en-US"),
             versionCatalog: versionCatalog.Object);
 
+        var changedProperties = new HashSet<string>();
+        viewModel.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName is not null)
+                changedProperties.Add(args.PropertyName);
+        };
+
         viewModel.OpenInstanceCreatorCommand.Execute(null);
         viewModel.SetNewInstanceBranchCommand.Execute("pre-release");
 
         Assert.False(viewModel.IsInstanceVersionsLoading);
+        Assert.False(viewModel.IsCreateReleaseBranch);
+        Assert.True(viewModel.IsCreatePreReleaseBranch);
+        Assert.Contains(nameof(viewModel.IsCreateReleaseBranch), changedProperties);
+        Assert.Contains(nameof(viewModel.IsCreatePreReleaseBranch), changedProperties);
         Assert.Equal([61, 60], viewModel.AvailableInstanceVersions.Select(item => item.Version));
         versionCatalog.Verify(
             service => service.GetVersionListAsync(
