@@ -48,6 +48,65 @@ namespace Hyprism.Desktop.Tests;
 public sealed class MainWindowRenderTests
 {
     [AvaloniaFact]
+    public async Task InstanceWizardPopupStaysInsideTheMainSceneSurface()
+    {
+        using var httpClient = new HttpClient();
+        using var viewModel = MainWindowViewModelFactory.Create(httpClient);
+        var window = new MainWindow
+        {
+            Width = 1024,
+            Height = 700,
+            DataContext = viewModel
+        };
+
+        window.Show();
+        viewModel.NavigateCommand.Execute("instances");
+        Dispatcher.UIThread.RunJobs();
+
+        var instancesView = Assert.Single(window.GetVisualDescendants().OfType<InstancesView>());
+        var addInstanceRow = Assert.Single(
+            instancesView.GetVisualDescendants().OfType<Button>(),
+            button => button.Classes.Contains("instancesAddRow"));
+        addInstanceRow.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+        var wizard = instancesView.FindControl<Border>("InstanceCreatorScreen");
+        Assert.NotNull(wizard);
+        await WaitForConditionAsync(
+            () => wizard!.IsEffectivelyVisible,
+            "instance creator wizard to open");
+
+        foreach (var version in new[] { 7, 6, 5, 4, 3 })
+        {
+            viewModel.Instances.AvailableInstanceVersions.Add(
+                new InstanceVersionItemViewModel(version, version == 7));
+        }
+        Dispatcher.UIThread.RunJobs();
+
+        var comboBox = instancesView.FindControl<FadingComboBox>("InstanceVersionComboBox");
+        Assert.NotNull(comboBox);
+        comboBox!.Margin = new Thickness(0, 32, 0, 0);
+        Dispatcher.UIThread.RunJobs();
+        comboBox.IsDropDownOpen = true;
+        var popup = Assert.Single(comboBox.GetVisualDescendants().OfType<FadingPopup>());
+        await WaitForConditionAsync(
+            () => popup.Child is Visual { Bounds.Height: > 0 },
+            "instance version popup to measure");
+
+        var surface = Assert.IsType<Border>(window.FindControl<Border>("MainSceneSurface"));
+        var popupChild = Assert.IsAssignableFrom<Visual>(popup.Child);
+        var popupOrigin = popupChild.TranslatePoint(new Point(), window);
+        var surfaceOrigin = surface.TranslatePoint(new Point(), window);
+        var clip = Assert.IsType<RectangleGeometry>(popupChild.Clip).Rect;
+        Assert.NotNull(popupOrigin);
+        Assert.NotNull(surfaceOrigin);
+        Assert.True(
+            popupOrigin!.Value.Y + clip.Bottom <=
+            surfaceOrigin!.Value.Y + surface.Bounds.Height + 0.5);
+
+        window.Close();
+    }
+
+    [AvaloniaFact]
     public void WizardActionsUseSharedSeparatedAppearance()
     {
         var secondaryAction = new Button { Content = "Back" };
