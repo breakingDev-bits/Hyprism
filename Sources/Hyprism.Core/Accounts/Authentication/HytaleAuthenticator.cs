@@ -148,7 +148,7 @@ public class HytaleAuthenticator : IHytaleAuthenticator
             finally
             {
                 if (_authCodeTcs?.Task.IsCanceled == true)
-                    listener.Stop();
+                    listener.Close();
                 await callbackTask;
                 callbackTask = null;
                 _callbackListener = null;
@@ -195,7 +195,7 @@ public class HytaleAuthenticator : IHytaleAuthenticator
         finally
         {
             if (listener.IsListening)
-                listener.Stop();
+                listener.Close();
             if (callbackTask is not null)
                 await callbackTask;
             if (ReferenceEquals(_callbackListener, listener))
@@ -401,7 +401,6 @@ public class HytaleAuthenticator : IHytaleAuthenticator
     {
         try
         {
-            _callbackListener?.Stop();
             _callbackListener?.Close();
         }
         catch { }
