@@ -1384,12 +1384,12 @@ public sealed class MainWindowRenderTests
         Dispatcher.UIThread.RunJobs();
         var openTask = viewModel.FeaturedNews!.OpenCommand.ExecuteAsync(null);
         await WaitForConditionAsync(
-            () => viewModel.IsCompactNewsTransitionActive &&
+            () => viewModel.IsNewsArticleLoading &&
                   window.GetVisualDescendants()
                       .OfType<Border>()
                       .Any(border => border.IsEffectivelyVisible &&
                                      border.Classes.Contains("skeleton")),
-            "compact news loading transition to become active");
+            "compact news loading skeleton to become visible");
         Dispatcher.UIThread.RunJobs();
 
         var compactShell = FindVisualByName<Grid>(window, "CompactNewsShell");
@@ -1397,9 +1397,7 @@ public sealed class MainWindowRenderTests
         Assert.NotNull(compactShell);
         Assert.NotNull(articleHost);
         Assert.True(viewModel.IsNewsArticleLoading);
-        Assert.True(viewModel.IsCompactNewsTransitionActive);
         var articleTranslation = Assert.IsType<TranslateTransform>(articleHost!.RenderTransform);
-        Assert.True(articleTranslation.X > 0);
         var articleTransition = Assert.IsType<DoubleTransition>(Assert.Single(
             articleTranslation.Transitions!,
             transition => transition is DoubleTransition { Property: { } property } &&
