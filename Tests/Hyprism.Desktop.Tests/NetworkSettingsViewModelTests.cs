@@ -127,9 +127,9 @@ public sealed class NetworkSettingsViewModelTests
             viewModel.Categories.Single(category => category.Id == "network"));
 
         var server = Assert.Single(viewModel.AuthServerItems);
-        var timeout = DateTime.UtcNow.AddSeconds(1);
-        while (server.IsChecking && DateTime.UtcNow < timeout)
-            await Task.Delay(10);
+        await AvaloniaTestWait.UntilAsync(
+            () => !server.IsChecking,
+            "auth server availability probe to complete");
 
         Assert.True(server.IsAvailable);
         Assert.NotEqual("—", server.Ping);

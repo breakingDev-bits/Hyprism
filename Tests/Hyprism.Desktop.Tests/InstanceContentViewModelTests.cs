@@ -491,13 +491,8 @@ public sealed class InstanceContentViewModelTests
         Assert.True(viewModel.CanRunManagedInstanceAction);
     }
 
-    private static async Task WaitUntilAsync(Func<bool> condition)
-    {
-        for (var attempt = 0; attempt < 50 && !condition(); attempt++)
-            await Task.Delay(20);
-
-        Assert.True(condition());
-    }
+    private static Task WaitUntilAsync(Func<bool> condition)
+        => AvaloniaTestWait.UntilAsync(condition, "instance content state to settle");
 
     private static GameProcessInfo CreateProcessInfo(string instanceId)
         => new(

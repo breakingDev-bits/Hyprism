@@ -5,7 +5,6 @@ using System.Net;
 using System.Globalization;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
@@ -281,13 +280,13 @@ public sealed class MainWindowRenderTests
             var activeProfile = viewModel.SelectedProfile;
             viewModel.SelectProfileCommand.Execute(
                 viewModel.Profiles.Single(profile => !profile.IsActive));
-            await Task.Delay(380);
+            window.UpdateLayout();
             Dispatcher.UIThread.RunJobs();
             window.CaptureRenderedFrame()!.Save(
                 Path.Combine(directory, $"{stem}-inactive-wide.png"),
                 PngBitmapEncoderOptions.Default);
             viewModel.SelectProfileCommand.Execute(activeProfile);
-            await Task.Delay(380);
+            window.UpdateLayout();
             Dispatcher.UIThread.RunJobs();
         }
 
@@ -296,6 +295,23 @@ public sealed class MainWindowRenderTests
         var profileMain = view.FindControl<Grid>("ProfileMain");
         var profileMainWidthWithList = profileMain!.Bounds.Width;
         var wizard = Assert.IsType<Border>(view.FindControl<Border>("ProfileCreatorScreen"));
+        var profileWizardReveal = Assert.IsType<WizardRevealIcon>(
+            view.FindControl<WizardRevealIcon>("ProfileWizardReveal"));
+        var profileWizardAnimation = profileWizardReveal.Animation;
+        var creatorOpened = false;
+        TaskCompletionSource<bool>? profileAnimationCompleted = null;
+        EventHandler? profileAnimationCompletedHandler = null;
+        if (!string.IsNullOrWhiteSpace(previewPath))
+        {
+            profileAnimationCompleted = new TaskCompletionSource<bool>(
+                TaskCreationOptions.RunContinuationsAsynchronously);
+            profileAnimationCompletedHandler = (_, _) =>
+            {
+                if (creatorOpened)
+                    profileAnimationCompleted.TrySetResult(true);
+            };
+            profileWizardAnimation.AnimationCompleted += profileAnimationCompletedHandler;
+        }
         var profileListHidden = WaitForAvaloniaPropertyAsync(
             profilesListPane!,
             Visual.BoundsProperty,
@@ -306,6 +322,7 @@ public sealed class MainWindowRenderTests
             Visual.OpacityProperty,
             () => wizard.IsEffectivelyVisible && wizard.Opacity >= 0.99,
             "profile creator to finish opening");
+        creatorOpened = true;
         viewModel.ShowCreateChoiceCommand.Execute(null);
         Assert.True(profileOverview!.IsVisible);
         Assert.True(profileEditorContent!.IsVisible);
@@ -318,9 +335,6 @@ public sealed class MainWindowRenderTests
         Assert.False(profilesListPane.IsHitTestVisible);
         Assert.True(profileMain.Bounds.Width > profileMainWidthWithList + 275);
         Assert.Contains("profileWizardScreen", wizard.Classes);
-        var profileWizardReveal = Assert.IsType<WizardRevealIcon>(
-            view.FindControl<WizardRevealIcon>("ProfileWizardReveal"));
-        var profileWizardAnimation = profileWizardReveal.Animation;
         Assert.Equal("/Assets/Lotties/avatar-reveal.json", profileWizardAnimation.Path);
         Assert.True(profileWizardAnimation.AutoPlay);
         Assert.Equal(2, profileWizardAnimation.PlayBackRate);
@@ -335,11 +349,13 @@ public sealed class MainWindowRenderTests
             window.CaptureRenderedFrame()!.Save(
                 Path.Combine(directory, $"{stem}-wizard.png"),
                 PngBitmapEncoderOptions.Default);
-            await Task.Delay(1600);
-            Dispatcher.UIThread.RunJobs();
+            await profileAnimationCompleted!.Task.WaitAsync(
+                TimeSpan.FromSeconds(5),
+                TestContext.Current.CancellationToken);
             window.CaptureRenderedFrame()!.Save(
                 Path.Combine(directory, $"{stem}-wizard-final.png"),
                 PngBitmapEncoderOptions.Default);
+            profileWizardAnimation.AnimationCompleted -= profileAnimationCompletedHandler;
         }
 
         var profileCreationChoice = view.FindControl<StackPanel>("ProfileCreationChoiceContent");
@@ -1711,8 +1727,9 @@ public sealed class MainWindowRenderTests
             "HYPRISM_SETTINGS_COMBO_RENDER_OUTPUT");
         if (!string.IsNullOrWhiteSpace(settingsComboPreviewPath))
         {
-            await Task.Delay(220);
-            Dispatcher.UIThread.RunJobs();
+            await WaitForConditionAsync(
+                () => languagePopupBorder.Opacity >= 0.99,
+                "language popup to finish opening");
             window.CaptureRenderedFrame()!.Save(settingsComboPreviewPath, PngBitmapEncoderOptions.Default);
             Assert.True(File.Exists(settingsComboPreviewPath));
         }
@@ -2662,7 +2679,7 @@ public sealed class MainWindowRenderTests
                 "HYPRISM_INSTANCE_WIZARD_RENDER_OUTPUT");
             if (!string.IsNullOrWhiteSpace(instanceWizardPreviewPath) && width == 1280)
             {
-                await Task.Delay(700);
+                window.UpdateLayout();
                 Dispatcher.UIThread.RunJobs();
                 window.CaptureRenderedFrame()!.Save(
                     instanceWizardPreviewPath,
@@ -2796,8 +2813,9 @@ public sealed class MainWindowRenderTests
                 "HYPRISM_INSTANCES_COMPACT_MENU_CLOSING_RENDER_OUTPUT");
             if (!string.IsNullOrWhiteSpace(compactMenuClosingPreviewPath))
             {
-                await Task.Delay(90);
-                Dispatcher.UIThread.RunJobs();
+                await WaitForConditionAsync(
+                    () => compactInstanceMenuPopup.Child?.IsAnimating(Visual.OpacityProperty) == true,
+                    "compact instance menu close animation to start");
                 window.CaptureRenderedFrame()!.Save(compactMenuClosingPreviewPath, PngBitmapEncoderOptions.Default);
                 Assert.True(File.Exists(compactMenuClosingPreviewPath));
             }
@@ -4380,46 +4398,10 @@ public sealed class MainWindowRenderTests
         AvaloniaProperty property,
         Func<bool> condition,
         string description)
-    {
-        if (condition())
-            return;
-
-        var completion = new TaskCompletionSource<bool>(
-            TaskCreationOptions.RunContinuationsAsynchronously);
-        void OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs args)
-        {
-            if (args.Property == property && condition())
-                completion.TrySetResult(true);
-        }
-
-        source.PropertyChanged += OnPropertyChanged;
-        try
-        {
-            if (!condition())
-                await completion.Task.WaitAsync(TimeSpan.FromSeconds(5));
-        }
-        catch (TimeoutException)
-        {
-            Assert.True(condition(), $"Timed out waiting for {description}");
-        }
-        finally
-        {
-            source.PropertyChanged -= OnPropertyChanged;
-        }
-    }
+        => await AvaloniaTestWait.PropertyAsync(source, property, condition, description);
 
     private static async Task WaitForConditionAsync(Func<bool> condition, string description)
-    {
-        var startedAt = Stopwatch.GetTimestamp();
-        while (!condition() && Stopwatch.GetElapsedTime(startedAt) < TimeSpan.FromSeconds(5))
-        {
-            Dispatcher.UIThread.RunJobs();
-            await Task.Delay(16, TestContext.Current.CancellationToken);
-        }
-
-        Dispatcher.UIThread.RunJobs();
-        Assert.True(condition(), $"Timed out waiting for {description}");
-    }
+        => await AvaloniaTestWait.UntilAsync(condition, description);
 
     private static T? FindVisualByName<T>(Visual root, string name)
         where T : Control

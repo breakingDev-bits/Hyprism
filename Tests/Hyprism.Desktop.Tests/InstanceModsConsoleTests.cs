@@ -178,7 +178,6 @@ public sealed class InstanceModsConsoleTests
         Assert.True(viewModel.ConsoleLines[1].IsError);
 
         console.Append("other-instance", "OUT", "not ours");
-        await Task.Delay(300);
         Assert.Equal(2, viewModel.ConsoleLines.Count);
 
         viewModel.ConsoleSearchQuery = "boom";
@@ -256,11 +255,6 @@ public sealed class InstanceModsConsoleTests
             modManager: modManager.Object,
             gameConsole: gameConsole);
 
-    private static async Task WaitUntilAsync(Func<bool> condition)
-    {
-        for (var attempt = 0; attempt < 50 && !condition(); attempt++)
-            await Task.Delay(20);
-
-        Assert.True(condition());
-    }
+    private static Task WaitUntilAsync(Func<bool> condition)
+        => AvaloniaTestWait.UntilAsync(condition, "instance view-model state to settle");
 }

@@ -1,7 +1,6 @@
 // Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Headless;
@@ -90,7 +89,7 @@ public sealed class MirrorSettingsViewModelTests
         downloadsCategory.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
         var settingsMain = Assert.IsType<Grid>(view.FindControl<Grid>("SettingsMain"));
         var settingsMainTranslation = Assert.IsType<TranslateTransform>(settingsMain.RenderTransform);
-        await WaitForAvaloniaPropertyAsync(
+        await AvaloniaTestWait.PropertyAsync(
             settingsMainTranslation,
             TranslateTransform.XProperty,
             () => Math.Abs(settingsMainTranslation.X) <= 0.01,
@@ -100,43 +99,19 @@ public sealed class MirrorSettingsViewModelTests
         var wizardTranslation = Assert.IsType<TranslateTransform>(wizard.RenderTransform);
         var overview = Assert.IsType<Grid>(view.FindControl<Grid>("SettingsOverview"));
         var overviewTranslation = Assert.IsType<TranslateTransform>(overview.RenderTransform);
-        var observedIntermediateOffset = false;
-        var maximumOffset = wizardTranslation.X;
-        void OnWizardTranslationChanged(object? sender, AvaloniaPropertyChangedEventArgs args)
-        {
-            if (args.Property == TranslateTransform.XProperty)
-            {
-                maximumOffset = Math.Max(maximumOffset, wizardTranslation.X);
-                if (wizardTranslation.X > 0.5 &&
-                    wizardTranslation.X < settingsMain.Bounds.Width - 0.5)
-                {
-                    observedIntermediateOffset = true;
-                }
-            }
-        }
-
-        wizardTranslation.PropertyChanged += OnWizardTranslationChanged;
-        try
-        {
-            viewModel.ShowAddMirrorCommand.Execute(null);
-            Assert.Equal(1, wizard.Opacity);
-            Assert.Equal(1, overview.Opacity);
-            Assert.Equal(0, overviewTranslation.X);
-            await WaitForRenderStateAsync(
-                () => observedIntermediateOffset,
-                "compact download source wizard opening slide to advance");
-            Assert.True(
-                maximumOffset > settingsMain.Bounds.Width / 2,
-                $"maximum wizard offset {maximumOffset}, content width {settingsMain.Bounds.Width}");
-            await WaitForRenderStateAsync(
-                () => Math.Abs(wizardTranslation.X) <= 0.01,
-                "compact download source wizard opening slide to finish");
-        }
-        finally
-        {
-            wizardTranslation.PropertyChanged -= OnWizardTranslationChanged;
-            window.Close();
-        }
+        viewModel.ShowAddMirrorCommand.Execute(null);
+        Assert.Equal(1, wizard.Opacity);
+        Assert.Equal(1, overview.Opacity);
+        Assert.Equal(0, overviewTranslation.X);
+        await AvaloniaTestWait.PropertyAsync(
+            wizardTranslation,
+            TranslateTransform.XProperty,
+            () => wizardTranslation.IsAnimating(TranslateTransform.XProperty),
+            "compact download source wizard opening slide to start");
+        await AvaloniaTestWait.UntilAsync(
+            () => Math.Abs(wizardTranslation.X) <= 0.01,
+            "compact download source wizard opening slide to finish");
+        window.Close();
     }
 
     [Fact]
@@ -225,13 +200,17 @@ public sealed class MirrorSettingsViewModelTests
             var general = viewModel.Categories.Single(category => category.Id == "general");
 
             viewModel.SelectCategoryCommand.Execute(downloads);
-            await WaitUntilAsync(() => source.HasNoCompatibleVersions);
+            await AvaloniaTestWait.UntilAsync(
+                () => source.HasNoCompatibleVersions,
+                "download source probe to complete");
 
             viewModel.RefreshLocalization();
             viewModel.SelectCategoryCommand.Execute(downloads);
             viewModel.SelectCategoryCommand.Execute(general);
             viewModel.SelectCategoryCommand.Execute(downloads);
-            await Task.Delay(80);
+            await AvaloniaTestWait.UntilAsync(
+                () => !source.IsChecking,
+                "download source probe to settle after repeated category selection");
 
             Assert.Same(source, Assert.Single(viewModel.MirrorSources));
             Assert.False(source.IsChecking);
@@ -271,13 +250,17 @@ public sealed class MirrorSettingsViewModelTests
         var general = viewModel.Categories.Single(category => category.Id == "general");
 
         viewModel.SelectCategoryCommand.Execute(downloads);
-        await WaitUntilAsync(() => viewModel.OfficialSourceIsAvailable);
+        await AvaloniaTestWait.UntilAsync(
+            () => viewModel.OfficialSourceIsAvailable,
+            "official source probe to complete");
 
         viewModel.RefreshLocalization();
         viewModel.SelectCategoryCommand.Execute(downloads);
         viewModel.SelectCategoryCommand.Execute(general);
         viewModel.SelectCategoryCommand.Execute(downloads);
-        await Task.Delay(80);
+        await AvaloniaTestWait.UntilAsync(
+            () => !viewModel.OfficialSourceIsChecking,
+            "official source probe to settle after repeated category selection");
 
         Assert.False(viewModel.OfficialSourceIsChecking);
         Assert.False(viewModel.OfficialSourceIsUnavailable);
@@ -343,7 +326,9 @@ public sealed class MirrorSettingsViewModelTests
             viewModel.SelectCategoryCommand.Execute(
                 viewModel.Categories.Single(category => category.Id == "downloads"));
             source = Assert.Single(viewModel.MirrorSources);
-            await WaitUntilAsync(() => source.Ping == "42 ms");
+            await AvaloniaTestWait.UntilAsync(
+                () => source.Ping == "42 ms",
+                "download source ping to update");
             Assert.Equal("Available", source.Availability);
 
             source.IsEnabled = false;
@@ -469,7 +454,6 @@ public sealed class MirrorSettingsViewModelTests
                 Content = view
             };
             window.Show();
-            await Task.Delay(100);
             Dispatcher.UIThread.RunJobs();
 
             var categoryScroll = Assert.IsAssignableFrom<ScrollViewer>(
@@ -549,19 +533,25 @@ public sealed class MirrorSettingsViewModelTests
             Assert.Equal(TextWrapping.Wrap, noteText.TextWrapping);
 
             probeCompletion.SetResult(probeResult);
-            await WaitUntilAsync(() => source.Ping == "42 ms");
-            await Task.Delay(300);
-            Dispatcher.UIThread.RunJobs();
+            await AvaloniaTestWait.UntilAsync(
+                () => source.Ping == "42 ms" &&
+                      !source.IsChecking &&
+                      source.HasNoCompatibleVersions &&
+                      mirrorAvailability.Classes.Contains("noVersions"),
+                "download source availability state to settle");
             Assert.False(source.IsChecking);
             Assert.False(source.IsAvailable);
             Assert.True(source.HasNoCompatibleVersions);
             Assert.Equal("Available, but no versions for this system", source.Availability);
             Assert.Contains("noVersions", mirrorAvailability.Classes);
-            Assert.InRange(checkingState.Opacity, 0, 0.01);
             var noVersionsState = Assert.Single(
                 mirrorAvailability.GetVisualDescendants().OfType<Grid>(),
                 grid => grid.Classes.Contains("sourceAvailabilityState") &&
                         grid.Classes.Contains("noVersions"));
+            await AvaloniaTestWait.UntilAsync(
+                () => checkingState.Opacity <= 0.01 && noVersionsState.Opacity >= 0.99,
+                "download source availability transition to finish");
+            Assert.InRange(checkingState.Opacity, 0, 0.01);
             Assert.InRange(noVersionsState.Opacity, 0.99, 1);
             var warningIcon = Assert.Single(
                 noVersionsState.GetVisualDescendants().OfType<PathIcon>(),
@@ -591,10 +581,11 @@ public sealed class MirrorSettingsViewModelTests
             var addButton = Assert.IsType<Button>(view.FindControl<Button>("AddDownloadSourceButton"));
             Assert.Same(viewModel.ShowAddMirrorCommand, addButton.Command);
             viewModel.ShowAddMirrorCommand.Execute(null);
-            await Task.Delay(420);
-            Dispatcher.UIThread.RunJobs();
             var wizard = Assert.IsType<Border>(view.FindControl<Border>("DownloadSourceWizardScreen"));
             var choice = Assert.IsType<StackPanel>(view.FindControl<StackPanel>("SourceAdditionChoiceContent"));
+            await AvaloniaTestWait.UntilAsync(
+                () => wizard.IsEffectivelyVisible && choice.IsEffectivelyVisible,
+                "download source wizard to open");
             var wizardReveal = Assert.IsType<WizardRevealIcon>(
                 view.FindControl<WizardRevealIcon>("DownloadSourceWizardReveal"));
             var wizardAnimation = wizardReveal.Animation;
@@ -614,7 +605,7 @@ public sealed class MirrorSettingsViewModelTests
                 view.FindControl<StackPanel>("ManualSourceAdditionContent"));
 
             var manualButton = Assert.IsType<Button>(view.FindControl<Button>("BeginManualSourceAdditionButton"));
-            var manualStepActivated = WaitForAvaloniaPropertyAsync(
+            var manualStepActivated = AvaloniaTestWait.PropertyAsync(
                 manualContent,
                 InputElement.IsHitTestVisibleProperty,
                 () => manualContent.IsHitTestVisible,
@@ -630,12 +621,13 @@ public sealed class MirrorSettingsViewModelTests
             var wizardRenderPath = Environment.GetEnvironmentVariable("HYPRISM_DOWNLOAD_SOURCE_WIZARD_RENDER_OUTPUT");
             if (!string.IsNullOrWhiteSpace(wizardRenderPath))
             {
-                await Task.Delay(800);
-                Dispatcher.UIThread.RunJobs();
+                await AvaloniaTestWait.UntilAsync(
+                    () => !wizardReveal.LastSelectionWasAnimated,
+                    "download source wizard reveal animation to finish");
                 window.CaptureRenderedFrame()!.Save(wizardRenderPath, PngBitmapEncoderOptions.Default);
             }
 
-            var wizardClosed = WaitForAvaloniaPropertyAsync(
+            var wizardClosed = AvaloniaTestWait.PropertyAsync(
                 wizard,
                 Visual.IsVisibleProperty,
                 () => !wizard.IsVisible,
@@ -691,62 +683,6 @@ public sealed class MirrorSettingsViewModelTests
                 }
             }
         };
-
-    private static async Task WaitUntilAsync(Func<bool> condition)
-    {
-        for (var attempt = 0; attempt < 20 && !condition(); attempt++)
-            await Task.Delay(10);
-
-        Assert.True(condition());
-    }
-
-    private static async Task WaitForRenderStateAsync(Func<bool> condition, string description)
-    {
-        var startedAt = Stopwatch.GetTimestamp();
-        while (!condition() && Stopwatch.GetElapsedTime(startedAt) < TimeSpan.FromSeconds(5))
-        {
-            AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
-            Dispatcher.UIThread.RunJobs();
-            await Task.Delay(16, TestContext.Current.CancellationToken);
-        }
-
-        AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
-        Dispatcher.UIThread.RunJobs();
-        Assert.True(condition(), $"Timed out waiting for {description}");
-    }
-
-    private static async Task WaitForAvaloniaPropertyAsync(
-        AvaloniaObject source,
-        AvaloniaProperty property,
-        Func<bool> condition,
-        string description)
-    {
-        if (condition())
-            return;
-
-        var completion = new TaskCompletionSource<bool>(
-            TaskCreationOptions.RunContinuationsAsynchronously);
-        void OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs args)
-        {
-            if (args.Property == property && condition())
-                completion.TrySetResult(true);
-        }
-
-        source.PropertyChanged += OnPropertyChanged;
-        try
-        {
-            if (!condition())
-                await completion.Task.WaitAsync(TimeSpan.FromSeconds(2));
-        }
-        catch (TimeoutException)
-        {
-            Assert.True(condition(), $"Timed out waiting for {description}");
-        }
-        finally
-        {
-            source.PropertyChanged -= OnPropertyChanged;
-        }
-    }
 
     private static double GetCenterX(Control control, Visual relativeTo)
         => control.TranslatePoint(

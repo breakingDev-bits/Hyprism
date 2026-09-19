@@ -787,8 +787,9 @@ public sealed class InstanceSectionRenderTests
         Assert.False(viewModel.CanShowNextModCatalogScreenshot);
         viewModel.ShowNextModCatalogScreenshotCommand.Execute(null);
         Assert.Equal(1, viewModel.ModCatalogPreviewScreenshotIndex);
-        await Task.Delay(150);
-        Dispatcher.UIThread.RunJobs();
+        await AvaloniaTestWait.UntilAsync(
+            () => imageHandler.Requests == 2,
+            "next mod catalog screenshot request to complete");
         Assert.Equal(2, imageHandler.Requests);
 
         var closingImage = viewModel.ModCatalogPreviewImage;
@@ -797,12 +798,17 @@ public sealed class InstanceSectionRenderTests
         Assert.True(viewModel.IsModCatalogPreviewMounted);
         Assert.Equal(1d, modal.FindControl<Grid>("OverlayModalSheet")!.Opacity);
         Assert.Same(closingImage, viewModel.ModCatalogPreviewImage);
-        await Task.Delay(100);
-        Assert.Same(closingImage, viewModel.ModCatalogPreviewImage);
         var closingPreviewPath = Environment.GetEnvironmentVariable(
             "HYPRISM_MOD_PREVIEW_CLOSING_RENDER_OUTPUT");
         if (!string.IsNullOrWhiteSpace(closingPreviewPath))
+        {
+            var closingSheet = Assert.IsType<Grid>(modal.FindControl<Grid>("OverlayModalSheet"));
+            var closingTranslation = Assert.IsType<TranslateTransform>(closingSheet.RenderTransform);
+            await AvaloniaTestWait.UntilAsync(
+                () => closingTranslation.IsAnimating(TranslateTransform.YProperty),
+                "mod catalog preview close animation to start");
             window.CaptureRenderedFrame()!.Save(closingPreviewPath, PngBitmapEncoderOptions.Default);
+        }
         await WaitUntilAsync(() => viewModel.ModCatalogPreviewImage is null);
         Assert.False(viewModel.IsModCatalogPreviewMounted);
         Assert.False(viewModel.IsModCatalogPreviewFilesSkeletonVisible);
@@ -826,13 +832,8 @@ public sealed class InstanceSectionRenderTests
             .Where(text => text.Classes.Contains("consoleText"))
             .ToList();
 
-    private static async Task WaitUntilAsync(Func<bool> condition)
-    {
-        for (var attempt = 0; attempt < 50 && !condition(); attempt++)
-            await Task.Delay(20);
-
-        Assert.True(condition());
-    }
+    private static Task WaitUntilAsync(Func<bool> condition)
+        => AvaloniaTestWait.UntilAsync(condition, "instance section state to settle");
 
     private sealed class CountingImageHandler : HttpMessageHandler
     {

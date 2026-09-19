@@ -1,7 +1,6 @@
 // Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using System.Diagnostics;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -60,10 +59,16 @@ public sealed class WizardAnimationTests
 
         var transition = new WizardScreenTransition(overview, wizard, pane);
         transition.HideNavigationPane(animate: true);
-        await WaitForRenderStateAsync(
-            () => pane.Opacity is > 0.01 and < 0.99 &&
-                  pane.Bounds.Width is > 0.5 and < 275.5,
-            "navigation pane transition to reach an intermediate state");
+        Dispatcher.UIThread.RunJobs();
+        Assert.True(pane.IsAnimating(Layoutable.WidthProperty));
+        Assert.True(pane.IsAnimating(Visual.OpacityProperty));
+
+        await AvaloniaTestWait.UntilAsync(
+            () => !pane.IsAnimating(Layoutable.WidthProperty) &&
+                  !pane.IsAnimating(Visual.OpacityProperty),
+            "navigation pane transition to finish");
+        Assert.Equal(0, pane.Bounds.Width);
+        Assert.Equal(0, pane.Opacity);
 
         window.Close();
     }
@@ -100,18 +105,6 @@ public sealed class WizardAnimationTests
         var initialOffset = profileMain.Bounds.Width;
         Assert.InRange(translation.X, initialOffset - 1, initialOffset + 1);
 
-        var observedIntermediateOffset = false;
-        void OnTranslationChanged(object? sender, AvaloniaPropertyChangedEventArgs args)
-        {
-            if (args.Property == TranslateTransform.XProperty &&
-                translation.X > 0.5 &&
-                translation.X < initialOffset - 0.5)
-            {
-                observedIntermediateOffset = true;
-            }
-        }
-
-        translation.PropertyChanged += OnTranslationChanged;
         try
         {
             var addProfileRow = view.GetVisualDescendants()
@@ -119,16 +112,17 @@ public sealed class WizardAnimationTests
                 .Single(button => button.IsEffectivelyVisible && button.Classes.Contains("instancesAddRow"));
             addProfileRow.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
-            await WaitForRenderStateAsync(
-                () => observedIntermediateOffset,
-                "compact profile creator opening slide to advance");
-            await WaitForRenderStateAsync(
+            await AvaloniaTestWait.PropertyAsync(
+                translation,
+                TranslateTransform.XProperty,
+                () => translation.IsAnimating(TranslateTransform.XProperty),
+                "compact profile creator opening slide to start");
+            await AvaloniaTestWait.UntilAsync(
                 () => Math.Abs(translation.X) <= 0.01,
                 "compact profile creator opening slide to finish");
         }
         finally
         {
-            translation.PropertyChanged -= OnTranslationChanged;
             window.Close();
         }
     }
@@ -163,36 +157,25 @@ public sealed class WizardAnimationTests
         Assert.Equal(276, pane.Bounds.Width);
 
         profilesViewModel.ShowCreateChoiceCommand.Execute(null);
-        await WaitForRenderStateAsync(
+        await AvaloniaTestWait.UntilAsync(
             () => pane.Bounds.Width <= 0.5,
             "navigation pane to finish hiding before wizard close");
 
         profilesViewModel.CancelCreationCommand.Execute(null);
         profileRepository.Raise(repository => repository.ProfilesChanged += null);
-        await WaitForRenderStateAsync(
-            () => pane.Bounds.Width is > 0.5 and < 275.5,
-            "navigation pane to start reopening without snapping");
-        Assert.InRange(pane.Bounds.Width, 0.5, 275.5);
+        await AvaloniaTestWait.PropertyAsync(
+            pane,
+            Layoutable.WidthProperty,
+            () => pane.IsAnimating(Layoutable.WidthProperty),
+            "navigation pane to start reopening");
 
-        await WaitForRenderStateAsync(
-            () => pane.Bounds.Width >= 275.5 && pane.Opacity >= 0.99,
+        await AvaloniaTestWait.UntilAsync(
+            () => !pane.IsAnimating(Layoutable.WidthProperty) &&
+                  !pane.IsAnimating(Visual.OpacityProperty),
             "navigation pane to finish reopening");
+        Assert.Equal(276, pane.Bounds.Width);
+        Assert.Equal(1, pane.Opacity);
 
         window.Close();
-    }
-
-    private static async Task WaitForRenderStateAsync(Func<bool> condition, string description)
-    {
-        var startedAt = Stopwatch.GetTimestamp();
-        while (!condition() && Stopwatch.GetElapsedTime(startedAt) < TimeSpan.FromSeconds(5))
-        {
-            AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
-            Dispatcher.UIThread.RunJobs();
-            await Task.Delay(16, TestContext.Current.CancellationToken);
-        }
-
-        AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
-        Dispatcher.UIThread.RunJobs();
-        Assert.True(condition(), $"Timed out waiting for {description}");
     }
 }

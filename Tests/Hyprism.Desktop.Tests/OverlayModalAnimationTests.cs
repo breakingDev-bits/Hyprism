@@ -1,7 +1,6 @@
 // Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
-using System.Diagnostics;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
@@ -180,19 +179,8 @@ public sealed class OverlayModalAnimationTests
     private static async Task WaitForShoulderScaleAsync(OverlayModal modal, double target)
     {
         var shoulders = Assert.IsType<Grid>(modal.FindControl<Grid>("OverlayModalShoulders"));
-        var startedAt = Stopwatch.GetTimestamp();
-        while (Stopwatch.GetElapsedTime(startedAt) < TimeSpan.FromSeconds(5))
-        {
-            Dispatcher.UIThread.RunJobs();
-            if (Assert.IsType<ScaleTransform>(shoulders.RenderTransform).ScaleY == target)
-                return;
-
-            await Task.Delay(16, TestContext.Current.CancellationToken);
-        }
-
-        Dispatcher.UIThread.RunJobs();
-        Assert.Equal(
-            target,
-            Assert.IsType<ScaleTransform>(shoulders.RenderTransform).ScaleY);
+        await AvaloniaTestWait.UntilAsync(
+            () => Assert.IsType<ScaleTransform>(shoulders.RenderTransform).ScaleY == target,
+            $"modal shoulder scale to reach {target}");
     }
 }

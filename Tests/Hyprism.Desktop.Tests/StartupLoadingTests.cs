@@ -91,7 +91,6 @@ public sealed class StartupLoadingTests
             DataContext = viewModel
         };
         window.Show();
-        await Task.Delay(80);
         Dispatcher.UIThread.RunJobs();
 
         var startupScreen = Assert.IsType<Border>(
@@ -103,6 +102,9 @@ public sealed class StartupLoadingTests
         var windowChrome = Assert.IsType<Grid>(window.FindControl<Grid>("WindowChrome"));
         var minimizeButton = Assert.IsType<Button>(window.FindControl<Button>("MinimizeWindowButton"));
         var resizeEast = Assert.IsType<Border>(window.FindControl<Border>("ResizeEast"));
+        await AvaloniaTestWait.UntilAsync(
+            () => startupScreen.IsEffectivelyVisible && launcherShell.Opacity <= 0.01,
+            "startup loading screen to become ready");
         Assert.True(startupScreen.IsEffectivelyVisible);
         Assert.True(startupScreen.IsHitTestVisible);
         Assert.Equal(0, launcherShell.Opacity);
@@ -125,8 +127,9 @@ public sealed class StartupLoadingTests
 
         var preloadStopwatch = Stopwatch.StartNew();
         var preloadTask = viewModel.PreloadStartupDataAsync(TestContext.Current.CancellationToken);
-        await WaitUntilAsync(
+        await AvaloniaTestWait.UntilAsync(
             () => viewModel.StartupLoadingStatus == "Ready to launch",
+            "startup preload to reach the ready state",
             TimeSpan.FromSeconds(2));
 
         Assert.False(preloadTask.IsCompleted);
@@ -144,18 +147,19 @@ public sealed class StartupLoadingTests
 
         viewModel.Settings.SelectCategoryCommand.Execute(
             viewModel.Settings.Categories.Single(category => category.Id == "data"));
-        await Task.Delay(40, TestContext.Current.CancellationToken);
+        Dispatcher.UIThread.RunJobs();
         settings.Verify(
             service => service.GetLauncherStorageUsageAsync(It.IsAny<CancellationToken>()),
             Times.Once);
 
         viewModel.NavigateCommand.Execute("news");
-        await Task.Delay(80);
+        Dispatcher.UIThread.RunJobs();
         news.Verify(service => service.GetNewsAsync(It.IsAny<int>()), Times.Once);
 
         viewModel.CompleteStartupLoading();
-        await WaitUntilAsync(
+        await AvaloniaTestWait.UntilAsync(
             () => !startupScreen.IsVisible,
+            "startup screen to finish closing",
             TimeSpan.FromSeconds(2));
         Dispatcher.UIThread.RunJobs();
 
@@ -163,15 +167,6 @@ public sealed class StartupLoadingTests
         Assert.Equal(1, launcherShell.Opacity);
         Assert.True(launcherShell.IsHitTestVisible);
         window.Close();
-    }
-
-    private static async Task WaitUntilAsync(Func<bool> predicate, TimeSpan timeout)
-    {
-        var deadline = DateTime.UtcNow + timeout;
-        while (!predicate() && DateTime.UtcNow < deadline)
-            await Task.Delay(10, TestContext.Current.CancellationToken);
-
-        Assert.True(predicate());
     }
 
     private sealed class PreviewHandler : HttpMessageHandler
