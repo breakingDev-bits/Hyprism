@@ -523,7 +523,7 @@ SPDX-License-Identifier: GPL-3.0-only
                        Classes="articleToolbarTitle"
                        Text="{Binding NewsArticleDisplayTitle}"
                        Margin="12,0"
-                       MaxWidth="280"
+                       MaxWidth="420"
                        MaxLines="1"
                        TextTrimming="CharacterEllipsis"
                        TextWrapping="NoWrap"

@@ -53,6 +53,13 @@ public sealed class SmoothScrollViewer : ScrollViewer
     private IPointer? _capturedPointer;
     private bool _isApplyingOffset;
 
+    public SmoothScrollViewer()
+    {
+        // Focus changes must never move the page implicitly. Scrolling remains
+        // an explicit pointer or keyboard action.
+        BringIntoViewOnFocusChange = false;
+    }
+
     protected override Type StyleKeyOverride => typeof(ScrollViewer);
 
     public bool IsPastTop

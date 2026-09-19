@@ -966,7 +966,7 @@ public partial class InstanceRepository : IInstanceRepository
             }
 
             meta.Name = string.IsNullOrWhiteSpace(customName)
-                ? $"{meta.Branch} v{meta.Version}"
+                ? InstanceMeta.DefaultName
                 : customName;
 
             SaveInstanceMeta(instancePath, meta);
@@ -1046,7 +1046,7 @@ public partial class InstanceRepository : IInstanceRepository
         var meta = new InstanceMeta
         {
             Id = instanceId,
-            Name = name ?? $"{normalizedBranch} v{versionName ?? version.ToString()}",
+            Name = name ?? InstanceMeta.DefaultName,
             Branch = normalizedBranch,
             Version = version,
             VersionName = versionName,
@@ -1214,6 +1214,19 @@ public partial class InstanceRepository : IInstanceRepository
             .ThenBy(instance => instance.Branch)
             .ThenByDescending(instance => instance.Version)
             .ToList();
+
+        if (!string.IsNullOrWhiteSpace(config.SelectedInstanceId) &&
+            !synced.Any(instance => string.Equals(
+                instance.Id,
+                config.SelectedInstanceId,
+                StringComparison.OrdinalIgnoreCase)))
+        {
+            Logger.Debug(
+                "InstanceRepository",
+                $"Clearing selected instance that is no longer present: {config.SelectedInstanceId}");
+            config.SelectedInstanceId = string.Empty;
+            _configStore.SaveConfig();
+        }
 
         SaveInstanceCache(synced);
         Logger.Debug("InstanceRepository", $"Synced {synced.Count} instances with config");

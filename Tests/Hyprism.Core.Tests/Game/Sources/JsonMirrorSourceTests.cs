@@ -130,6 +130,47 @@ public sealed class JsonMirrorSourceTests
             });
     }
 
+    [Fact]
+    public async Task ManifestDiscoveryDoesNotUseGlobalVersionsForUnsupportedPlatforms()
+    {
+        var mirror = new MirrorMeta
+        {
+            Id = "windows-only-manifest",
+            Pattern = new MirrorPatternConfig
+            {
+                BaseUrl = "https://mirror.example.test/patches",
+                FullBuildUrl = "{base}/{os}/{arch}/{branch}/0_to_{version}.pwr",
+                VersionDiscovery = new VersionDiscoveryConfig
+                {
+                    Method = "manifest",
+                    Url = "{base}/manifest.json"
+                }
+            }
+        };
+
+        using var client = new HttpClient(new StubHandler(
+            """
+            {
+              "versions": {
+                "release": {
+                  "27": { "version": "0.6.4" }
+                }
+              },
+              "files": {
+                "windows/amd64/release/0_to_27.pwr": { "gameVersion": "0.6.4" }
+              }
+            }
+            """));
+        var source = new JsonMirrorSource(mirror, client);
+
+        Assert.Empty(await source.GetVersionsAsync("linux", "amd64", "release"));
+
+        var windowsEntries = await source.GetVersionsAsync("windows", "amd64", "release");
+        var windowsEntry = Assert.Single(windowsEntries);
+        Assert.Equal(27, windowsEntry.Version);
+        Assert.Equal("0.6.4", windowsEntry.VersionName);
+    }
+
     private sealed class StubHandler(string body) : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(

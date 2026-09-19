@@ -969,6 +969,14 @@ public sealed class MainWindowRenderTests
         Assert.True(spinner.Data.Bounds.Top >= spinner.StrokeThickness / 2);
         Assert.True(spinner.Data.Bounds.Right <= spinner.Bounds.Width - spinner.StrokeThickness / 2);
         Assert.True(spinner.Data.Bounds.Bottom <= spinner.Bounds.Height - spinner.StrokeThickness / 2);
+        var spinnerRotation = spinner.RenderTransform is RotateTransform rotation
+            ? rotation
+            : Assert.Single(
+                Assert.IsType<TransformGroup>(spinner.RenderTransform).Children
+                    .OfType<RotateTransform>());
+        await WaitForConditionAsync(
+            () => spinnerRotation.Angle is > 1 and < 359,
+            "managed instance spinner to advance");
         Assert.Equal(1, Grid.GetColumn(status));
         Assert.Equal(HorizontalAlignment.Stretch, status.HorizontalAlignment);
         Assert.Equal(2, Grid.GetColumn(metric));
@@ -1376,12 +1384,12 @@ public sealed class MainWindowRenderTests
         Dispatcher.UIThread.RunJobs();
         var openTask = viewModel.FeaturedNews!.OpenCommand.ExecuteAsync(null);
         await WaitForConditionAsync(
-            () => viewModel.IsCompactNewsTransitionActive &&
+            () => viewModel.IsNewsArticleLoading &&
                   window.GetVisualDescendants()
                       .OfType<Border>()
                       .Any(border => border.IsEffectivelyVisible &&
                                      border.Classes.Contains("skeleton")),
-            "compact news loading transition to become active");
+            "compact news loading skeleton to become visible");
         Dispatcher.UIThread.RunJobs();
 
         var compactShell = FindVisualByName<Grid>(window, "CompactNewsShell");
@@ -1389,9 +1397,7 @@ public sealed class MainWindowRenderTests
         Assert.NotNull(compactShell);
         Assert.NotNull(articleHost);
         Assert.True(viewModel.IsNewsArticleLoading);
-        Assert.True(viewModel.IsCompactNewsTransitionActive);
         var articleTranslation = Assert.IsType<TranslateTransform>(articleHost!.RenderTransform);
-        Assert.True(articleTranslation.X > 0);
         var articleTransition = Assert.IsType<DoubleTransition>(Assert.Single(
             articleTranslation.Transitions!,
             transition => transition is DoubleTransition { Property: { } property } &&
@@ -1601,7 +1607,7 @@ public sealed class MainWindowRenderTests
         var languagePopup = fadingLanguageComboBox.GetVisualDescendants().OfType<FadingPopup>().Single();
         Assert.True(languagePopup.IsOpen);
         var languagePopupBorder = Assert.IsType<Border>(languagePopup.Child);
-        Assert.Equal(8, languagePopup.VerticalOffset);
+        Assert.Equal(8, Math.Abs(languagePopup.VerticalOffset));
         Assert.False(languagePopup.IsLightDismissEnabled);
         Assert.False(languagePopup.WindowManagerAddShadowHint);
         Assert.True(languagePopup.ShouldUseOverlayLayer);
@@ -1626,6 +1632,12 @@ public sealed class MainWindowRenderTests
         Assert.NotNull(comboPositionAfterScroll);
         Assert.NotNull(popupPositionBeforeScroll);
         Assert.NotNull(popupPositionAfterScroll);
+        var comboBottom = comboPositionBeforeScroll!.Value.Y + fadingLanguageComboBox.Bounds.Height;
+        var popupBottom = popupPositionBeforeScroll!.Value.Y + languagePopupBorder.Bounds.Height;
+        var popupGap = popupPositionBeforeScroll.Value.Y < comboPositionBeforeScroll.Value.Y
+            ? comboPositionBeforeScroll.Value.Y - popupBottom
+            : popupPositionBeforeScroll.Value.Y - comboBottom;
+        Assert.Equal(8, popupGap, precision: 3);
         Assert.InRange(
             comboPositionBeforeScroll!.Value.Y - comboPositionAfterScroll!.Value.Y,
             99,
@@ -1901,7 +1913,7 @@ public sealed class MainWindowRenderTests
             [
                 new NewsItemResponse
                 {
-                    Title = "Hytale launches a new adventure",
+                    Title = "PRE-RELEASE PATCH NOTES (UPDATE 7)",
                     Excerpt = "A closer look at the world, its creatures, and the systems behind exploration.",
                     Url = "https://hytale.com/news/preview",
                     Date = "2026-08-05",
@@ -1935,7 +1947,7 @@ public sealed class MainWindowRenderTests
         news.Setup(service => service.GetNewsArticleAsync(It.IsAny<string>()))
             .ReturnsAsync(new NewsArticleResponse
             {
-                Title = "Hytale launches a new adventure",
+                Title = "PRE-RELEASE PATCH NOTES (UPDATE 7)",
                 Excerpt = "A closer look at the world and its creatures.",
                 Url = "https://hytale.com/news/2026/8/new-adventure",
                 PublishedAt = "2026-08-05",
@@ -3007,7 +3019,7 @@ public sealed class MainWindowRenderTests
         Assert.False(viewModel.IsNewsFeedVisible);
         Assert.True(viewModel.FeaturedNews.IsSelected);
         Assert.Equal(usesWideLayout ? 0 : 1, viewModel.CompactNewsPageIndex);
-        Assert.Equal("Hytale launches a new adventure", viewModel.SelectedNewsArticle?.Title);
+        Assert.Equal("PRE-RELEASE PATCH NOTES (UPDATE 7)", viewModel.SelectedNewsArticle?.Title);
         var selectedArticle = viewModel.SelectedNewsArticle!;
         Assert.False(viewModel.IsNewsArticleSkeletonVisible);
         Assert.Equal(7, viewModel.SelectedNewsArticle?.Blocks.Count);
@@ -3148,6 +3160,8 @@ public sealed class MainWindowRenderTests
             Assert.True(viewModel.IsNewsArticleScrolled);
             Assert.InRange(articleToolbar.Margin.Left, 23.5, 24.5);
             Assert.InRange(toolbarTitle.Opacity, 0.99, 1);
+            Assert.Equal(selectedArticle.Title, toolbarTitle.Text);
+            Assert.True(toolbarTitle.Bounds.Width > 280);
             var scrolledBackPosition = backButton.TranslatePoint(default, activeArticleHost);
             var scrolledOriginalPosition = originalButton.TranslatePoint(default, activeArticleHost);
             var toolbarTitlePosition = toolbarTitle.TranslatePoint(default, articleToolbar);

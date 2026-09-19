@@ -12,6 +12,11 @@ namespace Hyprism.Core.Models;
 public class InstanceMeta
 {
     /// <summary>
+    /// Default display name stored for newly created instances.
+    /// </summary>
+    public const string DefaultName = "Hytale";
+
+    /// <summary>
     /// Unique identifier for this instance. Generated on creation.
     /// </summary>
     public string Id { get; set; } = "";

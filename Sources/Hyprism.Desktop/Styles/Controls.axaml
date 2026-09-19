@@ -56,7 +56,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="Cursor" Value="Hand" />
     <Setter Property="HorizontalContentAlignment" Value="Left" />
-    <Setter Property="Background" Value="{DynamicResource ControlSurfaceBrush}" />
+    <Setter Property="Background" Value="{DynamicResource SegmentedTrackBrush}" />
     <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="FocusAdorner" Value="{x:Null}" />
@@ -97,7 +97,10 @@ SPDX-License-Identifier: GPL-3.0-only
                                   MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
                                   MaxWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
                                   MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                  PlacementTarget="Background"
+                                  PlacementTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                  PlacementGap="8"
+                                  ConstrainToPlacementContext="True"
+                                  PlacementConstraintAdjustment="SlideX,ResizeX"
                                   VerticalOffset="8"
                                   IsHitTestVisible="{TemplateBinding IsDropDownOpen}"
                                   InheritsTransform="True">
@@ -121,11 +124,11 @@ SPDX-License-Identifier: GPL-3.0-only
   </Style>
 
   <Style Selector="controls|FadingComboBox.uiComboBox:pointerover /template/ Border#Background">
-    <Setter Property="Background" Value="{DynamicResource ControlSurfaceHoverBrush}" />
+    <Setter Property="Background" Value="{DynamicResource ControlTrackHoverBrush}" />
   </Style>
 
   <Style Selector="controls|FadingComboBox.uiComboBox:dropdownopen /template/ Border#Background">
-    <Setter Property="Background" Value="{DynamicResource ControlSurfaceActiveBrush}" />
+    <Setter Property="Background" Value="{DynamicResource ControlTrackHoverBrush}" />
   </Style>
 
   <Style Selector="controls|FadingComboBox.uiComboBox /template/ PathIcon#DropDownGlyph">

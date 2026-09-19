@@ -105,7 +105,8 @@ public sealed partial class InstancesView : UserControl
         if (args.PropertyName is nameof(InstancesViewModel.HasInstances))
             UpdateLayout(Bounds.Width);
 
-        if (args.PropertyName is nameof(InstancesViewModel.NewInstanceBranch))
+        if (args.PropertyName is nameof(InstancesViewModel.NewInstanceBranch) &&
+            DataContext is InstancesViewModel { IsInstanceCreatorOpen: true })
             UpdateBranchIndicator(animate: true);
 
         if (args.PropertyName is nameof(InstancesViewModel.InstanceSection))

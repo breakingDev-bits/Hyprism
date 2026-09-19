@@ -13,6 +13,17 @@ namespace Hyprism.Desktop.Controls;
 
 public sealed class FadingComboBox : ComboBox
 {
+    public FadingComboBox()
+    {
+        // Opening a combo focuses the control, but that interaction must not
+        // ask the page ScrollViewer to reposition its content.
+        AddHandler(
+            Control.RequestBringIntoViewEvent,
+            OnRequestBringIntoView,
+            RoutingStrategies.Bubble,
+            handledEventsToo: true);
+    }
+
     public override bool UpdateSelectionFromEvent(Control container, RoutedEventArgs eventArgs)
     {
         if (eventArgs.Handled)
@@ -57,6 +68,9 @@ public sealed class FadingComboBox : ComboBox
             e.Handled = true;
     }
 
+    private static void OnRequestBringIntoView(object? sender, RequestBringIntoViewEventArgs e)
+        => e.Handled = true;
+
     internal bool IsDropDownInteractionSource(Visual source)
         => ResolvePopup()?.IsInteractionSource(source) ??
            ReferenceEquals(source, this) ||
@@ -64,5 +78,4 @@ public sealed class FadingComboBox : ComboBox
 
     private FadingPopup? ResolvePopup()
         => this.GetVisualDescendants().OfType<FadingPopup>().FirstOrDefault();
-
 }
