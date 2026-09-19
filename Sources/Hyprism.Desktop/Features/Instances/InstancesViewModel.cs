@@ -733,9 +733,10 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
             var instance = _instances.CreateInstanceMeta(
                 branch,
                 version,
-                $"{FormatBranch(branch)} {FormatVersion(version, SelectedNewInstanceVersion.VersionName)}",
+                InstanceMeta.DefaultName,
                 versionName: SelectedNewInstanceVersion.VersionName);
             _managedInstance = _instances.FindInstanceById(instance.Id);
+            UpdateManagedInstancePresentation();
             IsInstanceCreatorOpen = false;
             ResetInstanceCreatorState();
             InstanceSection = string.Empty;
@@ -2219,7 +2220,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
         ActivityProgress = 0;
         ActivityProgressText = "0%";
         ActivityTitle = _localizer["common.loading"];
-        ActivityDetail = instance.Name;
+        ActivityDetail = FormatInstanceName(instance.Name, instance.Version, instance.VersionName);
         NotifyManagedInstanceActionStateChanged();
         _managedInstanceActionTimer.Start();
 
@@ -2386,7 +2387,7 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
 
                 return new InstanceItemViewModel(
                     instance.Id,
-                    instance.Name,
+                    FormatInstanceName(instance.Name, instance.Version, instance.VersionName),
                     FormatVersion(instance.Version, instance.VersionName),
                     FormatBranch(instance.Branch),
                     instance.IsInstalled,
@@ -2957,7 +2958,10 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
             return;
         }
 
-        SelectedInstanceName = _selectedInstance.Name;
+        SelectedInstanceName = FormatInstanceName(
+            _selectedInstance.Name,
+            _selectedInstance.Version,
+            _selectedInstance.VersionName);
         SelectedInstanceMeta = $"{FormatBranch(_selectedInstance.Branch)}  ·  {FormatVersion(_selectedInstance.Version, _selectedInstance.VersionName)}";
         SelectedInstanceBranch = FormatBranch(_selectedInstance.Branch);
         SelectedInstanceVersion = FormatVersion(_selectedInstance.Version, _selectedInstance.VersionName);
@@ -2991,7 +2995,10 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
             return;
         }
 
-        ManagedInstanceName = _managedInstance.Name;
+        ManagedInstanceName = FormatInstanceName(
+            _managedInstance.Name,
+            _managedInstance.Version,
+            _managedInstance.VersionName);
         ManagedInstanceBranch = FormatBranch(_managedInstance.Branch);
         ManagedInstanceVersion = FormatVersion(_managedInstance.Version, _managedInstance.VersionName);
         ManagedInstancePlayTime = FormatPlayTime(GetManagedInstancePlayTimeSeconds());
@@ -3003,6 +3010,11 @@ public sealed partial class InstancesViewModel : ObservableObject, IDisposable
         => version <= 0
             ? _localizer["common.unknown"]
             : string.IsNullOrWhiteSpace(versionName) ? version.ToString() : versionName;
+
+    private string FormatInstanceName(string name, int version, string? versionName)
+        => string.Equals(name, InstanceMeta.DefaultName, StringComparison.Ordinal)
+            ? $"{InstanceMeta.DefaultName} {FormatVersion(version, versionName)}"
+            : name;
 
     private string FormatBranch(string branch)
         => branch.Contains("pre", StringComparison.OrdinalIgnoreCase)

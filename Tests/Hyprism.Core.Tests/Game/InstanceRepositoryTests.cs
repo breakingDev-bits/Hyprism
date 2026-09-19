@@ -37,6 +37,7 @@ public class InstanceRepositoryTests : IDisposable
 
         var meta = _svc.CreateInstanceMeta("release", 42);
 
+        Assert.Equal(InstanceMeta.DefaultName, meta.Name);
         Assert.Equal(1, raised);
         Assert.Single(_svc.GetCachedInstances());
         Assert.Contains(
@@ -116,6 +117,22 @@ public class InstanceRepositoryTests : IDisposable
         _svc.SyncInstancesWithConfig();
 
         Assert.Equal(1, raised);
+    }
+
+    [Fact]
+    public void SyncInstancesWithConfig_ClearsSelectionWhenInstanceWasRemoved()
+    {
+        var meta = _svc.CreateInstanceMeta("release", 42);
+        _svc.SetSelectedInstance(meta.Id);
+        var instancePath = _svc.GetInstancePathById(meta.Id)!;
+
+        Directory.Delete(instancePath, recursive: true);
+
+        _svc.SyncInstancesWithConfig();
+
+        Assert.Empty(_svc.GetCachedInstances());
+        Assert.Empty(_config.Configuration.SelectedInstanceId);
+        Assert.Null(_svc.GetSelectedInstance());
     }
 
     [Fact]

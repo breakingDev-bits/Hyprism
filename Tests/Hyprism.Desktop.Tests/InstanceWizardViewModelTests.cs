@@ -201,4 +201,139 @@ public sealed class InstanceWizardViewModelTests
         Assert.Equal("2026.09.08-e1d69dd", viewModel.SelectedNewInstanceVersion?.Label);
     }
 
+    [AvaloniaFact]
+    public void CreatingInstanceStoresHytaleAndDisplaysVersionInUi()
+    {
+        var instances = new Mock<IInstanceRepository>();
+        var profiles = new Mock<IProfileManager>();
+        var profileRepository = new Mock<IProfileRepository>();
+        var launchCoordinator = new Mock<IGameLaunchCoordinator>();
+        var installationWorkflow = new Mock<IGameInstallationWorkflow>();
+        var gameProcess = new Mock<IGameProcessTracker>();
+        var progress = new Mock<IProgressReporter>();
+        var settings = new Mock<IDesktopSettingsStore>();
+        var news = new Mock<IHytaleNewsClient>();
+        var uriLauncher = new Mock<IExternalUriLauncher>();
+        var versionCatalog = new Mock<IGameVersionCatalog>();
+        var cachedVersions = new List<CachedVersionEntry>
+        {
+            new() { Version = 101, VersionName = "0.6.4" }
+        };
+        var createdMeta = new InstanceMeta
+        {
+            Id = "created-instance",
+            Name = InstanceMeta.DefaultName,
+            Branch = "release",
+            Version = 101,
+            VersionName = "0.6.4"
+        };
+
+        instances.Setup(service => service.GetCachedInstances()).Returns([]);
+        instances.Setup(service => service.CreateInstanceMeta(
+                "release",
+                101,
+                InstanceMeta.DefaultName,
+                "0.6.4"))
+            .Returns(createdMeta);
+        instances.Setup(service => service.FindInstanceById(createdMeta.Id))
+            .Returns(new InstanceInfo
+            {
+                Id = createdMeta.Id,
+                Name = InstanceMeta.DefaultName,
+                Branch = "release",
+                Version = 101,
+                VersionName = "0.6.4"
+            });
+        profiles.Setup(service => service.GetNick()).Returns("Wizard Test");
+        versionCatalog
+            .Setup(service => service.TryGetCachedVersionEntries(
+                "release",
+                It.IsAny<TimeSpan>(),
+                out cachedVersions))
+            .Returns(true);
+
+        using var viewModel = new MainWindowViewModel(
+            instances.Object,
+            profiles.Object,
+            profileRepository.Object,
+            launchCoordinator.Object,
+            installationWorkflow.Object,
+            gameProcess.Object,
+            progress.Object,
+            settings.Object,
+            news.Object,
+            uriLauncher.Object,
+            new HttpClient(),
+            new StringLocalizer("en-US"),
+            versionCatalog: versionCatalog.Object);
+
+        viewModel.OpenInstanceCreatorCommand.Execute(null);
+        viewModel.CreateInstanceCommand.Execute(null);
+
+        instances.Verify(service => service.CreateInstanceMeta(
+            "release",
+            101,
+            InstanceMeta.DefaultName,
+            "0.6.4"), Times.Once);
+        Assert.Equal("Hytale 0.6.4", viewModel.ManagedInstanceName);
+    }
+
+    [AvaloniaFact]
+    public void DefaultInstanceNameIsExpandedInUiButCustomNamesArePreserved()
+    {
+        var instances = new Mock<IInstanceRepository>();
+        var profiles = new Mock<IProfileManager>();
+        var profileRepository = new Mock<IProfileRepository>();
+        var launchCoordinator = new Mock<IGameLaunchCoordinator>();
+        var installationWorkflow = new Mock<IGameInstallationWorkflow>();
+        var gameProcess = new Mock<IGameProcessTracker>();
+        var progress = new Mock<IProgressReporter>();
+        var settings = new Mock<IDesktopSettingsStore>();
+        var news = new Mock<IHytaleNewsClient>();
+        var uriLauncher = new Mock<IExternalUriLauncher>();
+        var versionCatalog = new Mock<IGameVersionCatalog>();
+        var cachedInstances = new List<InstanceInfo>
+        {
+            new()
+            {
+                Id = "default-instance",
+                Name = InstanceMeta.DefaultName,
+                Branch = "release",
+                Version = 101,
+                VersionName = "0.6.4"
+            },
+            new()
+            {
+                Id = "custom-instance",
+                Name = "My World",
+                Branch = "release",
+                Version = 102,
+                VersionName = "0.6.5"
+            }
+        };
+
+        instances.Setup(service => service.GetCachedInstances()).Returns(cachedInstances);
+        instances.Setup(service => service.GetSelectedInstance()).Returns(cachedInstances[0]);
+        profiles.Setup(service => service.GetNick()).Returns("Wizard Test");
+
+        using var viewModel = new MainWindowViewModel(
+            instances.Object,
+            profiles.Object,
+            profileRepository.Object,
+            launchCoordinator.Object,
+            installationWorkflow.Object,
+            gameProcess.Object,
+            progress.Object,
+            settings.Object,
+            news.Object,
+            uriLauncher.Object,
+            new HttpClient(),
+            new StringLocalizer("en-US"),
+            versionCatalog: versionCatalog.Object);
+
+        Assert.Equal(["Hytale 0.6.4", "My World"], viewModel.AllInstances.Select(item => item.Name));
+        Assert.Equal("Hytale 0.6.4", viewModel.SelectedInstanceName);
+        Assert.Equal("Hytale 0.6.4", viewModel.ManagedInstanceName);
+    }
+
 }
