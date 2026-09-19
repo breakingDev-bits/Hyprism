@@ -36,14 +36,15 @@ public sealed class FadingPopup : Popup
     private Control? _hoverChild;
     private Control? _placementChild;
     private RectangleGeometry? _contextClip;
+    private Rect? _lastTargetRect;
+    private Size? _lastTopLevelSize;
+    private bool _isRefreshingPlacement;
     private bool? _placeAbove;
 
     public FadingPopup()
     {
         IsLightDismissEnabled = false;
         WindowManagerAddShadowHint = false;
-        // Keep menus in the main composition tree so long-running sessions do
-        // not repeatedly allocate native popup hosts
         ShouldUseOverlayLayer = true;
     }
 
@@ -341,6 +342,8 @@ public sealed class FadingPopup : Popup
 
         _subscribedTopLevel = null;
         _subscribedWindow = null;
+        _lastTargetRect = null;
+        _lastTopLevelSize = null;
         UnsubscribeFromScrollViewers();
     }
 
@@ -371,9 +374,6 @@ public sealed class FadingPopup : Popup
         if (!IsOpen || !IsRequestedOpen)
             return;
 
-        // Popup's built-in LayoutUpdated check only compares the target's local
-        // bounds. Scrolling changes the target's screen position through an
-        // ancestor, so nudge the placement properties to request a fresh update.
         var offset = VerticalOffset;
         SetCurrentValue(VerticalOffsetProperty, offset + 0.001);
         SetCurrentValue(VerticalOffsetProperty, offset);
@@ -387,7 +387,67 @@ public sealed class FadingPopup : Popup
     }
 
     private void OnTopLevelLayoutUpdated(object? sender, EventArgs args)
-        => UpdatePlacementContext();
+    {
+        if (_isRefreshingPlacement || !IsOpen || !IsRequestedOpen ||
+            PlacementTarget is not Visual target ||
+            _subscribedTopLevel is not { } topLevel)
+        {
+            UpdatePlacementContext();
+            return;
+        }
+
+        var targetOrigin = target.TranslatePoint(new Point(), topLevel);
+        if (targetOrigin is not { } targetPoint)
+        {
+            UpdatePlacementContext();
+            return;
+        }
+
+        var targetRect = new Rect(targetPoint, target.Bounds.Size);
+        var topLevelSize = topLevel.Bounds.Size;
+        var topLevelResized = _lastTopLevelSize is not { } previousSize ||
+                              previousSize != topLevelSize;
+        var targetMoved = _lastTargetRect is not { } previousRect ||
+                          previousRect != targetRect;
+        _lastTargetRect = targetRect;
+        _lastTopLevelSize = topLevelSize;
+
+        if (!topLevelResized && !targetMoved)
+        {
+            UpdatePlacementContext();
+            return;
+        }
+
+        if (topLevelResized)
+            _placeAbove = null;
+
+        RefreshPopupPlacement();
+    }
+
+    private void RefreshPopupPlacement()
+    {
+        if (_isRefreshingPlacement || !IsOpen || !IsRequestedOpen)
+            return;
+
+        _isRefreshingPlacement = true;
+        try
+        {
+            UpdatePlacementGap();
+
+            var horizontalOffset = HorizontalOffset;
+            SetCurrentValue(HorizontalOffsetProperty, horizontalOffset + 0.001);
+            SetCurrentValue(HorizontalOffsetProperty, horizontalOffset);
+
+            var verticalOffset = VerticalOffset;
+            SetCurrentValue(VerticalOffsetProperty, verticalOffset + 0.001);
+            SetCurrentValue(VerticalOffsetProperty, verticalOffset);
+            UpdatePlacementContext();
+        }
+        finally
+        {
+            _isRefreshingPlacement = false;
+        }
+    }
 
     private void UpdatePlacementGap()
     {
@@ -491,7 +551,7 @@ public sealed class FadingPopup : Popup
             var pageSurface = ancestors
                 .Skip(scrollViewerIndex + 1)
                 .OfType<Control>()
-                .FirstOrDefault(control => control.ClipToBounds);
+                .FirstOrDefault(control => control is not TopLevel && control.ClipToBounds);
             if (pageSurface is not null)
             {
                 origin = pageSurface.TranslatePoint(new Point(), topLevel);
@@ -504,7 +564,7 @@ public sealed class FadingPopup : Popup
 
         var clippedAncestor = ancestors
             .OfType<Control>()
-            .FirstOrDefault(control => control.ClipToBounds);
+            .LastOrDefault(control => control is not TopLevel && control.ClipToBounds);
         if (clippedAncestor is not null)
         {
             var origin = clippedAncestor.TranslatePoint(new Point(), topLevel);

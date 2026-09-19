@@ -279,6 +279,55 @@ public sealed class FadingComboBoxTests
     }
 
     [AvaloniaFact]
+    public async Task PopupFollowsItsComboBoxWhenTheWindowIsResized()
+    {
+        var comboBox = new FadingComboBox
+        {
+            Width = 220,
+            ItemsSource = new[] { "Alpha", "Beta", "Gamma" },
+            SelectedIndex = 0,
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
+        };
+        comboBox.Classes.Add("uiComboBox");
+
+        var host = new Grid
+        {
+            Width = 420,
+            Height = 320,
+            Children = { comboBox }
+        };
+        var window = new Window
+        {
+            Width = 420,
+            Height = 320,
+            Content = host
+        };
+        window.Show();
+        Dispatcher.UIThread.RunJobs();
+
+        comboBox.IsDropDownOpen = true;
+        var popup = Assert.Single(comboBox.GetVisualDescendants().OfType<FadingPopup>());
+        await WaitUntilAsync(
+            () => TryGetHorizontalAlignment(comboBox, popup, window, out _));
+
+        var initialTargetOrigin = comboBox.TranslatePoint(new Point(), window);
+        Assert.NotNull(initialTargetOrigin);
+
+        window.Width = 600;
+        Dispatcher.UIThread.RunJobs();
+
+        await WaitUntilAsync(
+            () => TryGetHorizontalAlignment(comboBox, popup, window, out var alignment) &&
+                  Math.Abs(alignment) < 0.1);
+
+        var resizedTargetOrigin = comboBox.TranslatePoint(new Point(), window);
+        Assert.NotNull(resizedTargetOrigin);
+        Assert.True(resizedTargetOrigin!.Value.X > initialTargetOrigin!.Value.X + 50);
+        window.Close();
+    }
+
+    [AvaloniaFact]
     public async Task ScrollingDoesNotFlipAnOpenPopupToTheOtherSide()
     {
         var comboBox = new FadingComboBox
@@ -482,6 +531,68 @@ public sealed class FadingComboBoxTests
                   geometry.Rect.Height > 0);
 
         Assert.Equal(PlacementMode.Bottom, popup.Placement);
+        window.Close();
+    }
+
+    [AvaloniaFact]
+    public async Task PopupUsesTheOuterPageContextWhenNoScrollViewerIsPresent()
+    {
+        var comboBox = new FadingComboBox
+        {
+            Width = 220,
+            ItemsSource = new[] { "Alpha", "Beta", "Gamma", "Delta", "Epsilon" },
+            SelectedIndex = 0
+        };
+        comboBox.Classes.Add("uiComboBox");
+
+        var clippedCard = new Border
+        {
+            Width = 220,
+            Height = 44,
+            ClipToBounds = true,
+            Child = comboBox
+        };
+        Canvas.SetLeft(clippedCard, 40);
+        Canvas.SetTop(clippedCard, 220);
+
+        var canvas = new Canvas
+        {
+            Width = 420,
+            Height = 320
+        };
+        canvas.Children.Add(clippedCard);
+
+        var page = new Border
+        {
+            Width = 420,
+            Height = 320,
+            ClipToBounds = true,
+            Child = canvas
+        };
+        var window = new Window
+        {
+            Width = 500,
+            Height = 520,
+            Content = page
+        };
+        window.Show();
+        Dispatcher.UIThread.RunJobs();
+
+        comboBox.IsDropDownOpen = true;
+        var popup = Assert.Single(comboBox.GetVisualDescendants().OfType<FadingPopup>());
+        await WaitUntilAsync(() => popup.Child is Visual { Bounds.Height: > 0 });
+        Dispatcher.UIThread.RunJobs();
+
+        Assert.Equal(PlacementMode.Top, popup.Placement);
+        var popupChild = Assert.IsAssignableFrom<Visual>(popup.Child);
+        var clip = Assert.IsType<RectangleGeometry>(popupChild.Clip).Rect;
+        Assert.True(clip.Height > clippedCard.Bounds.Height);
+        var pageOrigin = page.TranslatePoint(new Point(), window);
+        var popupOrigin = popupChild.TranslatePoint(new Point(), window);
+        Assert.NotNull(pageOrigin);
+        Assert.NotNull(popupOrigin);
+        Assert.True(
+            popupOrigin!.Value.Y + clip.Bottom <= pageOrigin!.Value.Y + page.Bounds.Height + 0.5);
         window.Close();
     }
 
@@ -716,6 +827,25 @@ public sealed class FadingComboBoxTests
         gap = popupPoint.Y < targetPoint.Y
             ? targetPoint.Y - popupBottom
             : popupPoint.Y - targetBottom;
+        return true;
+    }
+
+    private static bool TryGetHorizontalAlignment(
+        FadingComboBox comboBox,
+        FadingPopup popup,
+        Window window,
+        out double alignment)
+    {
+        alignment = 0;
+        if (popup.Child is not Visual popupChild)
+            return false;
+
+        var targetOrigin = comboBox.TranslatePoint(new Point(), window);
+        var popupOrigin = popupChild.TranslatePoint(new Point(), window);
+        if (targetOrigin is not { } targetPoint || popupOrigin is not { } popupPoint)
+            return false;
+
+        alignment = popupPoint.X - targetPoint.X;
         return true;
     }
 
