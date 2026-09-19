@@ -262,15 +262,34 @@ public sealed partial class SettingsView : UserControl
 
     private async Task PlayDownloadSourceWizardOpenAsync()
     {
-        if (!_layoutHost.IsCompact)
-            _downloadSourceWizard.HideNavigationPane(animate: true);
+        if (_layoutHost.IsCompact)
+        {
+            await _downloadSourceWizard.OpenCompactOverlayAsync(
+                () => DataContext is SettingsViewModel { IsAddingMirror: true },
+                GetDownloadSourceWizardHorizontalOffset());
+            return;
+        }
 
+        _downloadSourceWizard.HideNavigationPane(animate: true);
         await _downloadSourceWizard.OpenAsync(
             () => DataContext is SettingsViewModel { IsAddingMirror: true });
     }
 
     private async Task PlayDownloadSourceWizardCloseAsync()
     {
+        if (_layoutHost.IsCompact)
+        {
+            await _downloadSourceWizard.CloseCompactOverlayAsync(
+                () => DataContext is SettingsViewModel { IsAddingMirror: false },
+                GetDownloadSourceWizardHorizontalOffset(),
+                () =>
+                {
+                    if (DataContext is SettingsViewModel viewModel)
+                        viewModel.CompleteMirrorAdditionTransition();
+                });
+            return;
+        }
+
         await _downloadSourceWizard.CloseAsync(
             () => DataContext is SettingsViewModel { IsAddingMirror: false },
             () =>
@@ -282,6 +301,11 @@ public sealed partial class SettingsView : UserControl
                     viewModel.CompleteMirrorAdditionTransition();
             });
     }
+
+    private double GetDownloadSourceWizardHorizontalOffset()
+        => _layoutHost.IsCompact
+            ? Math.Max(28, SettingsMain.Bounds.Width)
+            : 28;
 
     private void HideDownloadSourceWizardImmediately()
     {
