@@ -60,13 +60,10 @@ public sealed class WizardAnimationTests
 
         var transition = new WizardScreenTransition(overview, wizard, pane);
         transition.HideNavigationPane(animate: true);
-        Dispatcher.UIThread.RunJobs();
-        await Task.Delay(40);
-        AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
-        Dispatcher.UIThread.RunJobs();
-
-        Assert.InRange(pane.Opacity, 0.01, 0.99);
-        Assert.InRange(pane.Bounds.Width, 0.5, 275.5);
+        await WaitForRenderStateAsync(
+            () => pane.Opacity is > 0.01 and < 0.99 &&
+                  pane.Bounds.Width is > 0.5 and < 275.5,
+            "navigation pane transition to reach an intermediate state");
 
         window.Close();
     }
@@ -166,34 +163,20 @@ public sealed class WizardAnimationTests
         Assert.Equal(276, pane.Bounds.Width);
 
         profilesViewModel.ShowCreateChoiceCommand.Execute(null);
-        await Task.Delay(260);
-        AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
-        Dispatcher.UIThread.RunJobs();
-        Assert.InRange(pane.Bounds.Width, 0, 0.5);
+        await WaitForRenderStateAsync(
+            () => pane.Bounds.Width <= 0.5,
+            "navigation pane to finish hiding before wizard close");
 
-        var firstVisibleWidth = new TaskCompletionSource<double>(
-            TaskCreationOptions.RunContinuationsAsynchronously);
-        void OnPaneChanged(object? sender, AvaloniaPropertyChangedEventArgs args)
-        {
-            if (args.Property == Visual.BoundsProperty && pane.Bounds.Width > 0.5)
-                firstVisibleWidth.TrySetResult(pane.Bounds.Width);
-        }
-
-        pane.PropertyChanged += OnPaneChanged;
         profilesViewModel.CancelCreationCommand.Execute(null);
         profileRepository.Raise(repository => repository.ProfilesChanged += null);
-        Dispatcher.UIThread.RunJobs();
-        AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
-        Dispatcher.UIThread.RunJobs();
-        var firstWidth = await firstVisibleWidth.Task.WaitAsync(TimeSpan.FromSeconds(2));
-        pane.PropertyChanged -= OnPaneChanged;
-        Assert.InRange(firstWidth, 0.5, 275.5);
+        await WaitForRenderStateAsync(
+            () => pane.Bounds.Width is > 0.5 and < 275.5,
+            "navigation pane to start reopening without snapping");
+        Assert.InRange(pane.Bounds.Width, 0.5, 275.5);
 
-        await Task.Delay(420);
-        AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
-        Dispatcher.UIThread.RunJobs();
-        Assert.InRange(pane.Bounds.Width, 275.5, 276.5);
-        Assert.InRange(pane.Opacity, 0.99, 1);
+        await WaitForRenderStateAsync(
+            () => pane.Bounds.Width >= 275.5 && pane.Opacity >= 0.99,
+            "navigation pane to finish reopening");
 
         window.Close();
     }
