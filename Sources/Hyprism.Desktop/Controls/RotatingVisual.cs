@@ -51,6 +51,7 @@ public sealed class RotatingVisual : AvaloniaObject
         private TimeSpan? _animationStartedAt;
         private Visual? _target;
         private Visual? _visual;
+        private RotateTransform? _rotation;
 
         public void SetActive(Visual visual, bool isActive)
         {
@@ -145,15 +146,50 @@ public sealed class RotatingVisual : AvaloniaObject
 
             Stop(visual);
             visual.RenderTransformOrigin = RelativePoint.Center;
-            visual.RenderTransform ??= new RotateTransform();
-            if (visual.RenderTransform is not RotateTransform rotation)
+            var rotation = EnsureRotationTransform(visual);
+            if (rotation is null)
                 return;
 
             _visual = visual;
+            _rotation = rotation;
             _animationStartedAt = null;
             var animationVersion = ++_animationVersion;
             TopLevel.GetTopLevel(visual)?.RequestAnimationFrame(
                 timestamp => OnAnimationFrame(timestamp, animationVersion));
+        }
+
+        private static RotateTransform? EnsureRotationTransform(Visual visual)
+        {
+            var rotation = FindRotationTransform(visual);
+            if (rotation is not null)
+                return rotation;
+
+            switch (visual.RenderTransform)
+            {
+                case TransformGroup group:
+                    return AddRotationTransform(group);
+                case null:
+                    rotation = new RotateTransform();
+                    visual.RenderTransform = rotation;
+                    return rotation;
+                default:
+                    return null;
+            }
+        }
+
+        private static RotateTransform? FindRotationTransform(Visual visual)
+            => visual.RenderTransform switch
+            {
+                RotateTransform rotation => rotation,
+                TransformGroup group => group.Children.OfType<RotateTransform>().FirstOrDefault(),
+                _ => null
+            };
+
+        private static RotateTransform AddRotationTransform(TransformGroup group)
+        {
+            var rotation = new RotateTransform();
+            group.Children.Add(rotation);
+            return rotation;
         }
 
         private void Stop(Visual visual)
@@ -161,8 +197,10 @@ public sealed class RotatingVisual : AvaloniaObject
             _animationVersion++;
             _animationStartedAt = null;
             _visual = null;
-            if (visual.RenderTransform is RotateTransform rotation)
+            var rotation = _rotation ?? FindRotationTransform(visual);
+            if (rotation is not null)
                 rotation.Angle = 0;
+            _rotation = null;
         }
 
         private void OnAnimationFrame(TimeSpan timestamp, int animationVersion)
@@ -181,13 +219,13 @@ public sealed class RotatingVisual : AvaloniaObject
                 return;
             }
 
-            if (visual.RenderTransform is RotateTransform rotation)
+            if (_rotation is not null)
             {
                 _animationStartedAt ??= timestamp;
                 var elapsed = timestamp - _animationStartedAt.Value;
-                rotation.Angle = elapsed.TotalMilliseconds %
-                                 MotionDurations.SpinnerRotation.TotalMilliseconds /
-                                 MotionDurations.SpinnerRotation.TotalMilliseconds * 360;
+                _rotation.Angle = elapsed.TotalMilliseconds %
+                                  MotionDurations.SpinnerRotation.TotalMilliseconds /
+                                  MotionDurations.SpinnerRotation.TotalMilliseconds * 360;
             }
 
             TopLevel.GetTopLevel(visual)?.RequestAnimationFrame(

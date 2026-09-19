@@ -969,6 +969,14 @@ public sealed class MainWindowRenderTests
         Assert.True(spinner.Data.Bounds.Top >= spinner.StrokeThickness / 2);
         Assert.True(spinner.Data.Bounds.Right <= spinner.Bounds.Width - spinner.StrokeThickness / 2);
         Assert.True(spinner.Data.Bounds.Bottom <= spinner.Bounds.Height - spinner.StrokeThickness / 2);
+        var spinnerRotation = spinner.RenderTransform is RotateTransform rotation
+            ? rotation
+            : Assert.Single(
+                Assert.IsType<TransformGroup>(spinner.RenderTransform).Children
+                    .OfType<RotateTransform>());
+        await WaitForConditionAsync(
+            () => spinnerRotation.Angle is > 1 and < 359,
+            "managed instance spinner to advance");
         Assert.Equal(1, Grid.GetColumn(status));
         Assert.Equal(HorizontalAlignment.Stretch, status.HorizontalAlignment);
         Assert.Equal(2, Grid.GetColumn(metric));
