@@ -397,6 +397,7 @@ public sealed partial class InstancesView : UserControl
 
                 _layoutHost.OpenDetail();
                 UpdateBranchIndicator(animate: false);
+                await Task.Delay(CompactContentTransitionDuration);
                 return;
             }
 

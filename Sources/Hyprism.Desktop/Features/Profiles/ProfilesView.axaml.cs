@@ -301,6 +301,7 @@ public sealed partial class ProfilesView : UserControl
                 }
 
                 _layoutHost.OpenDetail();
+                await Task.Delay(CompactContentTransitionDuration);
                 return;
             }
 

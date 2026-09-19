@@ -1,14 +1,17 @@
 // Copyright (C) 2026 Hyprism Launcher
 // SPDX-License-Identifier: GPL-3.0-only
 
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Headless;
 using Avalonia.Headless.XUnit;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using Hyprism.Core.Accounts;
 using Hyprism.Core.Models;
 using Hyprism.Desktop.Controls;
@@ -66,6 +69,71 @@ public sealed class WizardAnimationTests
         Assert.InRange(pane.Bounds.Width, 0.5, 275.5);
 
         window.Close();
+    }
+
+    [AvaloniaFact]
+    public async Task CompactProfileCreatorOpeningKeepsItsDetailSlide()
+    {
+        var profileManager = new Mock<IProfileManager>();
+        var profileRepository = new Mock<IProfileRepository>();
+        profileRepository.Setup(repository => repository.GetProfiles()).Returns(
+        [
+            new Profile { Id = "active", Name = "Active", UUID = Guid.NewGuid().ToString() }
+        ]);
+        profileRepository.Setup(repository => repository.GetSelectedProfileId()).Returns("active");
+
+        using var profilesViewModel = new ProfilesViewModel(
+            profileManager.Object,
+            profileRepository.Object,
+            new Mock<IExternalUriLauncher>().Object,
+            new StringLocalizer("en-US"));
+        var view = new ProfilesView { DataContext = profilesViewModel };
+        var window = new Window
+        {
+            Width = 760,
+            Height = 760,
+            Content = view
+        };
+
+        window.Show();
+        Dispatcher.UIThread.RunJobs();
+
+        var profileMain = Assert.IsType<Grid>(view.FindControl<Grid>("ProfileMain"));
+        var translation = Assert.IsType<TranslateTransform>(profileMain.RenderTransform);
+        var initialOffset = profileMain.Bounds.Width;
+        Assert.InRange(translation.X, initialOffset - 1, initialOffset + 1);
+
+        var observedIntermediateOffset = false;
+        void OnTranslationChanged(object? sender, AvaloniaPropertyChangedEventArgs args)
+        {
+            if (args.Property == TranslateTransform.XProperty &&
+                translation.X > 0.5 &&
+                translation.X < initialOffset - 0.5)
+            {
+                observedIntermediateOffset = true;
+            }
+        }
+
+        translation.PropertyChanged += OnTranslationChanged;
+        try
+        {
+            var addProfileRow = view.GetVisualDescendants()
+                .OfType<Button>()
+                .Single(button => button.IsEffectivelyVisible && button.Classes.Contains("instancesAddRow"));
+            addProfileRow.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+
+            await WaitForRenderStateAsync(
+                () => observedIntermediateOffset,
+                "compact profile creator opening slide to advance");
+            await WaitForRenderStateAsync(
+                () => Math.Abs(translation.X) <= 0.01,
+                "compact profile creator opening slide to finish");
+        }
+        finally
+        {
+            translation.PropertyChanged -= OnTranslationChanged;
+            window.Close();
+        }
     }
 
     [AvaloniaFact]
@@ -128,5 +196,20 @@ public sealed class WizardAnimationTests
         Assert.InRange(pane.Opacity, 0.99, 1);
 
         window.Close();
+    }
+
+    private static async Task WaitForRenderStateAsync(Func<bool> condition, string description)
+    {
+        var startedAt = Stopwatch.GetTimestamp();
+        while (!condition() && Stopwatch.GetElapsedTime(startedAt) < TimeSpan.FromSeconds(5))
+        {
+            AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
+            Dispatcher.UIThread.RunJobs();
+            await Task.Delay(16, TestContext.Current.CancellationToken);
+        }
+
+        AvaloniaHeadlessPlatform.ForceRenderTimerTick(1);
+        Dispatcher.UIThread.RunJobs();
+        Assert.True(condition(), $"Timed out waiting for {description}");
     }
 }
