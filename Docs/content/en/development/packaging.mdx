@@ -63,9 +63,11 @@ pwsh Packaging/publish-windows.ps1 all --output dist
 
 It verifies both `Hyprism.Desktop.exe` and `Hyprism.LocalNode.exe` before producing artifacts. ZIP contains the same application payload as the installers
 
+The Windows apphost uses the multi-size `Sources/Hyprism.Desktop/Assets/Images/Hyprism.ico` resource. WiX uses the same icon for the MSI entry in Apps and Features and the EXE bootstrapper
+
 ## macOS
 
-The publishers use `logo.svg` as the Linux application icon and derive the macOS icon set from the same logo asset. The macOS publisher uses the system `sips`, `iconutil`, `plutil`, `hdiutil`, `codesign`, and `file` tools
+The macOS app bundle includes the generated `Packaging/macos/Hyprism.icns` icon derived from `logo.svg` and references it from `Info.plist`. The macOS publisher uses `plutil`, `hdiutil`, `codesign`, and `file`
 
 ```bash
 ./Packaging/publish-macos.sh dmg --output dist

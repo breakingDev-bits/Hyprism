@@ -11,6 +11,7 @@ $ErrorActionPreference = 'Stop'
 $packagingDirectory = Split-Path -Parent $PSCommandPath
 $projectRoot = Split-Path -Parent $packagingDirectory
 $projectFile = Join-Path $projectRoot 'Sources/Hyprism.Desktop/Hyprism.Desktop.csproj'
+$iconFile = Join-Path $projectRoot 'Sources/Hyprism.Desktop/Assets/Images/Hyprism.ico'
 $wixSource = Join-Path $packagingDirectory 'windows'
 $wixVersion = '6.0.2'
 $targets = [System.Collections.Generic.List[string]]::new()
@@ -49,6 +50,10 @@ for ($index = 0; $index -lt $Arguments.Count; $index++) {
 
 if ($targets.Count -eq 0 -or $targets.Contains('all')) {
     $targets = [System.Collections.Generic.List[string]]@('zip', 'msi', 'exe')
+}
+
+if (-not (Test-Path -Path $iconFile -PathType Leaf)) {
+    throw "Windows icon was not found: $iconFile"
 }
 
 $version = (& dotnet msbuild $projectFile -nologo -getProperty:Version | Select-Object -Last 1).Trim()
@@ -108,6 +113,7 @@ try {
         & $wix build (Join-Path $wixSource 'Hyprism.msi.wxs') `
             -arch x64 `
             -d "PublishDir=$publishDirectory" `
+            -d "IconPath=$iconFile" `
             -d "ProductVersion=$installerVersion" `
             -o $msiPath
         if ($LASTEXITCODE -ne 0) { throw 'WiX could not build the MSI package' }
@@ -116,6 +122,7 @@ try {
             & $wix build (Join-Path $wixSource 'Hyprism.bundle.wxs') `
                 -arch x64 `
                 -ext WixToolset.BootstrapperApplications.wixext `
+                -d "IconPath=$iconFile" `
                 -d "MsiPath=$msiPath" `
                 -d "ProductVersion=$installerVersion" `
                 -o (Join-Path $outputDirectory "Hyprism-win-x64-$artifactVersion-setup.exe")
