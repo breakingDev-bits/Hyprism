@@ -165,7 +165,9 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
     [NotifyPropertyChangedFor(nameof(CanResetInstanceFolder))]
     private string _instanceFolder = string.Empty;
     [ObservableProperty] private bool _isStorageUsageLoading;
-    [ObservableProperty] private string _totalStorageUsage = "0 B";
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StorageUsageSummary))]
+    private string _totalStorageUsage = "0 B";
     [ObservableProperty] private IReadOnlyList<StorageUsageSegment> _storageUsageItems = [];
     [ObservableProperty] private bool _hasAboutLatestCommit;
     [ObservableProperty] private bool _hasMoreAboutContributors;
@@ -315,6 +317,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
     public bool HasNoEnvironmentVariables => EnvironmentVariableItems.Count == 0;
     public string JavaMaximumRamValue => FormatMemory(JavaMaximumRamMb);
     public string JavaInitialRamValue => FormatMemory(JavaInitialRamMb);
+    public string StorageUsageSummary => $"{StorageUsedLabel} {TotalStorageUsage}";
     public bool HasMirrors => MirrorSources.Count > 0;
     public bool HasNoMirrors => MirrorSources.Count == 0;
     public bool HasMirrorOperationError => !string.IsNullOrWhiteSpace(MirrorOperationError);
@@ -437,6 +440,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
     public string InstanceFolderLabel { get; private set; } = string.Empty;
     public string LauncherFilesLabel { get; private set; } = string.Empty;
     public string StorageLoadingLabel { get; private set; } = string.Empty;
+    public string StorageUsedLabel { get; private set; } = string.Empty;
     public string InstancesLabel { get; private set; } = string.Empty;
     public string ImagesLabel { get; private set; } = string.Empty;
     public string ModsLabel { get; private set; } = string.Empty;
@@ -582,6 +586,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
         InstanceFolderLabel = _localizer["settings.dataSettings.instanceFolder"];
         LauncherFilesLabel = _localizer["settings.dataSettings.launcherFiles"];
         StorageLoadingLabel = _localizer["common.loading"];
+        StorageUsedLabel = _localizer["settings.dataSettings.storageUsed"];
         InstancesLabel = _localizer["dock.instances"];
         ImagesLabel = _localizer["settings.visualSettings.images"];
         ModsLabel = _localizer["instances.tab.mods"];
@@ -1650,7 +1655,9 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
     private async Task LoadStorageUsageAsync(CancellationToken cancellationToken)
     {
         var loaded = false;
-        IsStorageUsageLoading = true;
+        var showLoadingIndicator = _latestStorageUsage is null;
+        if (showLoadingIndicator)
+            IsStorageUsageLoading = true;
         try
         {
             var usage = await _settings.GetLauncherStorageUsageAsync(cancellationToken).ConfigureAwait(false);
@@ -1674,7 +1681,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
             {
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    IsStorageUsageLoading = false;
+                    if (showLoadingIndicator)
+                        IsStorageUsageLoading = false;
                     _storageUsageCancellation?.Dispose();
                     _storageUsageCancellation = null;
                     if (!loaded)
@@ -1692,8 +1700,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
         _latestStorageUsage = usage;
         TotalStorageUsage = FormatStorageSize(usage.TotalBytes);
         var total = Math.Max(1, usage.TotalBytes);
-        StorageUsageItems =
-        [
+        var updatedItems = new[]
+        {
             CreateStorageSegment(
                 InstancesLabel,
                 usage.InstanceBytes,
@@ -1705,8 +1713,39 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
             CreateStorageSegment(NewsLabel, usage.NewsBytes, total, "#A86416"),
             CreateStorageSegment(LogsLabel, usage.LogBytes, total, "#9C3A50"),
             CreateStorageSegment(OtherFilesLabel, usage.OtherBytes, total, "#197765")
-        ];
+        };
+        if (!HasSameStorageUsageItems(updatedItems))
+            StorageUsageItems = updatedItems;
     }
+
+    private bool HasSameStorageUsageItems(IReadOnlyList<StorageUsageSegment> updatedItems)
+    {
+        if (StorageUsageItems.Count != updatedItems.Count)
+            return false;
+
+        for (var index = 0; index < updatedItems.Count; index++)
+        {
+            var current = StorageUsageItems[index];
+            var updated = updatedItems[index];
+            if (current.Label != updated.Label ||
+                current.Bytes != updated.Bytes ||
+                current.DisplaySize != updated.DisplaySize ||
+                current.Percentage != updated.Percentage ||
+                current.Count != updated.Count ||
+                !AreStorageBrushesEqual(current.Brush, updated.Brush))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static bool AreStorageBrushesEqual(IBrush first, IBrush second)
+        => first is ISolidColorBrush firstSolid &&
+           second is ISolidColorBrush secondSolid
+            ? firstSolid.Color == secondSolid.Color
+            : ReferenceEquals(first, second);
 
     private static StorageUsageSegment CreateStorageSegment(
         string label,

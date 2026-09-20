@@ -1909,7 +1909,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <value>Файлы лаунчера</value>
   </data>
   <data name="settings.dataSettings.storageUsed" xml:space="preserve">
-    <value>Занято</value>
+    <value>Используется</value>
   </data>
   <data name="settings.dataSettings.otherFiles" xml:space="preserve">
     <value>Другие файлы</value>

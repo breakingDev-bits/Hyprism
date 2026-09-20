@@ -342,6 +342,7 @@ public sealed class DataSettingsViewModelTests
         Assert.Equal("3", viewModel.StorageUsageItems[0].Count);
         Assert.Equal("News", viewModel.StorageUsageItems[3].Label);
         Assert.Equal("151 MB", viewModel.TotalStorageUsage);
+        Assert.Equal("Used space 151 MB", viewModel.StorageUsageSummary);
         Assert.True(warning.IsEffectivelyVisible);
         Assert.False(selectButton.IsEnabled);
         Assert.False(resetButton.IsEnabled);
