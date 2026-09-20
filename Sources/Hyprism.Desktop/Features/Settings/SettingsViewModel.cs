@@ -1655,7 +1655,9 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
     private async Task LoadStorageUsageAsync(CancellationToken cancellationToken)
     {
         var loaded = false;
-        IsStorageUsageLoading = true;
+        var showLoadingIndicator = _latestStorageUsage is null;
+        if (showLoadingIndicator)
+            IsStorageUsageLoading = true;
         try
         {
             var usage = await _settings.GetLauncherStorageUsageAsync(cancellationToken).ConfigureAwait(false);
@@ -1679,7 +1681,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
             {
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    IsStorageUsageLoading = false;
+                    if (showLoadingIndicator)
+                        IsStorageUsageLoading = false;
                     _storageUsageCancellation?.Dispose();
                     _storageUsageCancellation = null;
                     if (!loaded)
@@ -1697,8 +1700,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
         _latestStorageUsage = usage;
         TotalStorageUsage = FormatStorageSize(usage.TotalBytes);
         var total = Math.Max(1, usage.TotalBytes);
-        StorageUsageItems =
-        [
+        var updatedItems = new[]
+        {
             CreateStorageSegment(
                 InstancesLabel,
                 usage.InstanceBytes,
@@ -1710,8 +1713,39 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
             CreateStorageSegment(NewsLabel, usage.NewsBytes, total, "#A86416"),
             CreateStorageSegment(LogsLabel, usage.LogBytes, total, "#9C3A50"),
             CreateStorageSegment(OtherFilesLabel, usage.OtherBytes, total, "#197765")
-        ];
+        };
+        if (!HasSameStorageUsageItems(updatedItems))
+            StorageUsageItems = updatedItems;
     }
+
+    private bool HasSameStorageUsageItems(IReadOnlyList<StorageUsageSegment> updatedItems)
+    {
+        if (StorageUsageItems.Count != updatedItems.Count)
+            return false;
+
+        for (var index = 0; index < updatedItems.Count; index++)
+        {
+            var current = StorageUsageItems[index];
+            var updated = updatedItems[index];
+            if (current.Label != updated.Label ||
+                current.Bytes != updated.Bytes ||
+                current.DisplaySize != updated.DisplaySize ||
+                current.Percentage != updated.Percentage ||
+                current.Count != updated.Count ||
+                !AreStorageBrushesEqual(current.Brush, updated.Brush))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static bool AreStorageBrushesEqual(IBrush first, IBrush second)
+        => first is ISolidColorBrush firstSolid &&
+           second is ISolidColorBrush secondSolid
+            ? firstSolid.Color == secondSolid.Color
+            : ReferenceEquals(first, second);
 
     private static StorageUsageSegment CreateStorageSegment(
         string label,
