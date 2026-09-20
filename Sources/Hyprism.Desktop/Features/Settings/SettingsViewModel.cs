@@ -165,7 +165,9 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
     [NotifyPropertyChangedFor(nameof(CanResetInstanceFolder))]
     private string _instanceFolder = string.Empty;
     [ObservableProperty] private bool _isStorageUsageLoading;
-    [ObservableProperty] private string _totalStorageUsage = "0 B";
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StorageUsageSummary))]
+    private string _totalStorageUsage = "0 B";
     [ObservableProperty] private IReadOnlyList<StorageUsageSegment> _storageUsageItems = [];
     [ObservableProperty] private bool _hasAboutLatestCommit;
     [ObservableProperty] private bool _hasMoreAboutContributors;
@@ -315,6 +317,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
     public bool HasNoEnvironmentVariables => EnvironmentVariableItems.Count == 0;
     public string JavaMaximumRamValue => FormatMemory(JavaMaximumRamMb);
     public string JavaInitialRamValue => FormatMemory(JavaInitialRamMb);
+    public string StorageUsageSummary => $"{StorageUsedLabel} {TotalStorageUsage}";
     public bool HasMirrors => MirrorSources.Count > 0;
     public bool HasNoMirrors => MirrorSources.Count == 0;
     public bool HasMirrorOperationError => !string.IsNullOrWhiteSpace(MirrorOperationError);
@@ -437,6 +440,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
     public string InstanceFolderLabel { get; private set; } = string.Empty;
     public string LauncherFilesLabel { get; private set; } = string.Empty;
     public string StorageLoadingLabel { get; private set; } = string.Empty;
+    public string StorageUsedLabel { get; private set; } = string.Empty;
     public string InstancesLabel { get; private set; } = string.Empty;
     public string ImagesLabel { get; private set; } = string.Empty;
     public string ModsLabel { get; private set; } = string.Empty;
@@ -582,6 +586,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IDisposable
         InstanceFolderLabel = _localizer["settings.dataSettings.instanceFolder"];
         LauncherFilesLabel = _localizer["settings.dataSettings.launcherFiles"];
         StorageLoadingLabel = _localizer["common.loading"];
+        StorageUsedLabel = _localizer["settings.dataSettings.storageUsed"];
         InstancesLabel = _localizer["dock.instances"];
         ImagesLabel = _localizer["settings.visualSettings.images"];
         ModsLabel = _localizer["instances.tab.mods"];

@@ -1104,22 +1104,23 @@ SPDX-License-Identifier: GPL-3.0-only
             </Border>
 
             <StackPanel x:Name="StorageUsageOverview"
-                        MaxWidth="720"
                         HorizontalAlignment="Stretch"
                         Spacing="12">
               <Border Classes="storageUsageCard">
                 <Grid>
                   <StackPanel Spacing="10" IsVisible="{Binding !IsStorageUsageLoading}">
-                   <TextBlock Text="{Binding TotalStorageUsage}"
+                   <TextBlock Text="{Binding StorageUsageSummary}"
                               Classes="storageTotalValue storageUsageValue" />
-                   <Border Height="16" CornerRadius="8">
+                   <Border Height="16"
+                           CornerRadius="8"
+                           ClipToBounds="True">
                     <ItemsControl ItemsSource="{Binding StorageUsageItems}">
                       <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate><controls:StorageUsageBarPanel /></ItemsPanelTemplate>
                       </ItemsControl.ItemsPanel>
                       <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="controls:StorageUsageSegment">
-                          <Border Background="{Binding Brush}" CornerRadius="3" />
+                          <Border Background="{Binding Brush}" CornerRadius="0" />
                         </DataTemplate>
                       </ItemsControl.ItemTemplate>
                     </ItemsControl>

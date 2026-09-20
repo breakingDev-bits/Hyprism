@@ -31,7 +31,7 @@ public sealed class StorageUsageBarPanel : Panel
         {
             var bytes = (child.DataContext as StorageUsageSegment)?.Bytes ?? 0;
             var width = totalBytes > 0 ? finalSize.Width * bytes / totalBytes : 0;
-            child.Arrange(new Rect(x, 0, Math.Max(0, width - 2), finalSize.Height));
+            child.Arrange(new Rect(x, 0, Math.Max(0, width), finalSize.Height));
             x += width;
         }
 
