@@ -87,6 +87,8 @@ SPDX-License-Identifier: GPL-3.0-only
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
           <TextBlock Text="{Binding ChangeInstanceFolderLabel}"
+                     TextWrapping="NoWrap"
+                     TextTrimming="CharacterEllipsis"
                      VerticalAlignment="Center" />
         </StackPanel>
         <Grid Classes="managedActionProgress" VerticalAlignment="Center">

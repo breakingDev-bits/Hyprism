@@ -1893,6 +1893,7 @@ SPDX-License-Identifier: GPL-3.0-only
 
   <Style Selector="settings|SettingsView Button.instanceFolderChangeAction">
     <Setter Property="Width" Value="110" />
+    <Setter Property="Padding" Value="10,0" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     <Setter Property="Transitions">
       <Transitions>
