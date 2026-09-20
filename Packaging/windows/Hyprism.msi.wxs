@@ -12,6 +12,8 @@
       Scope="perMachine">
     <MajorUpgrade DowngradeErrorMessage="A newer version of Hyprism is already installed" />
     <MediaTemplate EmbedCab="yes" />
+    <Icon Id="HyprismIcon" SourceFile="$(var.IconPath)" />
+    <Property Id="ARPPRODUCTICON" Value="HyprismIcon" />
 
     <StandardDirectory Id="ProgramFiles6432Folder">
       <Directory Id="INSTALLFOLDER" Name="Hyprism">

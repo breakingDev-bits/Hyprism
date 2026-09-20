@@ -10,6 +10,7 @@
       Name="Hyprism"
       Manufacturer="Hyprism Team"
       Version="$(var.ProductVersion)"
+      IconSourceFile="$(var.IconPath)"
       UpgradeCode="5B9C81F5-083C-45B3-8AC9-C6DAE2DEB61F">
     <BootstrapperApplication>
       <bal:WixStandardBootstrapperApplication LicenseUrl="" Theme="hyperlinkLicense" />

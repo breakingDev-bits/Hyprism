@@ -8,7 +8,7 @@ set -euo pipefail
 PACKAGING_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$PACKAGING_DIR/.." && pwd)"
 PROJECT_FILE="$PROJECT_ROOT/Sources/Hyprism.Desktop/Hyprism.Desktop.csproj"
-APP_ICON="$PROJECT_ROOT/Sources/Hyprism.Desktop/Assets/Images/logo.svg"
+APP_ICON="$PACKAGING_DIR/macos/Hyprism.icns"
 APP_NAME="Hyprism"
 INFO_PLIST="$PACKAGING_DIR/macos/Info.plist"
 OUTPUT_DIR="$PROJECT_ROOT/dist"
@@ -52,7 +52,7 @@ if [[ ${#TARGETS[@]} -eq 0 ]]; then
     TARGETS=(all)
 fi
 
-for command in dotnet sips iconutil plutil hdiutil codesign file; do
+for command in dotnet plutil hdiutil codesign file; do
     command -v "$command" >/dev/null 2>&1 || {
         echo "Required command is unavailable: $command" >&2
         exit 1
@@ -68,20 +68,10 @@ BUNDLE_VERSION="${VERSION%%[-+]*}"
 
 BUILD_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/hyprism-macos-publish.XXXXXX")"
 APP_DIR="$BUILD_ROOT/$APP_NAME.app"
-ICONSET_DIR="$BUILD_ROOT/$APP_NAME.iconset"
 trap 'rm -rf "$BUILD_ROOT"' EXIT
-mkdir -p "$OUTPUT_DIR" "$APP_DIR/Contents/MacOS" "$APP_DIR/Contents/Resources" "$ICONSET_DIR"
-
-sips -s format png "$APP_ICON" --out "$ICONSET_DIR/logo.png" >/dev/null
-
-for size in 16 32 64 128 256 512; do
-    sips -z "$size" "$size" "$ICONSET_DIR/logo.png" --out "$ICONSET_DIR/icon_${size}x${size}.png" >/dev/null
-    doubled_size=$((size * 2))
-    if [[ "$doubled_size" -le 1024 ]]; then
-        sips -z "$doubled_size" "$doubled_size" "$ICONSET_DIR/logo.png" --out "$ICONSET_DIR/icon_${size}x${size}@2x.png" >/dev/null
-    fi
-done
-iconutil -c icns "$ICONSET_DIR" -o "$APP_DIR/Contents/Resources/$APP_NAME.icns"
+test -s "$APP_ICON"
+mkdir -p "$OUTPUT_DIR" "$APP_DIR/Contents/MacOS" "$APP_DIR/Contents/Resources"
+cp "$APP_ICON" "$APP_DIR/Contents/Resources/$APP_NAME.icns"
 
 dotnet publish "$PROJECT_FILE" \
     --configuration Release \

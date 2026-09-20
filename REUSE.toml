@@ -32,6 +32,8 @@ SPDX-License-Identifier = "GPL-3.0-only"
 path = [
     "Sources/Hyprism.Desktop/Assets/Images/logo.svg",
     "Sources/Hyprism.Desktop/Assets/Images/banner.svg",
+    "Sources/Hyprism.Desktop/Assets/Images/Hyprism.ico",
+    "Packaging/macos/Hyprism.icns",
     "Sources/Hyprism.Desktop/Assets/Brands/Hyprism*"
 ]
 precedence = "override"
