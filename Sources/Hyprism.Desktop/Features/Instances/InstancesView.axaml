@@ -12,69 +12,11 @@ SPDX-License-Identifier: GPL-3.0-only
              x:Name="InstancesRoot"
              x:DataType="instances:InstancesViewModel">
   <UserControl.Resources>
-    <DataTemplate x:Key="InstanceVersionTemplate" x:DataType="instances:InstanceVersionItemViewModel">
-      <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
-    </DataTemplate>
-
-    <DataTemplate x:Key="InstanceFilterOptionTemplate" x:DataType="instances:InstanceListOptionViewModel">
-      <TextBlock Text="{Binding Display}"
-                 VerticalAlignment="Center"
-                 TextWrapping="NoWrap"
-                 TextTrimming="CharacterEllipsis" />
-    </DataTemplate>
-
-    <DataTemplate x:Key="ManagedInstanceActionTemplate" x:DataType="instances:InstancesViewModel">
-      <Grid Classes="managedActionContent">
-        <StackPanel Classes="managedActionIdle"
-                    Orientation="Horizontal"
-                    Spacing="8"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-          <Path Classes="managedActionIcon"
-                IsVisible="{Binding IsManagedInstanceInstalled}"
-                Data="{StaticResource PlayIcon}" />
-          <Path Classes="managedActionIcon"
-                IsVisible="{Binding !IsManagedInstanceInstalled}"
-                Data="{StaticResource DownloadIcon}" />
-          <TextBlock Text="{Binding ManagedInstanceActionLabel}"
-                     VerticalAlignment="Center" />
-        </StackPanel>
-
-        <Grid Classes="managedActionProgress"
-              ColumnDefinitions="48,*,48"
-              VerticalAlignment="Center">
-          <Path Classes="managedActionSpinner"
-                IsVisible="{Binding !IsManagedInstanceActionRunning}"
-                controls:RotatingVisual.IsActive="{Binding ShouldSpinManagedInstanceAction}"
-                HorizontalAlignment="Center"
-                Data="M10,2 A8,8 0 1 1 2,10" />
-          <Path Classes="managedActionIcon running"
-                IsVisible="{Binding IsManagedInstanceActionRunning}"
-                HorizontalAlignment="Center"
-                Data="{StaticResource DirectionsRunIcon}" />
-          <controls:FadingTextBlock Grid.Column="1"
-                                    Classes="managedActionStatus"
-                                    Text="{Binding ManagedInstanceActionStatusText}"
-                                    Foreground="{Binding $parent[Button].Foreground}"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Center" />
-          <TextBlock Grid.Column="2"
-                     Classes="managedActionMetric"
-                     Text="{Binding ManagedInstanceActionMetricText}"
-                     Width="48"
-                     FontFeatures="tnum"
-                     TextAlignment="Right"
-                     HorizontalAlignment="Right"
-                     VerticalAlignment="Center" />
-        </Grid>
-
-        <TextBlock Classes="managedActionCancel"
-                   Text="{Binding ManagedInstanceActionCancelLabel}"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center" />
-      </Grid>
-    </DataTemplate>
-
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://Hyprism.Desktop/Features/Instances/InstancesTemplates.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
   </UserControl.Resources>
   <Grid x:Name="InstancesOverlayRoot">
   <Grid x:Name="InstancesLayout" Classes="instancesPage" ColumnDefinitions="Auto,*" RowDefinitions="*">
@@ -234,36 +176,26 @@ SPDX-License-Identifier: GPL-3.0-only
             </TranslateTransform.Transitions>
           </TranslateTransform>
         </Grid.RenderTransform>
-        <StackPanel IsVisible="{Binding !HasInstances}"
-                  Classes="instancesEmptyState"
-                  HorizontalAlignment="Center"
-                  VerticalAlignment="Center"
-                  MaxWidth="520"
-                  Spacing="12">
-        <Image Width="56"
-               Height="56"
-               HorizontalAlignment="Center"
-               Source="avares://Hyprism.Desktop/Assets/Fluent/puzzle.png"
-               Stretch="Uniform" />
-        <TextBlock Text="{Binding CreateInstanceTitle}"
-                   HorizontalAlignment="Center"
-                   FontSize="22"
-                   FontWeight="Bold"
-                   TextAlignment="Center" />
-        <TextBlock Text="{Binding CreateInstanceHint}"
-                   Classes="muted"
-                   HorizontalAlignment="Center"
-                   TextAlignment="Center" />
-        <Button Classes="primary"
-                HorizontalAlignment="Center"
-                Margin="0,14,0,0"
-                Click="OnOpenCreatorClicked">
-          <StackPanel Orientation="Horizontal" Spacing="10">
-            <Path Classes="actionIcon" Width="18" Height="18" Stretch="Uniform" Data="{StaticResource GestureSelectIcon}" />
-            <TextBlock Text="{Binding SelectVersionLabel}" />
-          </StackPanel>
-        </Button>
-        </StackPanel>
+        <controls:EmptyState IsVisible="{Binding !HasInstances}"
+                             Classes="instancesEmptyState"
+                             Title="{Binding CreateInstanceTitle}"
+                             Description="{Binding CreateInstanceHint}">
+          <controls:EmptyState.Icon>
+            <Image Width="56"
+                   Height="56"
+                   Source="avares://Hyprism.Desktop/Assets/Fluent/puzzle.png"
+                   Stretch="Uniform" />
+          </controls:EmptyState.Icon>
+          <controls:EmptyState.ActionContent>
+            <Button Classes="primary"
+                    Click="OnOpenCreatorClicked">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <Path Classes="actionIcon" Width="18" Height="18" Stretch="Uniform" Data="{StaticResource GestureSelectIcon}" />
+                <TextBlock Text="{Binding SelectVersionLabel}" />
+              </StackPanel>
+            </Button>
+          </controls:EmptyState.ActionContent>
+        </controls:EmptyState>
 
         <Grid IsVisible="{Binding HasInstances}" ClipToBounds="True">
           <Grid x:Name="InstanceHubScreen" RowDefinitions="Auto,*">

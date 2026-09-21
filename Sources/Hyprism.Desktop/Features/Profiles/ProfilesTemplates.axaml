@@ -1,0 +1,55 @@
+<!--
+Copyright (C) 2026 Hyprism Launcher
+SPDX-License-Identifier: GPL-3.0-only
+-->
+
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:profiles="using:Hyprism.Desktop.Features.Profiles"
+                    xmlns:controls="using:Hyprism.Desktop.Controls">
+    <DataTemplate x:Key="ProfileActivationActionTemplate" x:DataType="profiles:ProfilesViewModel">
+      <Grid Classes="profileActivationContent">
+        <StackPanel Classes="profileActivationIdle"
+                    Orientation="Horizontal"
+                    Spacing="8"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+          <Path Classes="profileActivationIcon"
+                Data="{StaticResource ProfilesIcon}" />
+          <TextBlock Text="{Binding ActivationLabel}"
+                     VerticalAlignment="Center" />
+        </StackPanel>
+
+        <TextBlock Classes="profileActivationActive"
+                   Text="{Binding ActiveLabel}"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+      </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="OfficialSignInActionTemplate" x:DataType="profiles:ProfilesViewModel">
+      <Grid Classes="managedActionContent">
+        <StackPanel Classes="managedActionIdle"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+          <TextBlock Text="{Binding SignInLabel}"
+                     VerticalAlignment="Center" />
+        </StackPanel>
+
+        <Grid Classes="managedActionProgress"
+              VerticalAlignment="Center">
+          <Path Classes="managedActionSpinner"
+                controls:RotatingVisual.IsActive="{Binding IsAuthenticating}"
+                HorizontalAlignment="Center"
+                Data="M10,2 A8,8 0 1 1 2,10" />
+        </Grid>
+
+        <TextBlock Classes="managedActionCancel"
+                   Text="{Binding CancelLabel}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+      </Grid>
+    </DataTemplate>
+</ResourceDictionary>
+

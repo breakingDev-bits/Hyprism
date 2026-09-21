@@ -1,0 +1,162 @@
+---
+title: Desktop UI architecture
+description: Tokens, components, feature styles, and layout ownership in Hyprism.Desktop
+---
+
+# Desktop UI architecture
+
+This page is the maintenance contract for the Avalonia UI layer. It explains where a resource belongs, how a shared component is consumed, and which layer owns a visual state
+
+## Ownership model
+
+The Desktop UI is split into five layers
+
+| Layer | Location | Owns |
+| --- | --- | --- |
+| Foundation | `UI/Foundation` | Theme templates, semantic brushes, primitive dimensions, and global selectors |
+| Components | `UI/Components` and `UI/Controls` | Reusable control themes, custom controls, layout primitives, and interaction behavior |
+| Shell | `Shell` | Window chrome, navigation composition, startup surface, and shell-only resources |
+| Feature resources | `Features/<Feature>` | Data templates and styles that describe one feature or a deliberate cross-feature pattern |
+| Feature views | `Features/<Feature>/*View.axaml` | Composition, bindings, view-local event handlers, and feature-specific layout |
+
+The feature view owns the behavior. A reusable control owns the visual contract that can be consumed by more than one feature. A token owns a value that should change consistently across several consumers
+
+## Resource pipeline
+
+`App.axaml` loads resources in this order
+
+| Order | Resource | Contract |
+| --- | --- | --- |
+| 1 | `UI/Foundation/Tokens/Primitives.axaml` | Context-free spacing, radius, size, and typography values |
+| 2 | `UI/Foundation/Tokens/Semantic.axaml` | Product colors, surfaces, interaction states, and status brushes |
+| 3 | `UI/Foundation/Tokens/ControlTokens.axaml` | Named framework control themes such as `TransparentPageButton` and `ThinScrollThumb` |
+| 4 | `Shell/WindowDecorations.axaml` | Window decoration resources |
+| 5 | `UI/Foundation/Themes/HyprismTheme.axaml` | Application templates for framework controls |
+| 6 | `UI/Components/Components.axaml` | Shared control selectors and custom control templates |
+| 7 | `UI/Foundation/GlobalStyles.axaml` | Selectors that apply across the application |
+| 8 | `UI/FeatureStyles.axaml` | Registry for feature-owned style dictionaries |
+
+Keep this order stable. A theme template must exist before a selector customizes it, and a token dictionary must exist before a dynamic resource references it
+
+## Component catalog
+
+### Custom controls
+
+| Component | Location | Use it for |
+| --- | --- | --- |
+| `EmptyState` | `UI/Controls/Primitives/EmptyState.cs` | A title, description, icon, and optional action for an empty feature surface |
+| `NoteCard` | `UI/Controls/Primitives/NoteCard.cs` | Informational or important callouts with a consistent icon and surface |
+| `SettingsRow` | `UI/Controls/Primitives/SettingsRow.cs` | A settings row that needs shared structure or state |
+| `OverlayModal` | `UI/Controls/Primitives/OverlayModal.axaml` | Animated modal sheets that share the application overlay contract |
+| `FadingPopup` | `UI/Controls/Primitives/FadingPopup.cs` | Popups that need coordinated open and close transitions |
+| `FadingComboBox` | `UI/Controls/Primitives/FadingComboBox.cs` | Combo box selection with the shared popup lifecycle |
+
+### Layout and interaction primitives
+
+| Component | Location | Use it for |
+| --- | --- | --- |
+| `AdaptiveMasterDetailHost` | `UI/Controls/Interaction` | Wide master-detail presentation and compact detail navigation |
+| `WizardHost` | `UI/Controls/Interaction` | Wizard step ownership, transitions, and navigation |
+| `SmoothScrollViewer` | `UI/Controls/Primitives` | Application-owned scrolling with shared wheel and touchpad behavior |
+| `DeferredContentControl` | `UI/Controls/Layout` | Delayed creation of expensive feature content |
+| `ReorderableListController` | `UI/Controls/Interaction` | Drag handles, previews, and drop position calculations |
+| `AspectRatioPanel` | `UI/Controls/Layout` | Media surfaces that must retain a stable aspect ratio |
+| `StorageUsageBarPanel` | `UI/Controls/Layout` | Storage usage segments with shared measurement behavior |
+
+Use a component from this catalog before adding a new selector or helper to a feature. If the existing API cannot express the feature state, extend the component contract or record why the feature must stay local
+
+## Placement rules
+
+| If the change is | Put it in | Do not put it in |
+| --- | --- | --- |
+| A raw value shared by several styles | `UI/Foundation/Tokens/Primitives.axaml` | A view or feature style |
+| A product color or state meaning | `UI/Foundation/Tokens/Semantic.axaml` | A hard-coded brush in a view |
+| A complete control family template | `UI/Components/Components.axaml` as a `ControlTheme` | Repeated templates in feature views |
+| A selector for an application-wide class | `UI/Foundation/GlobalStyles.axaml` | A feature dictionary |
+| A selector for one feature | `Features/<Feature>/<Feature>Styles.axaml` | The global foundation |
+| A data template for one feature | `Features/<Feature>/<Feature>Templates.axaml` | A global resource dictionary |
+| A handler that needs view code-behind | The owning `*View.axaml` resource section | A standalone resource dictionary |
+| A reusable behavior or control | `UI/Controls/<category>` | A static helper inside a view |
+| Window-only behavior | `Shell` | A feature folder |
+
+The current `InstancesStyles.axaml` also contains selectors shared by Instances and Profiles because both features use the same list and action classes. Keep that file as the owner until the shared pattern gets a named component contract
+
+## Consuming a shared component
+
+The feature supplies content and state. The component supplies hierarchy, spacing, and the default visual states
+
+```xml
+<controls:EmptyState IsVisible="{Binding !HasInstances}"
+                     Title="{Binding CreateInstanceTitle}"
+                     Description="{Binding CreateInstanceHint}">
+  <controls:EmptyState.Icon>
+    <Image Width="56"
+           Height="56"
+           Source="avares://Hyprism.Desktop/Assets/Fluent/puzzle.png" />
+  </controls:EmptyState.Icon>
+  <controls:EmptyState.ActionContent>
+    <Button Classes="primary" Click="OnOpenCreatorClicked">
+      <TextBlock Text="{Binding SelectVersionLabel}" />
+    </Button>
+  </controls:EmptyState.ActionContent>
+</controls:EmptyState>
+```
+
+Keep feature strings and commands in the view model. Keep component properties small and typed around the visual contract. Prefer `DynamicResource` for tokens so theme changes propagate without copying values
+
+## Style and state contract
+
+Use a `ControlTheme` when a control family needs a complete template and named states. Use a plain `Style` for a selector, a class, or a narrow state adjustment. Use `Classes.<name>` bindings when a view model state changes a visual state
+
+Every interactive shared component should account for the states that apply to it
+
+| State | Expected review |
+| --- | --- |
+| Rest | Baseline surface, text, icon, and spacing |
+| Pointer over | Clear but restrained hover feedback |
+| Pressed | Immediate pressed feedback without layout movement |
+| Focus visible | Keyboard focus remains visible |
+| Disabled | Contrast and cursor communicate unavailable action |
+| Selected | Selection survives pointer movement and compact layouts |
+| Loading | Progress replaces or accompanies the action without changing its meaning |
+| Success, warning, error | Status uses semantic brushes and localized text |
+| Empty | The user sees what is absent and the next useful action |
+
+Do not use animation as the only state signal. Keep transitions on render properties when a layout property would cause remeasure or scroll changes
+
+## Feature templates and views
+
+Feature resource files follow the owning feature
+
+| Feature | Template resources | Style resources |
+| --- | --- | --- |
+| Instances | `Features/Instances/InstancesTemplates.axaml` | `Features/Instances/InstancesStyles.axaml` |
+| Profiles | `Features/Profiles/ProfilesTemplates.axaml` | `Features/Profiles/ProfilesStyles.axaml` |
+| News | `Features/News/NewsArticleTemplates.axaml` | `Features/News/NewsStyles.axaml` |
+| Settings | View-local resources and existing view composition | `Features/Settings/SettingsStyles.axaml` |
+
+Templates are merged by the owning view when they are not application-wide. A template that references a view event handler stays in the view resource section because a standalone dictionary has no owner for that handler
+
+Views keep `x:DataType` and use compiled bindings. A view may contain layout and event wiring, but it should not define a second application-wide button or input template
+
+## Responsive ownership
+
+`AdaptiveMasterDetailHost` owns the transition between wide and compact master-detail behavior. Feature view models own selected items and commands. The view owns size observation and visual host changes
+
+When adding a responsive state, review the wide and compact layouts together
+
+- Keep the same command and localization contract
+- Preserve keyboard focus or provide a deterministic focus target after navigation
+- Keep destructive actions available through the compact action surface
+- Test long localized labels and narrow widths
+- Avoid duplicating a second state machine in code-behind
+
+## Tests and review gates
+
+UI changes require a Desktop build and the relevant headless tests. Reusable controls should have focused tests for their public properties and rendered states. Feature changes should cover the state transition that consumes the component
+
+Useful existing test locations include `Tests/Hyprism.Desktop.Tests/NoteCardTests.cs`, `OverlayModalAnimationTests.cs`, `MainWindowRenderTests.cs`, and `InstanceSectionRenderTests.cs`
+
+Before merging a UI change, verify the resource path, the owner dictionary, the state matrix, English and Russian strings, keyboard behavior, compact layout, and the rendered result
+
+The higher-level composition rules remain in [Desktop architecture](/architecture/desktop)

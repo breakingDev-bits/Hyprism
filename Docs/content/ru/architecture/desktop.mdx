@@ -25,7 +25,7 @@ Desktop служит хостом приложения Avalonia. Он собир
 
 ## Рамка окна
 
-Shell использует модель [WindowDrawnDecorations](https://docs.avaloniaui.net/controls/primitives/windowdrawndecorations) из Avalonia 12. Главное окно расширяет клиентскую область в область оформления. В Windows выбирается `WindowDecorations="Full"`, чтобы сохранить нативные переходы DWM и привязку окна к областям Snap, а [WindowDecorations.axaml](../../../../Sources/Hyprism.Desktop/Styles/WindowDecorations.axaml) заменяет стандартное содержимое отрисованного оформления Avalonia
+Shell использует модель [WindowDrawnDecorations](https://docs.avaloniaui.net/controls/primitives/windowdrawndecorations) из Avalonia 12. Главное окно расширяет клиентскую область в область оформления. В Windows выбирается `WindowDecorations="Full"`, чтобы сохранить нативные переходы DWM и привязку окна к областям Snap, а [WindowDecorations.axaml](../../../../Sources/Hyprism.Desktop/Shell/WindowDecorations.axaml) заменяет стандартное содержимое отрисованного оформления Avalonia
 
 На остальных платформах через платформенное значение сохраняется `WindowDecorations="None"` и используется та же оболочка. В Linux в `Program.cs` включены клиентские оформления Avalonia X11, поэтому роли элементов превращаются в нативные запросы оконному менеджеру на перемещение и изменение размера. [Главное окно](../../../../Sources/Hyprism.Desktop/Shell/MainWindow.axaml) помечает область заголовка, кнопки управления и зоны изменения размера через `WindowDecorationProperties.ElementRole`; сохраняйте эту настройку вместе с `ExtendClientAreaToDecorationsHint` и не возвращайте ручное изменение позиции окна через Win32
 
@@ -52,7 +52,9 @@ Shell использует модель [WindowDrawnDecorations](https://docs.av
 
 ## Общая основа UI
 
-`Styles/HyprismTheme.axaml` предоставляет шаблоны окна, прокрутки, ввода текста, выделения, списков, выпадающих списков, прогресса, подсказок и всплывающих поверхностей. Он должен оставаться перед общими стилями, чтобы стили функций могли переопределять значения по умолчанию. `Styles/Tokens.axaml` определяет цвета и семантические токены темы, а `Styles/Controls.axaml` общие стили. Используйте их классы вместо копирования вариантов в отдельные функции
+`UI/Foundation/Themes/HyprismTheme.axaml` предоставляет шаблоны окна, прокрутки, ввода текста, выделения, списков, выпадающих списков, прогресса, подсказок и всплывающих поверхностей. `UI/Foundation/Tokens` содержит примитивные, семантические и компонентные токены. `UI/Components/Components.axaml` определяет общие семейства контролов, а `UI/Foundation/GlobalStyles.axaml` содержит стили приложения. Словари стилей функций подключаются через `UI/FeatureStyles.axaml` и хранятся рядом с владельцами функций
+
+На странице [Архитектура UI Desktop](/architecture/desktop-ui) описаны каталог компонентов, порядок ресурсов, правила размещения и контракт состояний
 
 | Элемент | Ответственность |
 | --- | --- |
@@ -63,6 +65,7 @@ Shell использует модель [WindowDrawnDecorations](https://docs.av
 | `FadingPopup` и `FadingComboBox` | Жизненный цикл всплывающих меню |
 | `ReorderableListController` | Маркеры перетаскивания, превью и позиции |
 | `NoteCard` | Информационные и важные примечания |
+| `EmptyState` | Единая иерархия пустого состояния с иконкой, текстом и действием от функции |
 | `SmoothScrollViewer` | Общая прокрутка колесом и precision touchpad; опциональная прокрутка средней кнопкой |
 
 Длительности анимации принадлежат `MotionDurations` или общему элементу-владельцу. Проверки компоновки и рендеринга описаны в [руководстве по производительности](/development/avalonia-performance)
@@ -77,4 +80,4 @@ Shell использует модель [WindowDrawnDecorations](https://docs.av
 
 Выбор файлов использует Avalonia `StorageProvider`. Обработчик ссылок сохраняет экранированные абсолютные URI, включая параметры OAuth. Эти возможности не принадлежат Core
 
-Исходники: [MainWindowViewModel](../../../../Sources/Hyprism.Desktop/Shell/MainWindowViewModel.cs), [InstancesViewModel](../../../../Sources/Hyprism.Desktop/Features/Instances/InstancesViewModel.cs), [NewsViewModel](../../../../Sources/Hyprism.Desktop/Features/News/NewsViewModel.cs), [Shared controls](../../../../Sources/Hyprism.Desktop/Controls)
+Исходники: [MainWindowViewModel](../../../../Sources/Hyprism.Desktop/Shell/MainWindowViewModel.cs), [InstancesViewModel](../../../../Sources/Hyprism.Desktop/Features/Instances/InstancesViewModel.cs), [NewsViewModel](../../../../Sources/Hyprism.Desktop/Features/News/NewsViewModel.cs), [Shared controls](../../../../Sources/Hyprism.Desktop/UI/Controls)

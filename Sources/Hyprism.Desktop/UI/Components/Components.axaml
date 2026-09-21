@@ -12,7 +12,7 @@ SPDX-License-Identifier: GPL-3.0-only
       <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
       <Setter Property="Background" Value="Transparent" />
       <Setter Property="BorderThickness" Value="0" />
-      <Setter Property="CornerRadius" Value="9" />
+      <Setter Property="CornerRadius" Value="{DynamicResource Radius.Control}" />
       <Setter Property="Margin" Value="0,2" />
       <Setter Property="Padding" Value="12,9" />
       <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -160,7 +160,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <Setter Property="Background" Value="{DynamicResource ControlSurfaceActiveBrush}" />
     <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="CornerRadius" Value="18" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Card}" />
     <Setter Property="Padding" Value="6" />
     <Setter Property="Opacity" Value="1" />
     <Setter Property="Transitions">
@@ -272,13 +272,13 @@ SPDX-License-Identifier: GPL-3.0-only
     <Setter Property="Background" Value="{DynamicResource ControlGroupBrush}" />
     <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="CornerRadius" Value="14" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Group}" />
     <Setter Property="ClipToBounds" Value="True" />
   </Style>
 
   <Style Selector="Border.uiSettingsRow">
-    <Setter Property="MinHeight" Value="66" />
-    <Setter Property="Padding" Value="18,14" />
+    <Setter Property="MinHeight" Value="{DynamicResource Size.Row}" />
+    <Setter Property="Padding" Value="{DynamicResource Inset.Card}" />
     <Setter Property="BorderBrush" Value="{DynamicResource SurfaceBrush}" />
     <Setter Property="BorderThickness" Value="0,0,0,3" />
   </Style>
@@ -315,13 +315,44 @@ SPDX-License-Identifier: GPL-3.0-only
     </Setter>
   </Style>
 
+  <Style Selector="controls|EmptyState">
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="MaxWidth" Value="520" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel Spacing="{DynamicResource Space.300}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    MaxWidth="{TemplateBinding MaxWidth}">
+          <ContentPresenter Content="{TemplateBinding Icon}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" />
+          <TextBlock Text="{TemplateBinding Title}"
+                     HorizontalAlignment="Center"
+                     FontSize="{DynamicResource FontSize.Title}"
+                     FontWeight="Bold"
+                     TextAlignment="Center" />
+          <TextBlock Text="{TemplateBinding Description}"
+                     Classes="muted"
+                     HorizontalAlignment="Center"
+                     TextAlignment="Center"
+                     TextWrapping="Wrap" />
+          <ContentPresenter Content="{TemplateBinding ActionContent}"
+                            HorizontalAlignment="Center"
+                            Margin="{DynamicResource Inset.EmptyStateAction}" />
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
   <Style Selector="controls|SettingsRow.last">
     <Setter Property="BorderThickness" Value="0" />
   </Style>
 
   <Style Selector="controls|NoteCard">
     <Setter Property="Background" Value="{DynamicResource ControlGroupBrush}" />
-    <Setter Property="CornerRadius" Value="14" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Radius.Note}" />
     <Setter Property="Padding" Value="18,14" />
     <Setter Property="Template">
       <ControlTemplate>

@@ -25,7 +25,7 @@ Desktop is the Avalonia application host. It composes Core services, provides na
 
 ## Window chrome
 
-The shell uses Avalonia 12's [WindowDrawnDecorations](https://docs.avaloniaui.net/controls/primitives/windowdrawndecorations) model. The main window extends its client area into the decoration region. Windows selects `WindowDecorations="Full"` so native DWM state transitions and snap behavior remain available, while [WindowDecorations.axaml](../../../../Sources/Hyprism.Desktop/Styles/WindowDecorations.axaml) replaces Avalonia's default drawn decoration content
+The shell uses Avalonia 12's [WindowDrawnDecorations](https://docs.avaloniaui.net/controls/primitives/windowdrawndecorations) model. The main window extends its client area into the decoration region. Windows selects `WindowDecorations="Full"` so native DWM state transitions and snap behavior remain available, while [WindowDecorations.axaml](../../../../Sources/Hyprism.Desktop/Shell/WindowDecorations.axaml) replaces Avalonia's default drawn decoration content
 
 Other platforms keep `WindowDecorations="None"` through the platform-specific value and use the same custom shell. Linux enables Avalonia X11 client-side decorations in `Program.cs` so the element roles become native window-manager move and resize requests. The [main window](../../../../Sources/Hyprism.Desktop/Shell/MainWindow.axaml) marks the title bar, caption buttons, and resize hit regions with `WindowDecorationProperties.ElementRole`; keep that option paired with `ExtendClientAreaToDecorationsHint` and do not reintroduce manual Win32 position updates
 
@@ -52,7 +52,9 @@ Publish observable collection changes on the UI dispatcher. Unsubscribe from ser
 
 ## Shared UI foundation
 
-`Styles/HyprismTheme.axaml` provides the application-owned templates for the window, scrolling, text input, selection, list, combo box, progress, tooltip, and popup surfaces. It must remain before the shared styles so feature-specific selectors can override its defaults. `Styles/Tokens.axaml` defines the colors and semantic tokens used by the theme, while `Styles/Controls.axaml` defines shared control styles. Reuse their classes instead of copying feature-specific variants
+`UI/Foundation/Themes/HyprismTheme.axaml` provides the application-owned templates for the window, scrolling, text input, selection, list, combo box, progress, tooltip, and popup surfaces. `UI/Foundation/Tokens` contains primitive, semantic, and control tokens. `UI/Components/Components.axaml` defines shared control families, while `UI/Foundation/GlobalStyles.axaml` contains application-wide selectors. Feature style dictionaries are registered through `UI/FeatureStyles.axaml` and live next to their owning feature
+
+The [Desktop UI architecture](/architecture/desktop-ui) page defines the component catalog, resource order, placement rules, and state contract
 
 | Control | Responsibility |
 | --- | --- |
@@ -63,6 +65,7 @@ Publish observable collection changes on the UI dispatcher. Unsubscribe from ser
 | `FadingPopup` and `FadingComboBox` | Popup lifecycle and selection menus |
 | `ReorderableListController` | Drag handles, previews, and drop positions |
 | `NoteCard` | Informational and important callouts |
+| `EmptyState` | Consistent empty content hierarchy with feature-provided icon, text, and action |
 | `SmoothScrollViewer` | Shared wheel and precision-touchpad scrolling; optional middle-button auto-scroll |
 
 Animation timing belongs in `MotionDurations` or the owning reusable control. The [performance guide](/development/avalonia-performance) explains layout and rendering checks
@@ -77,4 +80,4 @@ News and GitHub clients use the shared HTTP identity. Parsed news lives in `Cach
 
 Native file selection uses Avalonia's `StorageProvider`. External links preserve escaped absolute URIs, including OAuth parameters. Neither capability belongs in Core
 
-Source: [MainWindowViewModel](../../../../Sources/Hyprism.Desktop/Shell/MainWindowViewModel.cs), [InstancesViewModel](../../../../Sources/Hyprism.Desktop/Features/Instances/InstancesViewModel.cs), [NewsViewModel](../../../../Sources/Hyprism.Desktop/Features/News/NewsViewModel.cs), [Shared controls](../../../../Sources/Hyprism.Desktop/Controls)
+Source: [MainWindowViewModel](../../../../Sources/Hyprism.Desktop/Shell/MainWindowViewModel.cs), [InstancesViewModel](../../../../Sources/Hyprism.Desktop/Features/Instances/InstancesViewModel.cs), [NewsViewModel](../../../../Sources/Hyprism.Desktop/Features/News/NewsViewModel.cs), [Shared controls](../../../../Sources/Hyprism.Desktop/UI/Controls)

@@ -1,0 +1,163 @@
+<!--
+Copyright (C) 2026 Hyprism Launcher
+SPDX-License-Identifier: GPL-3.0-only
+-->
+
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:profiles="using:Hyprism.Desktop.Features.Profiles">
+    <Style Selector="profiles|ProfilesView">
+      <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+    </Style>
+
+    <Style Selector="Border.profileListPane">
+      <Setter Property="Background" Value="{DynamicResource NavigationPaneBrush}" />
+    </Style>
+
+    <Style Selector="profiles|ProfilesView.compact Border.profileListPane">
+      <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+    </Style>
+
+    <Style Selector="Border.profileAvatar">
+      <Setter Property="Background" Value="{DynamicResource AccentSoftBrush}" />
+      <Setter Property="CornerRadius" Value="999" />
+      <Setter Property="ClipToBounds" Value="True" />
+    </Style>
+
+    <Style Selector="Border.profileListAvatar">
+      <Setter Property="Width" Value="0" />
+      <Setter Property="Height" Value="0" />
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="Grid.profileListIdentity">
+      <Setter Property="ColumnSpacing" Value="0" />
+    </Style>
+
+    <Style Selector="Border.profileMoreTarget">
+      <Setter Property="Width" Value="22" />
+      <Setter Property="Height" Value="40" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="profiles|ProfilesView.compact Border.profileListAvatar">
+      <Setter Property="Width" Value="38" />
+      <Setter Property="Height" Value="38" />
+      <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <Style Selector="profiles|ProfilesView.compact Grid.profileListIdentity">
+      <Setter Property="ColumnSpacing" Value="14" />
+    </Style>
+
+    <Style Selector="Border.profileDeleteConfirmation">
+      <Setter Property="Width" Value="300" />
+      <Setter Property="Padding" Value="18" />
+      <Setter Property="Background" Value="{DynamicResource ControlSurfaceActiveBrush}" />
+      <Setter Property="CornerRadius" Value="14" />
+      <Setter Property="BoxShadow" Value="{DynamicResource PopupShadow}" />
+    </Style>
+
+    <Style Selector="Border.profileHeroAvatar">
+      <Setter Property="Width" Value="144" />
+      <Setter Property="Height" Value="144" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="profiles|ProfilesView.compact Border.profileHeroAvatar">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="StackPanel.profileHeroIdentity">
+      <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="profiles|ProfilesView.compact StackPanel.profileHeroIdentity">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="Button.profileIconButton">
+      <Setter Property="Width" Value="34" />
+      <Setter Property="Height" Value="34" />
+      <Setter Property="Padding" Value="8" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="CornerRadius" Value="9" />
+      <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+      <Setter Property="RenderTransform" Value="{x:Null}" />
+    </Style>
+
+    <Style Selector="Button.profileIconButton:pointerover">
+      <Setter Property="Background" Value="{DynamicResource ItemHoverBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+    </Style>
+
+    <Style Selector="Button.profileIconButton Path">
+      <Setter Property="Fill" Value="{Binding $parent[Button].Foreground}" />
+    </Style>
+
+    <Style Selector="TextBox.profileInput">
+      <Setter Property="MinHeight" Value="44" />
+      <Setter Property="Background" Value="{DynamicResource ControlSurfaceBrush}" />
+      <Setter Property="BorderBrush" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="CornerRadius" Value="11" />
+      <Setter Property="Padding" Value="13,8" />
+      <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+    </Style>
+
+    <Style Selector="TextBox.profileInput /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="{DynamicResource ControlSurfaceBrush}" />
+      <Setter Property="BorderBrush" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="CornerRadius" Value="11" />
+    </Style>
+
+    <Style Selector="TextBox.profileInput:pointerover /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="{DynamicResource ControlSurfaceHoverBrush}" />
+    </Style>
+
+    <Style Selector="TextBox.profileInput:focus /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="{DynamicResource ControlSurfaceActiveBrush}" />
+    </Style>
+
+    <Style Selector="Border.profileStatus">
+      <Setter Property="Background" Value="{DynamicResource AccentSoftBrush}" />
+      <Setter Property="CornerRadius" Value="12" />
+      <Setter Property="Padding" Value="13,10" />
+    </Style>
+
+    <Style Selector="TextBlock.profileStatusText">
+      <Setter Property="Foreground" Value="{DynamicResource SuccessSoftBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.profileStatusText.error">
+      <Setter Property="Foreground" Value="{DynamicResource DangerSoftBrush}" />
+    </Style>
+
+    <Style Selector="Button.officialSignInAction">
+      <Setter Property="Width" Value="150" />
+      <Setter Property="CornerRadius" Value="14" />
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    </Style>
+
+    <Style Selector="Button.officialSignInAction.active, Button.officialSignInAction.active:pointerover">
+      <Setter Property="Width" Value="272" />
+      <Setter Property="Background" Value="{DynamicResource TextPrimaryBrush}" />
+      <Setter Property="Foreground" Value="#111111" />
+    </Style>
+
+    <Style Selector="Button.officialSignInAction.active.cancelArmed:pointerover">
+      <Setter Property="Background" Value="{DynamicResource DangerActionBrush}" />
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <Style Selector="Button.officialSignInAction.active Grid.managedActionContent">
+      <Setter Property="Width" Value="232" />
+      <Setter Property="MinWidth" Value="232" />
+      <Setter Property="MaxWidth" Value="232" />
+    </Style>
+
+</Styles>
