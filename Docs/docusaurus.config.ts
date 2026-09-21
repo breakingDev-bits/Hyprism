@@ -101,16 +101,21 @@ const config: Config = {
   themeConfig: {
     colorMode: {
       defaultMode: 'dark',
-      respectPrefersColorScheme: true
+      disableSwitch: true,
+      respectPrefersColorScheme: false
     },
     navbar: {
-      title: 'Hyprism',
+      title: 'Hyprism Launcher',
+      logo: {
+        alt: 'Hyprism Launcher',
+        href: `${baseUrl}docs/`,
+        src: 'img/hyprism-logo.svg'
+      },
       items: [
         {
-          type: 'html',
-          value: '<span>Docs</span>',
-          position: 'left',
-          className: 'hyprism-docs-link-slot'
+          href: 'https://hyprismteam.github.io/',
+          label: 'Team',
+          position: 'left'
         },
         {
           type: 'search',

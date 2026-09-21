@@ -22,6 +22,12 @@ export const dictionaries = {
       placeholder: 'Search docs',
       empty: 'No results found'
     },
+    footer: {
+      backToTop: 'Back to top',
+      repository: 'Source on GitHub',
+      teamSite: 'Visit the team site',
+      license: 'GPL-3.0-only'
+    },
     toc: 'On this page'
   },
   ru: {
@@ -39,6 +45,12 @@ export const dictionaries = {
       label: 'Поиск по документации',
       placeholder: 'Поиск',
       empty: 'Ничего не найдено'
+    },
+    footer: {
+      backToTop: 'Наверх',
+      repository: 'Исходный код на GitHub',
+      teamSite: 'Открыть сайт команды',
+      license: 'GPL-3.0-only'
     },
     toc: 'На этой странице'
   }

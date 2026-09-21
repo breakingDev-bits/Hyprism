@@ -46,6 +46,14 @@ export default {
 
 The five top-level categories use local SVG paths from Google's Material Symbols Rounded. `MaterialSymbol.tsx` owns the icon set, which is bundled without a remote font request
 
+## Brand and theme
+
+`src/css/custom.css` owns the dark Hyprism Launcher visual system for the navbar, documentation frame, home page, code examples, responsive layout, and footer. The theme uses the local Google Sans and JetBrains Mono files under `static/fonts` and the launcher mark at `static/img/hyprism-logo.svg`
+
+`src/theme/Footer/index.tsx` owns the large team-site call to action and the links below it. Keep its English and Russian labels in `src/i18n.ts` when the footer changes
+
+`DocsSidebar.tsx` renders the category tree in the left column on wide screens. At compact widths `Navbar/MobileSidebar/index.tsx` renders the search field and the same tree in a full-viewport panel below the existing navbar. The panel follows the language switcher interaction pattern, closes on outside click, Escape, or navigation, and does not render a second header
+
 ## Examples and prose
 
 Follow `AGENTS.md`: user guides describe actions and results, while technical pages describe responsibilities, contracts, and maintenance constraints
