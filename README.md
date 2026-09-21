@@ -38,7 +38,7 @@ iwr -useb [https://raw.githubusercontent.com/hyprismteam/Hyprism/main/install.ps
 
 ```
 
-The installer will fetch the latest version, extract it into the local user space (`~/.local/bin` on Linux/macOS or `%LOCALAPPDATA%\HyPrism` on Windows), download the logo, and automatically create Desktop/Application shortcuts.
+The installer will fetch the latest version, extract it into the local user space (`~/.local/bin` on Linux/macOS or `%LOCALAPPDATA%\HyPrism` on Windows), download the logo, and automatically create Desktop/Application shortcuts
 
 ## Build
 
