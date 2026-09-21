@@ -34,7 +34,7 @@ dotnet test Tests/Hyprism.Desktop.Tests/Hyprism.Desktop.Tests.csproj \
   --filter FullyQualifiedName~StringLocalizerTests
 ```
 
-Screenshot generation is an opt-in workflow documented under [Documentation site](/docs/development/documentation#screenshots). Normal test runs skip that capture
+Screenshot generation is an opt-in workflow documented under [Documentation site](/development/documentation#screenshots). Normal test runs skip that capture
 
 ## CI and manual checks
 
@@ -44,6 +44,6 @@ The macOS entry in the Local Node matrix also publishes apphosts and checks HTTP
 
 Packaging is a separate check group. In `ci.yml`, it starts only after the Core, Desktop, and Local Node reusable workflows complete successfully
 
-Verify native compositor behavior, platform dialogs, and real game compatibility manually when those boundaries change. For a documentation-only change, run [content checks and static export](/docs/development/documentation)
+Verify native compositor behavior, platform dialogs, and real game compatibility manually when those boundaries change. For a documentation-only change, run [content checks and static export](/development/documentation)
 
 Source: [Tests](../../../../Tests)

@@ -10,7 +10,7 @@ import { dictionaries } from '../../i18n'
 export default function Footer() {
   const { locale } = useDocsLocale()
   const dictionary = dictionaries[locale]
-  const docsUrl = useBaseUrl('/docs/')
+  const docsUrl = useBaseUrl('/')
   const logoUrl = useBaseUrl('/img/hyprism-logo.svg')
 
   return (

@@ -7,7 +7,7 @@ import { themes as prismThemes } from 'prism-react-renderer'
 import path from 'node:path'
 import repositoryLinks from './plugins/remark-repository-links'
 
-const configuredBasePath = process.env.PAGES_BASE_PATH || '/Hyprism'
+const configuredBasePath = process.env.PAGES_BASE_PATH || '/Hyprism/docs'
 const baseUrl = `/${configuredBasePath.replace(/^\/+|\/+$/g, '')}/`
 
 const localeBootstrapScript = `try {
@@ -109,7 +109,7 @@ const config: Config = {
       title: 'Hyprism Launcher',
       logo: {
         alt: 'Hyprism Launcher',
-        href: `${baseUrl}docs/`,
+        href: baseUrl,
         src: 'img/hyprism-logo.svg'
       },
       items: [

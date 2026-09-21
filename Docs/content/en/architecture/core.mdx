@@ -28,7 +28,7 @@ Core owns launcher behavior that can operate without a UI toolkit. Interfaces li
 
 ## Orchestration
 
-`GameLaunchCoordinator` guards installed-instance launches. `GameInstallationWorkflow` handles the selected branch and numeric version during installation or an explicit update, then calls `GameLauncher` after preparation. The [launch workflow](/docs/architecture/game-lifecycle) describes their ordering and cancellation boundaries
+`GameLaunchCoordinator` guards installed-instance launches. `GameInstallationWorkflow` handles the selected branch and numeric version during installation or an explicit update, then calls `GameLauncher` after preparation. The [launch workflow](/architecture/game-lifecycle) describes their ordering and cancellation boundaries
 
 The repository services raise `InstancesChanged` and `ProfilesChanged` after mutations. Consumers subscribe to these events instead of polling disk or assuming their own action was the only writer
 
@@ -48,6 +48,6 @@ CurseForge file relations are normalized into the instance manifest. Required re
 
 `ModCompatibilityEvaluator` reads the installed server version and compares it with the game versions attached to catalog files. The UI disables files classified as incompatible, while an unknown version remains a distinct state
 
-See [Core contracts](/docs/reference/services) for integration examples and [Data and cache](/docs/architecture/data-and-cache) for persistence rules
+See [Core contracts](/reference/services) for integration examples and [Data and cache](/architecture/data-and-cache) for persistence rules
 
 Source: [Core source](../../../../Sources/Hyprism.Core)

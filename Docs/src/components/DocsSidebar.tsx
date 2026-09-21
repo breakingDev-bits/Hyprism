@@ -66,7 +66,7 @@ export function DocsSidebarNavigation({ onNavigate }: Readonly<{ onNavigate?: ()
   const { locale } = useDocsLocale()
   const { navigation } = useLocalizedDocsData()
   const location = useLocation()
-  const docsBaseUrl = useBaseUrl('/docs/').replace(/\/$/, '')
+  const docsBaseUrl = useBaseUrl('/').replace(/\/$/, '')
   const activeRoute = location.pathname
     .replace(/\/$/, '')
     .replace(docsBaseUrl, '')

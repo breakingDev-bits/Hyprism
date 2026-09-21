@@ -36,5 +36,5 @@ export function useLocalizedDocsData(): LocalizedDocsData {
 }
 
 export function routeToUrl(route: string): string {
-  return route ? `/docs/${route}/` : '/docs/'
+  return route ? `/${route}/` : '/'
 }

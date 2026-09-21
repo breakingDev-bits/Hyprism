@@ -15,7 +15,7 @@ npm ci
 npm run dev
 ```
 
-Open the [local documentation](http://localhost:3000/HyPrism/docs/). Development and GitHub Pages use the same `/HyPrism` base path
+Open the [local documentation](http://localhost:3000/Hyprism/docs/). Development and GitHub Pages use the same `/Hyprism/docs` base path
 
 ## Content and languages
 
@@ -29,7 +29,7 @@ Use explicit, matching heading IDs in both languages when another page links to 
 ## Downloads {/* #downloads */}
 ```
 
-Internal documentation links use `/docs/...`; the MDX theme link applies the deployment base path. Write source links relative to the MDX file, for example `../../../../Sources/Hyprism.Core/Models/Config.cs`. The repository-link plugin verifies each target and converts it to a GitHub source link when building
+Internal documentation links use route paths such as `/getting-started/...`; the MDX theme link applies the deployment base path. Write source links relative to the MDX file, for example `../../../../Sources/Hyprism.Core/Models/Config.cs`. The repository-link plugin verifies each target and converts it to a GitHub source link when building
 
 ## Navigation and icons
 
@@ -84,10 +84,10 @@ Use the matching language image, write useful alternative text, and link to the 
 cd Docs
 npm ci
 npm run check
-PAGES_BASE_PATH=/HyPrism npm run build
+PAGES_BASE_PATH=/Hyprism/docs npm run build
 ```
 
-`npm run check` validates prose, language parity, code fences, local images, internal routes, explicit bilingual anchors, repository links, and Core contract documentation, then runs TypeScript checks. The static export goes to `Docs/out`
+`npm run check` validates prose, language parity, code fences, local images, internal routes, explicit bilingual anchors, repository links, and Core contract documentation, then runs TypeScript checks. The static export goes to `Docs/out/docs` so GitHub Pages serves it at `/Hyprism/docs/`
 
 Check highlighted C#, shell, JSON, and XML examples in the rendered site, plus language switching, section links, sidebar icons, and narrow-window layout
 

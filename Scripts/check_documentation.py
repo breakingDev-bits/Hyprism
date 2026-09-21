@@ -116,9 +116,14 @@ def check_links() -> list[str]:
                 for match in LINK_PATTERN.finditer(line):
                     target = match.group("target")
                     location = f"{path.relative_to(ROOT)}:{number}"
-                    if target.startswith("/docs/") or target == "/docs" or target.startswith("#"):
+                    if target.startswith("/") or target.startswith("#"):
                         destination, _, anchor = target.partition("#")
-                        destination_route = route if not destination else destination.removeprefix("/docs").strip("/")
+                        if not destination:
+                            destination_route = route
+                        elif destination == "/docs":
+                            destination_route = ""
+                        else:
+                            destination_route = destination.removeprefix("/docs").strip("/")
                         if destination_route not in pages:
                             errors.append(f"{location}: missing documentation route: {target}")
                         elif anchor and anchor not in anchors[destination_route]:
