@@ -17,7 +17,7 @@ using Hyprism.Core.Game.Versions;
 using Hyprism.Core.Infrastructure;
 using Hyprism.Core.Models;
 using Hyprism.Desktop.Controls;
-using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Screens.Settings;
 using Hyprism.Desktop.Localization;
 using Hyprism.Desktop.Platform;
 using Moq;
@@ -84,7 +84,7 @@ public sealed class MirrorSettingsViewModelTests
 
         var downloadsCategory = view.GetVisualDescendants()
             .OfType<Button>()
-            .Single(button => button.Classes.Contains("settingsRailCategory") &&
+            .Single(button => button.Classes.Contains("managerRailCategory") &&
                               button.DataContext is SettingCategoryViewModel { Id: "downloads" });
         downloadsCategory.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
         var settingsMain = Assert.IsType<Grid>(view.FindControl<Grid>("SettingsMain"));
@@ -463,7 +463,7 @@ public sealed class MirrorSettingsViewModelTests
             var categoryDescription = Assert.Single(
                 categoryScroll.GetVisualDescendants().OfType<TextBlock>(),
                 text => text.IsEffectivelyVisible &&
-                        text.Classes.Contains("settingsCategoryDescription") &&
+                        text.Classes.Contains("managerCategoryDescription") &&
                         text.Text == viewModel.Categories.Single(category => category.Id == "downloads").Description);
             var categoryDescriptionSize = categoryDescription.Bounds.Size;
 

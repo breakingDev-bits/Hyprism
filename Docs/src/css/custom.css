@@ -978,13 +978,10 @@ input {
 .hyprism-edit-link {
   align-items: center;
   border-bottom: 0;
-  border-top: 1px solid var(--hyprism-line);
   display: flex;
   font-family: var(--ifm-font-family-base);
   font-size: 13px;
   gap: 8px;
-  justify-content: center;
-  margin-top: 64px;
   padding-top: 16px;
   text-align: center;
 }

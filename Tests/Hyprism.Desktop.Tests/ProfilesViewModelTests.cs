@@ -5,7 +5,7 @@ using Avalonia.Headless.XUnit;
 using Hyprism.Core.Accounts;
 using Hyprism.Core.Game.Instances;
 using Hyprism.Core.Models;
-using Hyprism.Desktop.Features.Profiles;
+using Hyprism.Desktop.Screens.Profiles;
 using Hyprism.Desktop.Localization;
 using Hyprism.Desktop.Platform;
 using Moq;

@@ -1,0 +1,39 @@
+<!--
+Copyright (C) 2026 Hyprism Launcher
+SPDX-License-Identifier: GPL-3.0-only
+-->
+
+<!-- Primitive values are intentionally context-free. Semantic and component dictionaries map them to product intent -->
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Double x:Key="Space.100">4</x:Double>
+  <x:Double x:Key="Space.200">8</x:Double>
+  <x:Double x:Key="Space.300">12</x:Double>
+  <x:Double x:Key="Space.400">16</x:Double>
+  <x:Double x:Key="Space.500">20</x:Double>
+  <x:Double x:Key="Space.600">24</x:Double>
+  <x:Double x:Key="Space.800">32</x:Double>
+
+  <CornerRadius x:Key="Radius.Control">9</CornerRadius>
+  <CornerRadius x:Key="Radius.Group">14</CornerRadius>
+  <CornerRadius x:Key="Radius.Navigation">13</CornerRadius>
+  <CornerRadius x:Key="Radius.Action">16</CornerRadius>
+  <CornerRadius x:Key="Radius.Note">14</CornerRadius>
+  <CornerRadius x:Key="Radius.Card">18</CornerRadius>
+  <CornerRadius x:Key="Radius.Large">22</CornerRadius>
+  <CornerRadius x:Key="Radius.Pill">999</CornerRadius>
+
+  <Thickness x:Key="Inset.Control">14,6</Thickness>
+  <Thickness x:Key="Inset.Card">18,14</Thickness>
+  <Thickness x:Key="Inset.Nav">14,0</Thickness>
+  <Thickness x:Key="Inset.Primary">24,0</Thickness>
+  <Thickness x:Key="Inset.EmptyStateAction">0,4,0,0</Thickness>
+
+  <x:Double x:Key="Size.Row">66</x:Double>
+  <x:Double x:Key="Size.NavItem">48</x:Double>
+  <x:Double x:Key="Size.PrimaryAction">52</x:Double>
+
+  <x:Double x:Key="FontSize.Body">15</x:Double>
+  <x:Double x:Key="FontSize.Secondary">12</x:Double>
+  <x:Double x:Key="FontSize.Title">22</x:Double>
+</ResourceDictionary>

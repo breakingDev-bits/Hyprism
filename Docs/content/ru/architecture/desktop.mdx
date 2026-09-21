@@ -1,23 +1,23 @@
 ---
 title: Hyprism.Desktop
-description: Композиция Avalonia, ответственность функций и общие элементы UI
+description: Композиция Avalonia, ответственность экранов и общие элементы UI
 ---
 
 # Hyprism.Desktop
 
 Desktop служит хостом приложения Avalonia. Он собирает сервисы Core, предоставляет системные возможности и преобразует их состояние в представления и команды
 
-## Композиция и функции
+## Композиция и экраны
 
 | Расположение | Ответственность |
 | --- | --- |
 | `Program.cs` | Регистрации сервисов, рендерер, точка входа |
 | `App.axaml` и `App.axaml.cs` | Ресурсы, создание окна, запуск и завершение |
-| `Shell` | Окно, навигация, overlay запуска, данные аккаунта и сборка функций |
-| `Features/Instances` | Жизненный цикл экземпляров, выбор, запуск, активность, моды, каталог, миры, состояние консоли и представление экземпляров |
-| `Features/Profiles` | Карточки, активация, редактирование, создание и вход |
-| `Features/Settings` | Настройки, адаптер хранения, использование диска и представление About |
-| `Features/News` | Загрузка ленты и статей, координация кэша, состояние изображений, разбор HTML, статьи и представление новостей |
+| `Shell` | Окно, навигация, overlay запуска, данные аккаунта и сборка экранов |
+| `Screens/Instances` | Жизненный цикл экземпляров, выбор, запуск, активность, моды, каталог, миры, состояние консоли и представление экземпляров |
+| `Screens/Profiles` | Карточки, активация, редактирование, создание и вход |
+| `Screens/Settings` | Настройки, адаптер хранения, использование диска и представление About |
+| `Screens/News` | Загрузка ленты и статей, координация кэша, состояние изображений, разбор HTML, статьи и представление новостей |
 | `Integrations/GitHub` | Метаданные репозитория GitHub, коммиты, участники и API аватаров |
 | `Platform` | Ссылки, папки, диалоги, память, GPU, кэш изображений |
 | `Integrations/Discord` | Реализация контракта presence |
@@ -25,7 +25,7 @@ Desktop служит хостом приложения Avalonia. Он собир
 
 ## Рамка окна
 
-Shell использует модель [WindowDrawnDecorations](https://docs.avaloniaui.net/controls/primitives/windowdrawndecorations) из Avalonia 12. Главное окно расширяет клиентскую область в область оформления. В Windows выбирается `WindowDecorations="Full"`, чтобы сохранить нативные переходы DWM и привязку окна к областям Snap, а [WindowDecorations.axaml](../../../../Sources/Hyprism.Desktop/Styles/WindowDecorations.axaml) заменяет стандартное содержимое отрисованного оформления Avalonia
+Shell использует модель [WindowDrawnDecorations](https://docs.avaloniaui.net/controls/primitives/windowdrawndecorations) из Avalonia 12. Главное окно расширяет клиентскую область в область оформления. В Windows выбирается `WindowDecorations="Full"`, чтобы сохранить нативные переходы DWM и привязку окна к областям Snap, а [WindowDecorations.axaml](../../../../Sources/Hyprism.Desktop/Shell/WindowDecorations.axaml) заменяет стандартное содержимое отрисованного оформления Avalonia
 
 На остальных платформах через платформенное значение сохраняется `WindowDecorations="None"` и используется та же оболочка. В Linux в `Program.cs` включены клиентские оформления Avalonia X11, поэтому роли элементов превращаются в нативные запросы оконному менеджеру на перемещение и изменение размера. [Главное окно](../../../../Sources/Hyprism.Desktop/Shell/MainWindow.axaml) помечает область заголовка, кнопки управления и зоны изменения размера через `WindowDecorationProperties.ElementRole`; сохраняйте эту настройку вместе с `ExtendClientAreaToDecorationsHint` и не возвращайте ручное изменение позиции окна через Win32
 
@@ -35,14 +35,16 @@ Shell использует модель [WindowDrawnDecorations](https://docs.av
 
 В проекте включены компилируемые привязки. Представления объявляют `x:DataType`, модели предоставляют наблюдаемое состояние и команды. Code-behind обрабатывает ввод, компоновку, фокус и анимацию
 
-`MainWindowViewModel` содержит только состояние Shell и собирает модели функций. `InstancesViewModel` и `NewsViewModel` владеют состоянием своих функций и подписками на сервисы. `MainWindow.axaml` передаёт эти дочерние модели в `InstancesView` и `NewsView`, поэтому привязки функций не зависят от свойств Shell
+`MainWindowViewModel` содержит только состояние Shell и собирает view model экранов. `InstancesViewModel` и `NewsViewModel` владеют состоянием своих экранов и подписками на сервисы. `MainWindow.axaml` передаёт эти дочерние модели в `InstancesView` и `NewsView`, поэтому привязки экранов не зависят от свойств Shell
+
+Каждый каталог `Screens/<Screen>` является вертикальным UI-срезом. Он может содержать представление, его view model, локальные presentation model и Desktop-адаптеры, которые нужны только этому экрану
 
 Пример привязки к существующей модели настроек
 
 ```xml
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:settings="using:Hyprism.Desktop.Features.Settings"
+             xmlns:settings="using:Hyprism.Desktop.Screens.Settings"
              x:DataType="settings:SettingsViewModel">
   <ToggleSwitch IsChecked="{Binding CloseAfterLaunch}" />
 </UserControl>
@@ -52,7 +54,9 @@ Shell использует модель [WindowDrawnDecorations](https://docs.av
 
 ## Общая основа UI
 
-`Styles/HyprismTheme.axaml` предоставляет шаблоны окна, прокрутки, ввода текста, выделения, списков, выпадающих списков, прогресса, подсказок и всплывающих поверхностей. Он должен оставаться перед общими стилями, чтобы стили функций могли переопределять значения по умолчанию. `Styles/Tokens.axaml` определяет цвета и семантические токены темы, а `Styles/Controls.axaml` общие стили. Используйте их классы вместо копирования вариантов в отдельные функции
+`UI/Foundation/Themes/HyprismTheme.axaml` предоставляет шаблоны окна, прокрутки, ввода текста, выделения, списков, выпадающих списков, прогресса, подсказок и всплывающих поверхностей. `UI/Foundation/Tokens` содержит примитивные и семантические значения. `UI/Components/ControlThemes.axaml` содержит именованные темы системных контролов. `UI/Components/Components.axaml` определяет общие семейства контролов, `UI/Components/ManagerStyles.axaml` владеет повторяющимися паттернами manager и detail, а `UI/Foundation/GlobalStyles.axaml` содержит стили приложения. Каждый экран подключает свой словарь стилей локально
+
+На странице [Архитектура UI Desktop](/architecture/desktop-ui) описаны каталог компонентов, порядок ресурсов, правила размещения и контракт состояний
 
 | Элемент | Ответственность |
 | --- | --- |
@@ -63,6 +67,8 @@ Shell использует модель [WindowDrawnDecorations](https://docs.av
 | `FadingPopup` и `FadingComboBox` | Жизненный цикл всплывающих меню |
 | `ReorderableListController` | Маркеры перетаскивания, превью и позиции |
 | `NoteCard` | Информационные и важные примечания |
+| `EmptyState` | Единая иерархия пустого состояния с иконкой, текстом и действием от экрана |
+| `FormRow` | Общая компоновка подписи, подсказки и элемента редактирования |
 | `SmoothScrollViewer` | Общая прокрутка колесом и precision touchpad; опциональная прокрутка средней кнопкой |
 
 Длительности анимации принадлежат `MotionDurations` или общему элементу-владельцу. Проверки компоновки и рендеринга описаны в [руководстве по производительности](/development/avalonia-performance)
@@ -73,8 +79,8 @@ Shell использует модель [WindowDrawnDecorations](https://docs.av
 
 Клиенты новостей и GitHub используют общую HTTP-идентификацию. Разобранные новости хранятся в `Cache/News`, закодированные изображения в `Cache/Images`. Текст статьи готовится до декодирования изображений, а декодированные bitmap освобождаются при закрытии статьи
 
-`RemoteBitmapLoader` используется функциями, которые показывают изображения. Он проверяет удалённые URL, использует `RemoteImageCache` при наличии и декодирует bitmap вне Avalonia dispatcher
+`RemoteBitmapLoader` используется экранами, которые показывают изображения. Он проверяет удалённые URL, использует `RemoteImageCache` при наличии и декодирует bitmap вне Avalonia dispatcher
 
 Выбор файлов использует Avalonia `StorageProvider`. Обработчик ссылок сохраняет экранированные абсолютные URI, включая параметры OAuth. Эти возможности не принадлежат Core
 
-Исходники: [MainWindowViewModel](../../../../Sources/Hyprism.Desktop/Shell/MainWindowViewModel.cs), [InstancesViewModel](../../../../Sources/Hyprism.Desktop/Features/Instances/InstancesViewModel.cs), [NewsViewModel](../../../../Sources/Hyprism.Desktop/Features/News/NewsViewModel.cs), [Shared controls](../../../../Sources/Hyprism.Desktop/Controls)
+Исходники: [MainWindowViewModel](../../../../Sources/Hyprism.Desktop/Shell/MainWindowViewModel.cs), [InstancesViewModel](../../../../Sources/Hyprism.Desktop/Screens/Instances/InstancesViewModel.cs), [NewsViewModel](../../../../Sources/Hyprism.Desktop/Screens/News/NewsViewModel.cs), [Shared controls](../../../../Sources/Hyprism.Desktop/UI/Controls)

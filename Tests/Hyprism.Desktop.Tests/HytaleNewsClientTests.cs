@@ -5,7 +5,7 @@ using System.Net;
 using System.Reflection;
 using System.Text.Json;
 using Hyprism.Core;
-using Hyprism.Desktop.Features.News;
+using Hyprism.Desktop.Screens.News;
 using Hyprism.Desktop.Platform;
 using Xunit;
 

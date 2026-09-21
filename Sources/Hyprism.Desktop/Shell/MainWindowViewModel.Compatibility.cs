@@ -4,8 +4,8 @@
 using System.Collections.ObjectModel;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
-using Hyprism.Desktop.Features.Instances;
-using Hyprism.Desktop.Features.News;
+using Hyprism.Desktop.Screens.Instances;
+using Hyprism.Desktop.Screens.News;
 
 namespace Hyprism.Desktop.Shell;
 

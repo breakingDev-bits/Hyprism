@@ -14,7 +14,7 @@ using Avalonia.VisualTree;
 using Hyprism.Core.Accounts;
 using Hyprism.Core.Models;
 using Hyprism.Desktop.Controls;
-using Hyprism.Desktop.Features.Profiles;
+using Hyprism.Desktop.Screens.Profiles;
 using Hyprism.Desktop.Localization;
 using Hyprism.Desktop.Platform;
 using Moq;
@@ -109,7 +109,7 @@ public sealed class WizardAnimationTests
         {
             var addProfileRow = view.GetVisualDescendants()
                 .OfType<Button>()
-                .Single(button => button.IsEffectivelyVisible && button.Classes.Contains("instancesAddRow"));
+                .Single(button => button.IsEffectivelyVisible && button.Classes.Contains("managerAddRow"));
             addProfileRow.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
             await AvaloniaTestWait.PropertyAsync(

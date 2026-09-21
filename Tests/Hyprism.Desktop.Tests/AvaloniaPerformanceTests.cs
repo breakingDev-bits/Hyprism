@@ -7,7 +7,7 @@ using Avalonia.Headless.XUnit;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Hyprism.Desktop.Controls;
-using Hyprism.Desktop.Features.Instances;
+using Hyprism.Desktop.Screens.Instances;
 using Hyprism.Desktop.Shell;
 using Xunit;
 

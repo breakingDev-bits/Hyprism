@@ -1,0 +1,376 @@
+<!--
+Copyright (C) 2026 Hyprism Launcher
+SPDX-License-Identifier: GPL-3.0-only
+-->
+
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:easing="using:Avalonia.Animation.Easings"
+        xmlns:news="using:Hyprism.Desktop.Screens.News">
+  <!-- Selectors owned by the News screen -->
+
+  <Style Selector="Button.newsListItem">
+    <Setter Property="Height" Value="104" />
+    <Setter Property="Padding" Value="10,10,4,10" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="RenderTransform" Value="{x:Null}" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.18" />
+        <BrushTransition Property="Foreground" Duration="0:0:0.18" />
+      </Transitions>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding CornerRadius}"
+                Padding="{TemplateBinding Padding}">
+          <ContentPresenter Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.newsListItem:pointerover">
+    <Setter Property="Background" Value="#08FFFFFF" />
+    <Setter Property="Foreground" Value="#FFFFFFFF" />
+    <Setter Property="RenderTransform" Value="{x:Null}" />
+  </Style>
+
+  <Style Selector="Button.newsListItem:pressed">
+    <Setter Property="RenderTransform" Value="{x:Null}" />
+  </Style>
+
+  <Style Selector="Button.newsListItem.selected">
+    <Setter Property="Background" Value="#12FFFFFF" />
+    <Setter Property="Foreground" Value="#FFFFFFFF" />
+  </Style>
+
+  <Style Selector="Button.newsLoadMore">
+    <Setter Property="Padding" Value="12,8" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="RenderTransform" Value="{x:Null}" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Foreground" Duration="0:0:0.18" />
+      </Transitions>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="Transparent"
+                Padding="{TemplateBinding Padding}">
+          <ContentPresenter Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.newsLoadMore:pointerover">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+    <Setter Property="RenderTransform" Value="{x:Null}" />
+  </Style>
+
+  <Style Selector="Button.newsLoadMore:pressed">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="RenderTransform" Value="{x:Null}" />
+  </Style>
+
+  <Style Selector="Border.newsThumbnail">
+    <Setter Property="Background" Value="#1B1C20" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+
+  <Style Selector="Border.newsArticleHeader">
+    <Setter Property="Background" Value="#17181B" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="18" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+
+  <Style Selector="StackPanel.articleBody">
+    <Setter Property="Opacity" Value="0" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.24" />
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="StackPanel.articleBody.revealed">
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+
+  <Style Selector="StackPanel.articleBody.preparing">
+    <Setter Property="Opacity" Value="0" />
+    <Setter Property="Transitions">
+      <Transitions />
+    </Setter>
+  </Style>
+
+  <Style Selector="StackPanel.articleBodySkeleton">
+    <Setter Property="Opacity" Value="1" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.18" />
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="StackPanel.articleBodySkeleton.fading">
+    <Setter Property="Opacity" Value="0" />
+  </Style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Keep the scrollbar layout stable and animate only the thumb rendering. -->
+
+
+
+
+
+
+
+
+
+
+  <Style Selector="Button.articleAction">
+    <Setter Property="Padding" Value="0,8" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="RenderTransform" Value="{x:Null}" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Foreground" Duration="0:0:0.18" />
+      </Transitions>
+    </Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                Padding="{TemplateBinding Padding}">
+          <ContentPresenter Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="Center" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.articleAction:pointerover">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+    <Setter Property="RenderTransform" Value="{x:Null}" />
+  </Style>
+
+  <Style Selector="Button.articleAction:pressed">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="RenderTransform" Value="{x:Null}" />
+  </Style>
+
+  <Style Selector="Button.articleAction Path">
+    <Setter Property="Fill" Value="{Binding $parent[Button].Foreground}" />
+  </Style>
+
+  <Style Selector="news|NewsRichTextBlock.articleParagraph">
+    <Setter Property="Foreground" Value="#E1E2E5" />
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="LineHeight" Value="28" />
+  </Style>
+
+  <Style Selector="news|NewsRichTextBlock.articleHeading">
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+
+  <Style Selector="news|NewsRichTextBlock.articleCaption">
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="TextAlignment" Value="Center" />
+  </Style>
+
+  <Style Selector="Border.articleQuote">
+    <Setter Property="Background" Value="#0FFFFFFF" />
+    <Setter Property="BorderBrush" Value="#66FFFFFF" />
+    <Setter Property="BorderThickness" Value="3,0,0,0" />
+    <Setter Property="Padding" Value="20,16" />
+    <Setter Property="CornerRadius" Value="3,12,12,3" />
+  </Style>
+
+  <Style Selector="Border.articleDetails">
+    <Setter Property="Background" Value="#101A2230" />
+    <Setter Property="BorderBrush" Value="#26FFFFFF" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+
+  <Style Selector="Button.articleDetailsHeader">
+    <Setter Property="Padding" Value="16,11" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="0" />
+    <Setter Property="RenderTransform" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}"
+                HorizontalAlignment="Stretch"
+                Padding="{TemplateBinding Padding}">
+          <ContentPresenter Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="Center" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.articleDetailsHeader:pointerover">
+    <Setter Property="Background" Value="#08FFFFFF" />
+    <Setter Property="RenderTransform" Value="{x:Null}" />
+  </Style>
+
+  <Style Selector="Button.articleDetailsHeader:pressed">
+    <Setter Property="Background" Value="#0CFFFFFF" />
+    <Setter Property="RenderTransform" Value="{x:Null}" />
+  </Style>
+
+  <Style Selector="news|NewsRichTextBlock.articleDetailsSummary">
+    <Setter Property="Foreground" Value="{DynamicResource WarningBrush}" />
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+
+  <Style Selector="Border.articleDetailsBody">
+    <Setter Property="BorderBrush" Value="#20FFFFFF" />
+    <Setter Property="BorderThickness" Value="0,1,0,0" />
+    <Setter Property="Padding" Value="16,10,16,0" />
+  </Style>
+
+  <Style Selector="Border.articleImage">
+    <Setter Property="Background" Value="#16000000" />
+    <Setter Property="BorderBrush" Value="#20FFFFFF" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="16" />
+    <Setter Property="ClipToBounds" Value="True" />
+    <Setter Property="MinHeight" Value="120" />
+  </Style>
+
+  <Style Selector="Border.articleVideo">
+    <Setter Property="Background" Value="#16000000" />
+    <Setter Property="BorderBrush" Value="#20FFFFFF" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="16" />
+    <Setter Property="ClipToBounds" Value="True" />
+  </Style>
+
+  <Style Selector="Border.articleVideoLink">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+
+  <Style Selector="Border.articleVideoLink:pointerover">
+    <Setter Property="Background" Value="#10000000" />
+  </Style>
+
+  <Style Selector="Border.articleVideoLink:pressed">
+    <Setter Property="Background" Value="#20000000" />
+  </Style>
+
+  <Style Selector="Button.articleVideoWatchButton StackPanel.articleVideoActionIdle, Button.articleVideoWatchButton StackPanel.articleVideoActionHover">
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.22">
+          <DoubleTransition.Easing><easing:CubicEaseOut /></DoubleTransition.Easing>
+        </DoubleTransition>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.26">
+          <TransformOperationsTransition.Easing><easing:CubicEaseOut /></TransformOperationsTransition.Easing>
+        </TransformOperationsTransition>
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="Button.articleVideoWatchButton StackPanel.articleVideoActionIdle">
+    <Setter Property="Opacity" Value="1" />
+    <Setter Property="RenderTransform" Value="translate(0px, 0px)" />
+  </Style>
+
+  <Style Selector="Button.articleVideoWatchButton StackPanel.articleVideoActionHover">
+    <Setter Property="Opacity" Value="0" />
+    <Setter Property="RenderTransform" Value="translate(0px, 8px)" />
+  </Style>
+
+  <Style Selector="Button.articleVideoWatchButton:pointerover StackPanel.articleVideoActionIdle">
+    <Setter Property="Opacity" Value="0" />
+    <Setter Property="RenderTransform" Value="translate(0px, -8px)" />
+  </Style>
+
+  <Style Selector="Button.articleVideoWatchButton:pointerover StackPanel.articleVideoActionHover">
+    <Setter Property="Opacity" Value="1" />
+    <Setter Property="RenderTransform" Value="translate(0px, 0px)" />
+  </Style>
+
+  <Style Selector="Border.articleVideoWatch Path.articleVideoYoutubeIcon">
+    <Setter Property="Fill" Value="White" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Fill" Duration="0:0:0.18" />
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="Border.articleVideoWatch TextBlock.articleVideoWatchText">
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+
+  <Style Selector="Border.articleVideoWatch Path.articleVideoExternalIcon">
+    <Setter Property="Fill" Value="White" />
+  </Style>
+
+  <Style Selector="Button.articleVideoWatchButton:pointerover Path.articleVideoYoutubeIcon">
+    <Setter Property="Fill" Value="#FF0033" />
+  </Style>
+
+  <Style Selector="Border.articleCode">
+    <Setter Property="Background" Value="#E615151B" />
+    <Setter Property="BorderBrush" Value="#456F63A3" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="18,14" />
+  </Style>
+
+
+</Styles>
