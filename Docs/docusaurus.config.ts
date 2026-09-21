@@ -25,6 +25,7 @@ const config: Config = {
   tagline: 'User and developer documentation for Hyprism Launcher',
   url: 'https://hyprismteam.github.io',
   baseUrl,
+  favicon: 'img/hyprism-logo.svg',
   organizationName: 'hyprismteam',
   projectName: 'Hyprism Launcher',
   trailingSlash: true,
