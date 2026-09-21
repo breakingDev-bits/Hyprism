@@ -22,6 +22,24 @@ SPDX-License-Identifier: GPL-3.0-only
 
 Downloads are available in [Releases](https://github.com/hyprismteam/Hyprism/releases)
 
+### Quick Install (Command Line)
+
+You can automatically download, extract, and set up Hyprism (including shortcuts and PATH) using the installation scripts:
+
+**Linux / macOS (Bash / Zsh):**
+```bash
+curl -fsSL [https://raw.githubusercontent.com/hyprismteam/Hyprism/main/install.sh](https://raw.githubusercontent.com/hyprismteam/Hyprism/main/Scripts/install.sh) | sh
+```
+
+**Windows (PowerShell):**
+
+```powershell
+iwr -useb [https://raw.githubusercontent.com/hyprismteam/Hyprism/main/install.ps1](https://raw.githubusercontent.com/hyprismteam/Hyprism/main/Scripts/install.ps1) | iex
+
+```
+
+The installer will fetch the latest version, extract it into the local user space (`~/.local/bin` on Linux/macOS or `%LOCALAPPDATA%\HyPrism` on Windows), download the logo, and automatically create Desktop/Application shortcuts
+
 ## Build
 
 **Requirements:**
