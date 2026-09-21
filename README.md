@@ -1,6 +1,3 @@
-Вот обновленный `README.md` с добавленной секцией быстрого поиска и установки через командную строку (однострочники для Linux/macOS и PowerShell):
-
-```markdown
 <!--
 Copyright (C) 2026 Hyprism Launcher
 SPDX-License-Identifier: GPL-3.0-only
@@ -31,14 +28,13 @@ You can automatically download, extract, and set up Hyprism (including shortcuts
 
 **Linux / macOS (Bash / Zsh):**
 ```bash
-curl -fsSL [https://raw.githubusercontent.com/hyprismteam/Hyprism/main/install.sh](https://raw.githubusercontent.com/hyprismteam/Hyprism/main/Installer/install.sh) | sh
-
+curl -fsSL [https://raw.githubusercontent.com/hyprismteam/Hyprism/main/install.sh](https://raw.githubusercontent.com/hyprismteam/Hyprism/main/Scripts/install.sh) | sh
 ```
 
 **Windows (PowerShell):**
 
 ```powershell
-iwr -useb [https://raw.githubusercontent.com/hyprismteam/Hyprism/main/install.ps1](https://raw.githubusercontent.com/hyprismteam/Hyprism/main/Installer/install.ps1) | iex
+iwr -useb [https://raw.githubusercontent.com/hyprismteam/Hyprism/main/install.ps1](https://raw.githubusercontent.com/hyprismteam/Hyprism/main/Scripts/install.ps1) | iex
 
 ```
 
