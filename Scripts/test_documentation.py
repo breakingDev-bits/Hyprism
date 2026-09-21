@@ -47,16 +47,16 @@ class DocumentationChecksTests(unittest.TestCase):
         self.assertFalse(checks.check_images())
 
     def test_bilingual_anchors_are_checked_in_each_locale(self):
-        self.page("en/index.mdx", "[Settings](/docs/settings#downloads)")
+        self.page("en/index.mdx", "[Settings](/settings#downloads)")
         self.page("en/settings.mdx", "## Downloads {/* #downloads */}")
-        self.page("ru/index.mdx", "[Настройки](/docs/settings#downloads)")
+        self.page("ru/index.mdx", "[Настройки](/settings#downloads)")
         self.page("ru/settings.mdx", "## Загрузки")
         self.assertEqual(len(checks.check_links()), 1)
         self.page("ru/settings.mdx", "## Загрузки {/* #downloads */}")
         self.assertFalse(checks.check_links())
 
     def test_missing_routes_and_repository_targets(self):
-        self.page("en/index.mdx", "[Guide](/docs/missing)\n[Source](../../../missing.cs)")
+        self.page("en/index.mdx", "[Guide](/missing)\n[Source](../../../missing.cs)")
         self.assertEqual(len(checks.check_links()), 2)
 
     def test_images_need_alternative_text_and_existing_files(self):

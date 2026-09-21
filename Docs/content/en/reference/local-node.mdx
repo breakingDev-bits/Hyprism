@@ -89,7 +89,7 @@ Arguments use `--name value` pairs. Unknown and duplicate options are rejected
 
 ## Diagnostics and compatibility
 
-Managed logs use the launcher's [session log directory](/docs/architecture/data-and-cache). Authentication diagnostics omit headers, token values, and request bodies
+Managed logs use the launcher's [session log directory](/architecture/data-and-cache). Authentication diagnostics omit headers, token values, and request bodies
 
 Protocol compatibility follows the open [hytale-auth-server implementation](https://github.com/sanasol/hytale-auth-server). Automated tests cover HTTPS, account persistence, tokens, certificates, process lifetime, and client patch transitions; a new proprietary Hytale build still needs a real game launch to verify end-to-end compatibility
 

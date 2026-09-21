@@ -5,7 +5,7 @@ description: Поля Config.json, стандартные значения и п
 
 # Конфигурация
 
-`JsonConfigStore` читает и сохраняет `Config.json` в [каталоге приложения](/docs/architecture/data-and-cache). Свойства JSON используют PascalCase, чтение нечувствительно к регистру
+`JsonConfigStore` читает и сохраняет `Config.json` в [каталоге приложения](/architecture/data-and-cache). Свойства JSON используют PascalCase, чтение нечувствительно к регистру
 
 Перед ручным редактированием закройте лаунчер и сохраните остальные поля. Пример показывает часть настроек, а не полную замену файла
 
@@ -75,8 +75,8 @@ GPU принимает `auto`, старые типы `dedicated` и `integrated`
 | --- | --- |
 | `HYPRISM_DATA` | Существующий каталог всех данных приложения |
 | `XDG_DATA_HOME` | Корень данных Linux без `HYPRISM_DATA` |
-| `HYPRISM_WIN32_COMPOSITION` | Диагностика рендеринга Windows, см. [производительность](/docs/development/avalonia-performance) |
-| `HYPRISM_DOCS_SCREENSHOTS` | Каталог для явного запуска [снятия скриншотов](/docs/development/documentation#screenshots) |
+| `HYPRISM_WIN32_COMPOSITION` | Диагностика рендеринга Windows, см. [производительность](/development/avalonia-performance) |
+| `HYPRISM_DOCS_SCREENSHOTS` | Каталог для явного запуска [снятия скриншотов](/development/documentation#screenshots) |
 
 При запуске дочерние процессы также получают переменные Java, DualAuth, GPU и сертификатов. Эти значения не являются отдельными настройками лаунчера
 

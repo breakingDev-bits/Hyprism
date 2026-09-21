@@ -17,9 +17,10 @@ function containsRoute(item: NavigationItem, activeRoute: string): boolean {
     : item.items.some(child => containsRoute(child, activeRoute))
 }
 
-function SidebarItem({ item, activeRoute }: Readonly<{
+function SidebarItem({ item, activeRoute, onNavigate }: Readonly<{
   item: NavigationItem
   activeRoute: string
+  onNavigate?: () => void
 }>) {
   if (item.type === 'link') {
     const active = item.route === activeRoute
@@ -29,6 +30,7 @@ function SidebarItem({ item, activeRoute }: Readonly<{
           className={clsx('hyprism-sidebar-link', active && 'is-active')}
           aria-current={active ? 'page' : undefined}
           to={routeToUrl(item.route)}
+          onClick={onNavigate}
         >
           {item.label}
         </Link>
@@ -51,6 +53,7 @@ function SidebarItem({ item, activeRoute }: Readonly<{
               key={child.type === 'link' ? child.route : child.label}
               item={child}
               activeRoute={activeRoute}
+              onNavigate={onNavigate}
             />
           ))}
         </ul>
@@ -59,27 +62,37 @@ function SidebarItem({ item, activeRoute }: Readonly<{
   )
 }
 
-export default function DocsSidebar() {
+export function DocsSidebarNavigation({ onNavigate }: Readonly<{ onNavigate?: () => void }>) {
   const { locale } = useDocsLocale()
   const { navigation } = useLocalizedDocsData()
   const location = useLocation()
-  const docsBaseUrl = useBaseUrl('/docs/').replace(/\/$/, '')
+  const docsBaseUrl = useBaseUrl('/').replace(/\/$/, '')
   const activeRoute = location.pathname
     .replace(/\/$/, '')
     .replace(docsBaseUrl, '')
     .replace(/^\//, '')
+  const dictionary = dictionaries[locale]
 
   return (
-    <aside className="hyprism-docs-sidebar" aria-label={dictionaries[locale].menu}>
+    <nav className="hyprism-docs-navigation" aria-label={dictionary.menu}>
       <ul>
         {navigation[locale].map(item => (
           <SidebarItem
             key={item.type === 'link' ? item.route : item.label}
             item={item}
             activeRoute={activeRoute}
+            onNavigate={onNavigate}
           />
         ))}
       </ul>
+    </nav>
+  )
+}
+
+export default function DocsSidebar() {
+  return (
+    <aside className="hyprism-docs-sidebar">
+      <DocsSidebarNavigation />
     </aside>
   )
 }

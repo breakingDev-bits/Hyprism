@@ -26,11 +26,11 @@ Desktop ссылается на Core и Local Node. Local Node ссылаетс�
 
 | Граница | Владелец | Подробнее |
 | --- | --- | --- |
-| Предметная логика и постоянное состояние | Core | [Ответственность Core](/docs/architecture/core) |
-| Представления, команды, диалоги, ссылки | Desktop | [Устройство Desktop](/docs/architecture/desktop) |
-| Автономная аутентификация и локальный API | Local Node | [Протокол и жизненный цикл](/docs/reference/local-node) |
-| Установка и процессы игры | Core с возможностями хоста | [Жизненный цикл игры](/docs/architecture/game-lifecycle) |
-| Хранение, миграции и диагностика | Сервис-владелец | [Данные и кэш](/docs/architecture/data-and-cache) |
+| Предметная логика и постоянное состояние | Core | [Ответственность Core](/architecture/core) |
+| Представления, команды, диалоги, ссылки | Desktop | [Устройство Desktop](/architecture/desktop) |
+| Автономная аутентификация и локальный API | Local Node | [Протокол и жизненный цикл](/reference/local-node) |
+| Установка и процессы игры | Core с возможностями хоста | [Жизненный цикл игры](/architecture/game-lifecycle) |
+| Хранение, миграции и диагностика | Сервис-владелец | [Данные и кэш](/architecture/data-and-cache) |
 
 В лаунчере нет Electron, веб-фронтенда, IPC-моста или генерируемого TypeScript API. Desktop вызывает интерфейсы C# напрямую
 
@@ -48,6 +48,6 @@ Local Node, уже привязанный к игре, имеет отдельн
 
 Правила игры, аккаунтов, загрузки и хранения принадлежат Core. Состояние интерфейса и системные диалоги принадлежат Desktop. Local Node отвечает за локальный сервис и жизненный цикл вспомогательного процесса
 
-Перед добавлением сервиса проверьте [справку по контрактам](/docs/reference/services), а изменение покройте соответствующим [набором тестов](/docs/development/testing)
+Перед добавлением сервиса проверьте [справку по контрактам](/reference/services), а изменение покройте соответствующим [набором тестов](/development/testing)
 
 Исходники: [Bootstrapper](../../../../Sources/Hyprism.Core/Application/Composition/Bootstrapper.cs), [Desktop startup](../../../../Sources/Hyprism.Desktop/Program.cs), [Local Node host](../../../../Sources/Hyprism.LocalNode/LocalNodeApplication.cs)

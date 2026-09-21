@@ -7,7 +7,7 @@ import { themes as prismThemes } from 'prism-react-renderer'
 import path from 'node:path'
 import repositoryLinks from './plugins/remark-repository-links'
 
-const configuredBasePath = process.env.PAGES_BASE_PATH || '/Hyprism'
+const configuredBasePath = process.env.PAGES_BASE_PATH || '/Hyprism/docs'
 const baseUrl = `/${configuredBasePath.replace(/^\/+|\/+$/g, '')}/`
 
 const localeBootstrapScript = `try {
@@ -25,6 +25,7 @@ const config: Config = {
   tagline: 'User and developer documentation for Hyprism Launcher',
   url: 'https://hyprismteam.github.io',
   baseUrl,
+  favicon: 'img/hyprism-logo.svg',
   organizationName: 'hyprismteam',
   projectName: 'Hyprism Launcher',
   trailingSlash: true,
@@ -101,16 +102,21 @@ const config: Config = {
   themeConfig: {
     colorMode: {
       defaultMode: 'dark',
-      respectPrefersColorScheme: true
+      disableSwitch: true,
+      respectPrefersColorScheme: false
     },
     navbar: {
-      title: 'Hyprism',
+      title: 'Hyprism Launcher',
+      logo: {
+        alt: 'Hyprism Launcher',
+        href: baseUrl,
+        src: 'img/hyprism-logo.svg'
+      },
       items: [
         {
-          type: 'html',
-          value: '<span>Docs</span>',
-          position: 'left',
-          className: 'hyprism-docs-link-slot'
+          href: 'https://hyprismteam.github.io/',
+          label: 'Team',
+          position: 'left'
         },
         {
           type: 'search',

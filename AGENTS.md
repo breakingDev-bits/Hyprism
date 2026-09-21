@@ -92,7 +92,7 @@ Run these checks for every documentation change
 cd Docs
 npm ci
 npm run check
-PAGES_BASE_PATH=/HyPrism npm run build
+PAGES_BASE_PATH=/Hyprism/docs npm run build
 ```
 
 Also run the relevant .NET tests when documentation examples or screenshots depend on runtime behavior

@@ -17,6 +17,7 @@ export default function Root({ children }: Readonly<{ children: ReactNode }>) {
   const [locale, setLocale] = useState<Locale>('en')
 
   useEffect(() => {
+    document.documentElement.dataset.theme = 'dark'
     setLocale(preferredLocale())
   }, [])
 
