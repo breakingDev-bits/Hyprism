@@ -4,7 +4,8 @@ SPDX-License-Identifier: GPL-3.0-only
 -->
 
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:easing="using:Avalonia.Animation.Easings">
   <Style Selector="Window">
     <Setter Property="FontFamily" Value="{DynamicResource GoogleSansFont}" />
     <Setter Property="FontSize" Value="{DynamicResource FontSize.Body}" />
@@ -289,4 +290,67 @@ SPDX-License-Identifier: GPL-3.0-only
     <Setter Property="Padding" Value="10,5" />
   </Style>
 
+  <!-- Shared scroll viewer chrome -->
+
+  <Style Selector="ScrollViewer[AllowAutoHide=True] /template/ ScrollContentPresenter#PART_ContentPresenter">
+    <Setter Property="Grid.ColumnSpan" Value="1" />
+  </Style>
+  <Style Selector="ScrollViewer /template/ ScrollBar:vertical">
+    <Setter Property="Width" Value="12" />
+    <Setter Property="Margin" Value="0,12,4,12" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  <Style Selector="ScrollViewer /template/ ScrollBar:vertical /template/ Rectangle#TrackRect">
+    <Setter Property="Fill" Value="Transparent" />
+    <Setter Property="Stroke" Value="Transparent" />
+    <Setter Property="Opacity" Value="0" />
+  </Style>
+  <Style Selector="ScrollViewer /template/ ScrollBar:vertical /template/ Thumb">
+    <Setter Property="Width" Value="6" />
+    <Setter Property="MinWidth" Value="6" />
+    <Setter Property="MinHeight" Value="40" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="Background" Value="{DynamicResource ScrollBarPanningThumbBackground}" />
+    <Setter Property="CornerRadius" Value="999" />
+    <Setter Property="RenderTransform" Value="scaleX(0.5)" />
+    <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.16">
+          <TransformOperationsTransition.Easing>
+            <easing:CubicEaseInOut />
+          </TransformOperationsTransition.Easing>
+        </TransformOperationsTransition>
+        <BrushTransition Property="Background" Duration="0:0:0.18" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ScrollViewer /template/ ScrollBar:vertical[IsExpanded=true] /template/ Thumb">
+    <Setter Property="Width" Value="6" />
+    <Setter Property="Background" Value="{DynamicResource ScrollBarThumbBackgroundColor}" />
+    <Setter Property="RenderTransform" Value="scaleX(1)" />
+  </Style>
+  <Style Selector="ScrollViewer /template/ ScrollBar:vertical /template/ Thumb:pointerover">
+    <Setter Property="Background" Value="{DynamicResource ScrollBarThumbFillPointerOver}" />
+  </Style>
+  <Style Selector="ScrollViewer /template/ ScrollBar:vertical /template/ Thumb:pressed">
+    <Setter Property="Background" Value="{DynamicResource ScrollBarThumbFillPressed}" />
+  </Style>
+  <Style Selector="ScrollViewer /template/ ScrollBar:vertical /template/ Thumb /template/ Border">
+    <Setter Property="CornerRadius" Value="999" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.18" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="ScrollViewer /template/ ScrollBar:vertical /template/ RepeatButton#PART_LineUpButton">
+    <Setter Property="IsVisible" Value="False" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="ScrollViewer /template/ ScrollBar:vertical /template/ RepeatButton#PART_LineDownButton">
+    <Setter Property="IsVisible" Value="False" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
 </Styles>

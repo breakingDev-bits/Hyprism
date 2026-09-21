@@ -1,23 +1,23 @@
 ---
 title: Hyprism.Desktop
-description: Avalonia composition, feature ownership, and reusable controls
+description: Avalonia composition, screen ownership, and reusable controls
 ---
 
 # Hyprism.Desktop
 
 Desktop is the Avalonia application host. It composes Core services, provides native capabilities, and adapts their state into views and commands
 
-## Composition and features
+## Composition and screens
 
 | Location | Responsibility |
 | --- | --- |
 | `Program.cs` | Service registrations, renderer configuration, application entry point |
 | `App.axaml` and `App.axaml.cs` | Resources, window creation, startup and shutdown |
-| `Shell` | Main window, navigation, startup overlay, account presentation, and feature composition |
-| `Features/Instances` | Instance lifecycle, selection, launch activity, mods, catalog, worlds, console state, and instance view |
-| `Features/Profiles` | Profile cards, activation, editing, creation and sign-in |
-| `Features/Settings` | Settings, persistence, storage usage, and About presentation |
-| `Features/News` | Feed and article loading, cache coordination, image state, HTML parsing, structured articles, and news view |
+| `Shell` | Main window, navigation, startup overlay, account presentation, and screen composition |
+| `Screens/Instances` | Instance lifecycle, selection, launch activity, mods, catalog, worlds, console state, and instance view |
+| `Screens/Profiles` | Profile cards, activation, editing, creation and sign-in |
+| `Screens/Settings` | Settings, persistence, storage usage, and About presentation |
+| `Screens/News` | Feed and article loading, cache coordination, image state, HTML parsing, structured articles, and news view |
 | `Integrations/GitHub` | GitHub repository metadata, commits, contributors, and avatar API |
 | `Platform` | Browser and folder opening, file picker, memory and GPU discovery, image cache |
 | `Integrations/Discord` | Host implementation of Core presence |
@@ -35,14 +35,16 @@ Caption buttons render vector resources from `Assets/Icons/MaterialSymbols.axaml
 
 Compiled bindings are enabled for the Desktop project. Views declare `x:DataType`; view models expose observable state and commands. Code-behind handles behavior tied to input, layout, focus, or animation
 
-`MainWindowViewModel` owns only shell state and composes feature view models. `InstancesViewModel` and `NewsViewModel` own their feature state and service subscriptions. `MainWindow.axaml` passes those child models into `InstancesView` and `NewsView`, so feature bindings do not depend on Shell properties
+`MainWindowViewModel` owns only shell state and composes screen view models. `InstancesViewModel` and `NewsViewModel` own their screen state and service subscriptions. `MainWindow.axaml` passes those child models into `InstancesView` and `NewsView`, so screen bindings do not depend on Shell properties
+
+Each `Screens/<Screen>` directory is a vertical UI slice. It may contain the view, its view model, screen-local presentation models, and Desktop adapters that exist only for that screen
 
 The following fragment illustrates a compiled binding to the existing settings view model
 
 ```xml
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:settings="using:Hyprism.Desktop.Features.Settings"
+             xmlns:settings="using:Hyprism.Desktop.Screens.Settings"
              x:DataType="settings:SettingsViewModel">
   <ToggleSwitch IsChecked="{Binding CloseAfterLaunch}" />
 </UserControl>
@@ -52,20 +54,21 @@ Publish observable collection changes on the UI dispatcher. Unsubscribe from ser
 
 ## Shared UI foundation
 
-`UI/Foundation/Themes/HyprismTheme.axaml` provides the application-owned templates for the window, scrolling, text input, selection, list, combo box, progress, tooltip, and popup surfaces. `UI/Foundation/Tokens` contains primitive, semantic, and control tokens. `UI/Components/Components.axaml` defines shared control families, while `UI/Foundation/GlobalStyles.axaml` contains application-wide selectors. Feature style dictionaries are registered through `UI/FeatureStyles.axaml` and live next to their owning feature
+`UI/Foundation/Themes/HyprismTheme.axaml` provides the application-owned templates for the window, scrolling, text input, selection, list, combo box, progress, tooltip, and popup surfaces. `UI/Foundation/Tokens` contains primitive and semantic values. `UI/Components/ControlThemes.axaml` contains named framework control themes. `UI/Components/Components.axaml` defines shared control families, `UI/Components/ManagerStyles.axaml` owns repeated manager and detail patterns, and `UI/Foundation/GlobalStyles.axaml` contains application-wide selectors. Each screen includes its own style dictionary locally
 
 The [Desktop UI architecture](/architecture/desktop-ui) page defines the component catalog, resource order, placement rules, and state contract
 
 | Control | Responsibility |
 | --- | --- |
 | `AdaptiveMasterDetailHost` | Shared wide and compact navigation |
-| `DeferredContentControl` | Delayed creation and retention of feature views |
+| `DeferredContentControl` | Delayed creation and retention of screen views |
 | `WizardHost` | Wizard state, step transitions, and navigation coordination |
 | `OverlayModal` | Shared dialog sheet |
 | `FadingPopup` and `FadingComboBox` | Popup lifecycle and selection menus |
 | `ReorderableListController` | Drag handles, previews, and drop positions |
 | `NoteCard` | Informational and important callouts |
-| `EmptyState` | Consistent empty content hierarchy with feature-provided icon, text, and action |
+| `EmptyState` | Consistent empty content hierarchy with screen-provided icon, text, and action |
+| `FormRow` | Shared label, hint, and trailing editor layout |
 | `SmoothScrollViewer` | Shared wheel and precision-touchpad scrolling; optional middle-button auto-scroll |
 
 Animation timing belongs in `MotionDurations` or the owning reusable control. The [performance guide](/development/avalonia-performance) explains layout and rendering checks
@@ -76,8 +79,8 @@ App-owned scroll hosts use `SmoothScrollViewer`, so mouse-wheel and precision-to
 
 News and GitHub clients use the shared HTTP identity. Parsed news lives in `Cache/News`; encoded remote images live in `Cache/Images`. Article text is prepared before image decoding, and decoded article bitmaps are released when the article closes
 
-`RemoteBitmapLoader` is shared by image-bearing features. It validates remote URLs, uses `RemoteImageCache` when available, and decodes bitmaps away from the Avalonia dispatcher
+`RemoteBitmapLoader` is shared by screens that display images. It validates remote URLs, uses `RemoteImageCache` when available, and decodes bitmaps away from the Avalonia dispatcher
 
 Native file selection uses Avalonia's `StorageProvider`. External links preserve escaped absolute URIs, including OAuth parameters. Neither capability belongs in Core
 
-Source: [MainWindowViewModel](../../../../Sources/Hyprism.Desktop/Shell/MainWindowViewModel.cs), [InstancesViewModel](../../../../Sources/Hyprism.Desktop/Features/Instances/InstancesViewModel.cs), [NewsViewModel](../../../../Sources/Hyprism.Desktop/Features/News/NewsViewModel.cs), [Shared controls](../../../../Sources/Hyprism.Desktop/UI/Controls)
+Source: [MainWindowViewModel](../../../../Sources/Hyprism.Desktop/Shell/MainWindowViewModel.cs), [InstancesViewModel](../../../../Sources/Hyprism.Desktop/Screens/Instances/InstancesViewModel.cs), [NewsViewModel](../../../../Sources/Hyprism.Desktop/Screens/News/NewsViewModel.cs), [Shared controls](../../../../Sources/Hyprism.Desktop/UI/Controls)

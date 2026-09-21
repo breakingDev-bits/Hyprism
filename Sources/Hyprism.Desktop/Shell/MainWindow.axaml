@@ -6,11 +6,11 @@ SPDX-License-Identifier: GPL-3.0-only
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="using:Hyprism.Desktop.Shell"
-        xmlns:instances="using:Hyprism.Desktop.Features.Instances"
+        xmlns:instances="using:Hyprism.Desktop.Screens.Instances"
         xmlns:controls="using:Hyprism.Desktop.Controls"
-        xmlns:news="using:Hyprism.Desktop.Features.News"
-        xmlns:profiles="using:Hyprism.Desktop.Features.Profiles"
-        xmlns:settings="using:Hyprism.Desktop.Features.Settings"
+        xmlns:news="using:Hyprism.Desktop.Screens.News"
+        xmlns:profiles="using:Hyprism.Desktop.Screens.Profiles"
+        xmlns:settings="using:Hyprism.Desktop.Screens.Settings"
         xmlns:animation="using:Avalonia.Animation"
         xmlns:easing="using:Avalonia.Animation.Easings"
         xmlns:lottie="clr-namespace:Avalonia.Labs.Lottie;assembly=Avalonia.Labs.Lottie"
@@ -77,7 +77,7 @@ SPDX-License-Identifier: GPL-3.0-only
                  Stretch="Uniform" />
           <StackPanel VerticalAlignment="Center" Spacing="1">
             <TextBlock Text="Hyprism" FontSize="25" FontWeight="SemiBold" />
-            <Border Classes="aboutLicenseValue"
+            <Border Classes="versionBadge"
                     HorizontalAlignment="Left">
               <TextBlock Text="{Binding LauncherVersion}" />
             </Border>

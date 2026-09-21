@@ -34,7 +34,7 @@ public sealed class ReorderableListController
         Control layoutRoot,
         Control preview,
         Control fallbackWidthSource,
-        string rowClass = "instancesListItem")
+        string rowClass = "managerListItem")
     {
         _itemsHost = itemsHost;
         _layoutRoot = layoutRoot;

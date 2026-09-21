@@ -5,7 +5,7 @@ using System.Net;
 using Avalonia.Platform;
 using Hyprism.Core.Accounts;
 using Hyprism.Core.Infrastructure;
-using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Screens.Settings;
 using Hyprism.Desktop.Localization;
 
 namespace Hyprism.Desktop.Platform;

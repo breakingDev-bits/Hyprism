@@ -10,8 +10,8 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Hyprism.Desktop.Controls;
-using Hyprism.Desktop.Features.Instances;
-using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Screens.Instances;
+using Hyprism.Desktop.Screens.Settings;
 
 namespace Hyprism.Desktop.Shell;
 

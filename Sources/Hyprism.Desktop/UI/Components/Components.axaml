@@ -268,7 +268,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <Setter Property="Cursor" Value="Arrow" />
   </Style>
 
-  <Style Selector="Border.uiSettingsGroup">
+  <Style Selector="Border.formGroup">
     <Setter Property="Background" Value="{DynamicResource ControlGroupBrush}" />
     <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="BorderThickness" Value="0" />
@@ -276,18 +276,18 @@ SPDX-License-Identifier: GPL-3.0-only
     <Setter Property="ClipToBounds" Value="True" />
   </Style>
 
-  <Style Selector="Border.uiSettingsRow">
+  <Style Selector="Border.formRow">
     <Setter Property="MinHeight" Value="{DynamicResource Size.Row}" />
     <Setter Property="Padding" Value="{DynamicResource Inset.Card}" />
     <Setter Property="BorderBrush" Value="{DynamicResource SurfaceBrush}" />
     <Setter Property="BorderThickness" Value="0,0,0,3" />
   </Style>
 
-  <Style Selector="Border.uiSettingsRow.last">
+  <Style Selector="Border.formRow.last">
     <Setter Property="BorderThickness" Value="0" />
   </Style>
 
-  <Style Selector="controls|SettingsRow">
+  <Style Selector="controls|FormRow">
     <Setter Property="MinHeight" Value="66" />
     <Setter Property="Padding" Value="18,14" />
     <Setter Property="BorderBrush" Value="{DynamicResource SurfaceBrush}" />
@@ -301,8 +301,8 @@ SPDX-License-Identifier: GPL-3.0-only
                 Padding="{TemplateBinding Padding}">
           <Grid ColumnDefinitions="*,Auto" ColumnSpacing="24">
             <StackPanel Spacing="3" VerticalAlignment="Center">
-              <TextBlock Classes="uiSettingsLabel" Text="{TemplateBinding Label}" />
-              <TextBlock Classes="uiSettingsHint" Text="{TemplateBinding Hint}" />
+              <TextBlock Classes="formLabel" Text="{TemplateBinding Label}" />
+              <TextBlock Classes="formHint" Text="{TemplateBinding Hint}" />
             </StackPanel>
             <ContentPresenter Grid.Column="1"
                               Content="{TemplateBinding Content}"
@@ -346,7 +346,7 @@ SPDX-License-Identifier: GPL-3.0-only
     </Setter>
   </Style>
 
-  <Style Selector="controls|SettingsRow.last">
+  <Style Selector="controls|FormRow.last">
     <Setter Property="BorderThickness" Value="0" />
   </Style>
 
@@ -413,7 +413,7 @@ SPDX-License-Identifier: GPL-3.0-only
     <Setter Property="Foreground" Value="{DynamicResource ImportantBrush}" />
   </Style>
 
-  <Style Selector="Button.uiSettingsNavigationRow">
+  <Style Selector="Button.formNavigationRow">
     <Setter Property="MinHeight" Value="66" />
     <Setter Property="Padding" Value="18,14" />
     <Setter Property="Background" Value="Transparent" />
@@ -447,31 +447,31 @@ SPDX-License-Identifier: GPL-3.0-only
     </Setter>
   </Style>
 
-  <Style Selector="Button.uiSettingsNavigationRow.last">
+  <Style Selector="Button.formNavigationRow.last">
     <Setter Property="BorderThickness" Value="0" />
   </Style>
 
-  <Style Selector="Button.uiSettingsNavigationRow:pointerover">
+  <Style Selector="Button.formNavigationRow:pointerover">
     <Setter Property="Background" Value="{DynamicResource ItemHoverBrush}" />
     <Setter Property="RenderTransform" Value="{x:Null}" />
   </Style>
 
-  <Style Selector="Button.uiSettingsNavigationRow:pressed">
+  <Style Selector="Button.formNavigationRow:pressed">
     <Setter Property="Background" Value="{DynamicResource ItemSelectedBrush}" />
     <Setter Property="RenderTransform" Value="{x:Null}" />
   </Style>
 
-  <Style Selector="Button.uiSettingsNavigationRow:disabled">
+  <Style Selector="Button.formNavigationRow:disabled">
     <Setter Property="Opacity" Value="0.42" />
   </Style>
 
-  <Style Selector="TextBlock.uiSettingsLabel">
+  <Style Selector="TextBlock.formLabel">
     <Setter Property="FontSize" Value="14" />
     <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
 
-  <Style Selector="TextBlock.uiSettingsHint">
+  <Style Selector="TextBlock.formHint">
     <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}" />
     <Setter Property="FontSize" Value="12" />
     <Setter Property="LineHeight" Value="17" />

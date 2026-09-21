@@ -3,7 +3,7 @@
 
 using Hyprism.Core.Accounts;
 using Hyprism.Core.Models;
-using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Screens.Settings;
 using Hyprism.Desktop.Localization;
 using Hyprism.Desktop.Platform;
 using Avalonia.Headless.XUnit;

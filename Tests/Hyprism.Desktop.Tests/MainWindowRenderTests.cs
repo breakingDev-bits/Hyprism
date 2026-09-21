@@ -24,10 +24,10 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.Input;
 using Hyprism.Desktop.Integrations.GitHub;
-using Hyprism.Desktop.Features.Instances;
-using Hyprism.Desktop.Features.News;
-using Hyprism.Desktop.Features.Profiles;
-using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Screens.Instances;
+using Hyprism.Desktop.Screens.News;
+using Hyprism.Desktop.Screens.Profiles;
+using Hyprism.Desktop.Screens.Settings;
 using Hyprism.Desktop.Localization;
 using Hyprism.Desktop.Controls;
 using Hyprism.Desktop.Platform;
@@ -65,7 +65,7 @@ public sealed class MainWindowRenderTests
         var instancesView = Assert.Single(window.GetVisualDescendants().OfType<InstancesView>());
         var addInstanceRow = Assert.Single(
             instancesView.GetVisualDescendants().OfType<Button>(),
-            button => button.Classes.Contains("instancesAddRow"));
+            button => button.Classes.Contains("managerAddRow"));
         addInstanceRow.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 
         var wizard = instancesView.FindControl<Border>("InstanceCreatorScreen");
@@ -201,7 +201,7 @@ public sealed class MainWindowRenderTests
 
         var cards = view.GetVisualDescendants()
             .OfType<Button>()
-            .Where(button => button.Classes.Contains("instancesListItem"))
+            .Where(button => button.Classes.Contains("managerListItem"))
             .ToArray();
         var profilesListPane = Assert.IsType<Border>(view.FindControl<Border>("ProfilesListPane"));
         Assert.Equal(2, cards.Length);
@@ -220,7 +220,7 @@ public sealed class MainWindowRenderTests
             });
         Assert.Equal(2, view.GetVisualDescendants()
             .OfType<Border>()
-            .Count(border => border.IsEffectivelyVisible && border.Classes.Contains("instancesListDragTarget")));
+            .Count(border => border.IsEffectivelyVisible && border.Classes.Contains("managerListDragTarget")));
 
         var menuTargets = view.GetVisualDescendants()
             .OfType<Border>()
@@ -245,7 +245,7 @@ public sealed class MainWindowRenderTests
         Assert.All(
             view.GetVisualDescendants()
                 .OfType<StackPanel>()
-                .Where(panel => panel.Classes.Contains("instanceDeleteActionContent")),
+                .Where(panel => panel.Classes.Contains("managerDeleteActionContent")),
             panel => Assert.Equal(HorizontalAlignment.Center, panel.HorizontalAlignment));
         Assert.All(
             view.GetVisualDescendants()
@@ -255,10 +255,10 @@ public sealed class MainWindowRenderTests
 
         var profileInfoGroup = view.GetVisualDescendants()
             .OfType<Border>()
-            .Single(border => border.Classes.Contains("instanceInfoGroup"));
+            .Single(border => border.Classes.Contains("managerInfoGroup"));
         var profileInfoCells = profileInfoGroup.GetVisualDescendants()
             .OfType<Border>()
-            .Where(border => border.Classes.Contains("instanceInfoCell"))
+            .Where(border => border.Classes.Contains("managerInfoCell"))
             .ToArray();
         Assert.Equal(4, profileInfoCells.Length);
         Assert.All(
@@ -469,7 +469,7 @@ public sealed class MainWindowRenderTests
         Dispatcher.UIThread.RunJobs();
         var activeCard = view.GetVisualDescendants()
             .OfType<Button>()
-            .First(button => button.Classes.Contains("instancesListItem"));
+            .First(button => button.Classes.Contains("managerListItem"));
         activeCard.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
         await WaitForConditionAsync(
             () => view.Classes.Contains("compact") &&
@@ -480,7 +480,7 @@ public sealed class MainWindowRenderTests
         Assert.True(view.FindControl<Border>("CompactProfilesToolbar")!.IsEffectivelyVisible);
         var compactPrimaryAction = view.GetVisualDescendants()
             .OfType<Button>()
-            .Single(button => button.Classes.Contains("compactInstanceActionPart") &&
+            .Single(button => button.Classes.Contains("managerCompactActionPart") &&
                               button.Classes.Contains("main"));
         Assert.Equal(126, compactPrimaryAction.Width);
         Assert.Contains("active", compactPrimaryAction.Classes);
@@ -503,7 +503,7 @@ public sealed class MainWindowRenderTests
         Assert.True(compactProfileTranslation.X > 0);
         var addProfileRow = view.GetVisualDescendants()
             .OfType<Button>()
-            .Single(button => button.IsEffectivelyVisible && button.Classes.Contains("instancesAddRow"));
+            .Single(button => button.IsEffectivelyVisible && button.Classes.Contains("managerAddRow"));
         addProfileRow.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
         Assert.True(wizard.IsVisible);
         Assert.False(view.FindControl<Grid>("ProfileOverview")!.IsVisible);
@@ -975,7 +975,7 @@ public sealed class MainWindowRenderTests
         var primaryAction = compact
             ? instancesView.FindControl<Button>("CompactInstancePrimaryAction")!
             : instancesView.GetVisualDescendants().OfType<Button>()
-                .Single(button => button.Classes.Contains("instanceAction") &&
+                .Single(button => button.Classes.Contains("managerAction") &&
                                   button.Classes.Contains("primary"));
         var collapsingAction = compact
             ? instancesView.FindControl<Button>("CompactInstanceMoreButton")!
@@ -984,7 +984,7 @@ public sealed class MainWindowRenderTests
         if (compact)
         {
             var instanceRow = instancesView.GetVisualDescendants().OfType<Button>()
-                .Single(button => button.Classes.Contains("instancesListItem"));
+                .Single(button => button.Classes.Contains("managerListItem"));
             instanceRow.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             await WaitForConditionAsync(
                 () => primaryAction.IsEffectivelyVisible && primaryAction.Bounds.Width > 0,
@@ -1488,7 +1488,7 @@ public sealed class MainWindowRenderTests
             Assert.IsAssignableFrom<ISolidColorBrush>(readerRoot.Background).Color);
         var back = articleHost.GetVisualDescendants()
             .OfType<Button>()
-            .Single(button => button.IsEffectivelyVisible && button.Classes.Contains("articleBack"));
+            .Single(button => button.IsEffectivelyVisible && button.Classes.Contains("detailBack"));
         var skeleton = articleHost.GetVisualDescendants()
             .OfType<Border>()
             .First(border => border.IsEffectivelyVisible && border.Classes.Contains("skeleton"));
@@ -1567,7 +1567,7 @@ public sealed class MainWindowRenderTests
             12,
             bodySkeleton.GetVisualDescendants()
                 .OfType<Border>()
-                .Count(border => border.Classes.Contains("articleTextSkeleton")));
+                .Count(border => border.Classes.Contains("contentTextSkeleton")));
         var bodySkeletonPreviewPath = Environment.GetEnvironmentVariable(
             "HYPRISM_ARTICLE_BODY_SKELETON_RENDER_OUTPUT");
         if (!string.IsNullOrWhiteSpace(bodySkeletonPreviewPath))
@@ -2421,25 +2421,25 @@ public sealed class MainWindowRenderTests
         Assert.Equal(2, instanceListGroup.Spacing);
         Assert.Single(
             instanceListGroup.GetVisualDescendants().OfType<Button>(),
-            button => button.Classes.Contains("instancesAddRow"));
+            button => button.Classes.Contains("managerAddRow"));
         Assert.Equal(
             2,
             instanceListGroup.GetVisualDescendants().OfType<Avalonia.Controls.Shapes.Path>()
-                .Count(path => path.Classes.Contains("instancesListHandle") || path.Classes.Contains("instancesListMore")));
+                .Count(path => path.Classes.Contains("managerListHandle") || path.Classes.Contains("managerListMore")));
         var instanceDragHandle = Assert.Single(
             instanceListGroup.GetVisualDescendants().OfType<Avalonia.Controls.Shapes.Path>(),
-            path => path.Classes.Contains("instancesListHandle"));
+            path => path.Classes.Contains("managerListHandle"));
         Assert.Equal(14, instanceDragHandle.Bounds.Width);
         Assert.Equal(arrowCursor, instanceDragHandle.Cursor?.ToString());
         var instanceDragTarget = Assert.Single(
             instanceListGroup.GetVisualDescendants().OfType<Border>(),
-            border => border.Classes.Contains("instancesListDragTarget"));
+            border => border.Classes.Contains("managerListDragTarget"));
         Assert.Equal(usesCompactInstancesLayout ? 44 : 40, instanceDragTarget.Bounds.Width);
         Assert.Equal(usesCompactInstancesLayout ? 44 : 40, instanceDragTarget.Bounds.Height);
         Assert.Equal(arrowCursor, instanceDragTarget.Cursor?.ToString());
         var managedInstanceRow = Assert.Single(
             instanceListGroup.GetVisualDescendants().OfType<Button>(),
-            button => button.Classes.Contains("instancesListItem") && button.Classes.Contains("managed"));
+            button => button.Classes.Contains("managerListItem") && button.Classes.Contains("managed"));
         Assert.Equal(handCursor, managedInstanceRow.Cursor?.ToString());
         Assert.Equal(usesCompactInstancesLayout ? 78 : 72, managedInstanceRow.Bounds.Height);
         Assert.Equal(new CornerRadius(11), managedInstanceRow.CornerRadius);
@@ -2456,10 +2456,10 @@ public sealed class MainWindowRenderTests
             Assert.IsAssignableFrom<ISolidColorBrush>(managedInstanceRow.Background).Color);
         var managedInstanceTitle = Assert.Single(
             managedInstanceRow.GetVisualDescendants().OfType<TextBlock>(),
-            text => text.Classes.Contains("instancesListTitle"));
+            text => text.Classes.Contains("managerListTitle"));
         var managedInstanceDescription = Assert.Single(
             managedInstanceRow.GetVisualDescendants().OfType<TextBlock>(),
-            text => text.Classes.Contains("settingsCategoryDescription"));
+            text => text.Classes.Contains("managerCategoryDescription"));
         Assert.Equal(15, managedInstanceTitle.FontSize);
         Assert.Equal(11, managedInstanceDescription.FontSize);
         var managedInstanceGameIcon = Assert.Single(
@@ -2503,7 +2503,7 @@ public sealed class MainWindowRenderTests
         Dispatcher.UIThread.RunJobs();
         var inactiveInstanceRow = Assert.Single(
             instanceListGroup.GetVisualDescendants().OfType<Button>(),
-            button => button.Classes.Contains("instancesListItem") && !button.Classes.Contains("managed"));
+            button => button.Classes.Contains("managerListItem") && !button.Classes.Contains("managed"));
         Assert.Equal(
             Colors.Transparent,
             Assert.IsAssignableFrom<ISolidColorBrush>(inactiveInstanceRow.Background).Color);
@@ -2531,7 +2531,7 @@ public sealed class MainWindowRenderTests
 
         var addInstanceRow = Assert.Single(
             instanceListGroup.GetVisualDescendants().OfType<Button>(),
-            button => button.Classes.Contains("instancesAddRow"));
+            button => button.Classes.Contains("managerAddRow"));
         Assert.Equal(default, addInstanceRow.CornerRadius);
         Assert.Equal(default, addInstanceRow.BorderThickness);
         Assert.Contains(
@@ -2572,13 +2572,13 @@ public sealed class MainWindowRenderTests
         window.MouseUp(resolvedDragPoint + new Vector(36, 24), MouseButton.Left);
         Dispatcher.UIThread.RunJobs();
         Assert.False(dragPreview.IsVisible);
-        var instanceActions = instancesView.GetVisualDescendants()
+        var managerActions = instancesView.GetVisualDescendants()
             .OfType<Button>()
-            .Where(button => button.Classes.Contains("instanceAction"))
+            .Where(button => button.Classes.Contains("managerAction"))
             .ToList();
-        Assert.Equal(3, instanceActions.Count);
-        Assert.Single(instanceActions, button => button.Classes.Contains("primary"));
-        Assert.Single(instanceActions, button => button.Classes.Contains("danger"));
+        Assert.Equal(3, managerActions.Count);
+        Assert.Single(managerActions, button => button.Classes.Contains("primary"));
+        Assert.Single(managerActions, button => button.Classes.Contains("danger"));
         var instanceMenuRows = instancesView.GetVisualDescendants()
             .OfType<Button>()
             .Where(button => button.Classes.Contains("instanceMenuRow"))
@@ -2625,15 +2625,15 @@ public sealed class MainWindowRenderTests
         var instancesContent = instancesView.FindControl<Grid>("InstancesContent");
         var instancesListPane = instancesView.FindControl<Border>("InstancesListPane");
         var compactInstanceToolbar = instancesView.FindControl<Border>("CompactInstanceToolbar");
-        var compactInstanceSplitAction = instancesView.GetVisualDescendants()
+        var managerCompactSplitAction = instancesView.GetVisualDescendants()
             .OfType<Border>()
-            .Single(border => border.Classes.Contains("compactInstanceSplitAction") &&
+            .Single(border => border.Classes.Contains("managerCompactSplitAction") &&
                               border.GetVisualDescendants().OfType<Button>()
                                   .Any(button => button.Name == "CompactInstancePrimaryAction"));
         var compactInstancePrimaryAction = instancesView.FindControl<Button>("CompactInstancePrimaryAction");
         var compactInstanceMoreButton = instancesView.FindControl<Button>("CompactInstanceMoreButton");
         var compactInstanceMenuPopup = instancesView.FindControl<FadingPopup>("CompactInstanceMenuPopup");
-        var wideInstanceActions = instancesView.FindControl<StackPanel>("WideInstanceActions");
+        var managerWideActions = instancesView.FindControl<StackPanel>("WideInstanceActions");
         Assert.NotNull(instancesContent);
         Assert.NotNull(instancesListPane);
         if (!usesCompactInstancesLayout)
@@ -2644,8 +2644,8 @@ public sealed class MainWindowRenderTests
         Assert.NotNull(compactInstanceMenuPopup);
         Assert.False(compactInstanceMenuPopup!.WindowManagerAddShadowHint);
         Assert.False(compactInstanceMenuPopup.IsLightDismissEnabled);
-        Assert.NotNull(wideInstanceActions);
-        Assert.Equal(Avalonia.Layout.HorizontalAlignment.Center, wideInstanceActions!.HorizontalAlignment);
+        Assert.NotNull(managerWideActions);
+        Assert.Equal(Avalonia.Layout.HorizontalAlignment.Center, managerWideActions!.HorizontalAlignment);
         var instanceContentTranslation = Assert.IsType<TranslateTransform>(instancesContent!.RenderTransform);
         Assert.Equal(usesCompactInstancesLayout, compactInstanceToolbar!.IsVisible);
         var instanceWizardReveal = Assert.IsType<WizardRevealIcon>(
@@ -2751,7 +2751,7 @@ public sealed class MainWindowRenderTests
 
             var instanceButton = instancesListPane!.GetVisualDescendants()
                 .OfType<Button>()
-                .Single(button => button.Classes.Contains("instancesListItem"));
+                .Single(button => button.Classes.Contains("managerListItem"));
             var instanceContentOpened = WaitForAvaloniaPropertyAsync(
                 instanceContentTranslation,
                 TranslateTransform.XProperty,
@@ -2761,13 +2761,13 @@ public sealed class MainWindowRenderTests
             await instanceContentOpened;
             Dispatcher.UIThread.RunJobs();
             Assert.Equal(0, instanceContentTranslation.X);
-            Assert.False(wideInstanceActions.IsVisible);
-            Assert.True(compactInstanceSplitAction.IsEffectivelyVisible);
+            Assert.False(managerWideActions.IsVisible);
+            Assert.True(managerCompactSplitAction.IsEffectivelyVisible);
             Assert.True(compactInstancePrimaryAction!.IsEffectivelyVisible);
             Assert.True(compactInstanceGameIcon.IsEffectivelyVisible);
 
-            var compactActionRight = compactInstanceSplitAction.TranslatePoint(
-                new Point(compactInstanceSplitAction.Bounds.Width, 0),
+            var compactActionRight = managerCompactSplitAction.TranslatePoint(
+                new Point(managerCompactSplitAction.Bounds.Width, 0),
                 window);
             var compactContentRight = instanceHubContent!.TranslatePoint(
                 new Point(instanceHubContent.Bounds.Width, 0),
@@ -2863,29 +2863,29 @@ public sealed class MainWindowRenderTests
             Assert.Equal(0, instanceContentTranslation.X);
             Assert.True(instancesListPane!.IsHitTestVisible);
             Assert.True(instancesContent.IsHitTestVisible);
-            Assert.True(wideInstanceActions.IsEffectivelyVisible);
-            Assert.False(compactInstanceSplitAction.IsEffectivelyVisible);
+            Assert.True(managerWideActions.IsEffectivelyVisible);
+            Assert.False(managerCompactSplitAction.IsEffectivelyVisible);
             Assert.False(compactInstanceGameIcon.IsEffectivelyVisible);
         }
 
         var instanceHub = instancesView.FindControl<Grid>("InstanceHubScreen");
         var instanceSection = instancesView.FindControl<Grid>("InstanceSectionScreen");
-        var instanceInfoGroup = instancesView.GetVisualDescendants()
+        var managerInfoGroup = instancesView.GetVisualDescendants()
             .OfType<Border>()
-            .Single(border => border.Classes.Contains("instanceInfoGroup"));
+            .Single(border => border.Classes.Contains("managerInfoGroup"));
         Assert.NotNull(instanceHub);
         Assert.NotNull(instanceSection);
-        Assert.True(instanceInfoGroup.IsVisible);
-        Assert.Equal(new CornerRadius(14), instanceInfoGroup.CornerRadius);
+        Assert.True(managerInfoGroup.IsVisible);
+        Assert.Equal(new CornerRadius(14), managerInfoGroup.CornerRadius);
         Assert.Equal(
             4,
-            instanceInfoGroup.GetVisualDescendants()
+            managerInfoGroup.GetVisualDescendants()
                 .OfType<Border>()
-                .Count(border => border.Classes.Contains("instanceInfoCell")));
+                .Count(border => border.Classes.Contains("managerInfoCell")));
         Assert.All(
-            instanceInfoGroup.GetVisualDescendants()
+            managerInfoGroup.GetVisualDescendants()
                 .OfType<Border>()
-                .Where(border => border.Classes.Contains("instanceInfoCell")),
+                .Where(border => border.Classes.Contains("managerInfoCell")),
             cell => Assert.Equal(VerticalAlignment.Center, cell.Child?.VerticalAlignment));
         viewModel.SelectInstanceSectionCommand.Execute("mods");
         Assert.True(instanceHub!.IsVisible);
@@ -2898,13 +2898,13 @@ public sealed class MainWindowRenderTests
         Dispatcher.UIThread.RunJobs();
         Assert.Equal(usesCompactInstancesLayout, instanceHub!.IsVisible);
         Assert.True(instanceSection!.IsVisible);
-        Assert.Contains("articleToolbar", instanceSection.GetVisualDescendants()
+        Assert.Contains("detailToolbar", instanceSection.GetVisualDescendants()
             .OfType<Border>()
-            .First(border => border.Classes.Contains("articleToolbar"))
+            .First(border => border.Classes.Contains("detailToolbar"))
             .Classes);
         var instanceSectionTitle = instanceSection.GetVisualDescendants()
             .OfType<TextBlock>()
-            .Single(textBlock => textBlock.Classes.Contains("articleToolbarTitle"));
+            .Single(textBlock => textBlock.Classes.Contains("detailToolbarTitle"));
         var installedModsSection = instancesView.FindControl<Grid>("InstalledModsSection");
         Assert.NotNull(installedModsSection);
         Assert.Equal("Installed mods", instanceSectionTitle.Text);
@@ -3156,7 +3156,7 @@ public sealed class MainWindowRenderTests
             usesWideLayout ? 0 : 1,
             activeArticleHost.GetVisualDescendants()
                 .OfType<Button>()
-                .Count(button => button.IsEffectivelyVisible && button.Classes.Contains("articleBack")));
+                .Count(button => button.IsEffectivelyVisible && button.Classes.Contains("detailBack")));
         var articleHeader = activeArticleHost.GetVisualDescendants()
             .OfType<Border>()
             .Single(border => border.Classes.Contains("newsArticleHeader"));
@@ -3177,7 +3177,7 @@ public sealed class MainWindowRenderTests
         {
             Assert.DoesNotContain(
                 activeArticleHost.GetVisualDescendants().OfType<Border>(),
-                border => border.IsEffectivelyVisible && border.Classes.Contains("articleToolbar"));
+                border => border.IsEffectivelyVisible && border.Classes.Contains("detailToolbar"));
             Assert.Contains(originalButton, articleHeader.GetVisualDescendants());
             var headerTitle = articleHeader.GetVisualDescendants()
                 .OfType<TextBlock>()
@@ -3191,13 +3191,13 @@ public sealed class MainWindowRenderTests
         }
         else
         {
-            var articleToolbar = activeArticleHost.GetVisualDescendants()
+            var detailToolbar = activeArticleHost.GetVisualDescendants()
                 .OfType<Border>()
-                .Single(border => border.IsEffectivelyVisible && border.Classes.Contains("articleToolbar"));
-            Assert.Equal(new Thickness(0), articleToolbar.BorderThickness);
-            Assert.InRange(articleToolbar.Margin.Left, 23.5, 24.5);
-            Assert.InRange(articleToolbar.Bounds.Height, 55.5, 56.5);
-            var toolbarPosition = articleToolbar.TranslatePoint(default, activeArticleHost);
+                .Single(border => border.IsEffectivelyVisible && border.Classes.Contains("detailToolbar"));
+            Assert.Equal(new Thickness(0), detailToolbar.BorderThickness);
+            Assert.InRange(detailToolbar.Margin.Left, 23.5, 24.5);
+            Assert.InRange(detailToolbar.Bounds.Height, 55.5, 56.5);
+            var toolbarPosition = detailToolbar.TranslatePoint(default, activeArticleHost);
             var headerPosition = articleHeader.TranslatePoint(default, activeArticleHost);
             Assert.NotNull(toolbarPosition);
             Assert.NotNull(headerPosition);
@@ -3205,16 +3205,16 @@ public sealed class MainWindowRenderTests
                 Math.Abs(toolbarPosition!.Value.X - headerPosition!.Value.X),
                 0,
                 6);
-            var backButton = articleToolbar.GetVisualDescendants()
+            var backButton = detailToolbar.GetVisualDescendants()
                 .OfType<Button>()
-                .Single(button => button.IsEffectivelyVisible && button.Classes.Contains("articleBack"));
+                .Single(button => button.IsEffectivelyVisible && button.Classes.Contains("detailBack"));
             Assert.Equal(new Thickness(0), backButton.BorderThickness);
             Assert.Equal(
                 0,
                 Assert.IsAssignableFrom<ISolidColorBrush>(backButton.Background).Color.A);
-            var toolbarTitle = articleToolbar.GetVisualDescendants()
+            var toolbarTitle = detailToolbar.GetVisualDescendants()
                 .OfType<TextBlock>()
-                .Single(textBlock => textBlock.Classes.Contains("articleToolbarTitle"));
+                .Single(textBlock => textBlock.Classes.Contains("detailToolbarTitle"));
             Assert.Equal(0, toolbarTitle.Opacity);
             Assert.Equal(16, toolbarTitle.FontSize);
             var backIcon = backButton.GetVisualDescendants()
@@ -3235,13 +3235,13 @@ public sealed class MainWindowRenderTests
             Dispatcher.UIThread.RunJobs();
 
             Assert.True(viewModel.IsNewsArticleScrolled);
-            Assert.InRange(articleToolbar.Margin.Left, 23.5, 24.5);
+            Assert.InRange(detailToolbar.Margin.Left, 23.5, 24.5);
             Assert.InRange(toolbarTitle.Opacity, 0.99, 1);
             Assert.Equal(selectedArticle.Title, toolbarTitle.Text);
             Assert.True(toolbarTitle.Bounds.Width > 280);
             var scrolledBackPosition = backButton.TranslatePoint(default, activeArticleHost);
             var scrolledOriginalPosition = originalButton.TranslatePoint(default, activeArticleHost);
-            var toolbarTitlePosition = toolbarTitle.TranslatePoint(default, articleToolbar);
+            var toolbarTitlePosition = toolbarTitle.TranslatePoint(default, detailToolbar);
             Assert.NotNull(scrolledBackPosition);
             Assert.NotNull(scrolledOriginalPosition);
             Assert.NotNull(toolbarTitlePosition);
@@ -3255,8 +3255,8 @@ public sealed class MainWindowRenderTests
                 0.5);
             Assert.InRange(
                 toolbarTitlePosition!.Value.X + toolbarTitle.Bounds.Width / 2,
-                articleToolbar.Bounds.Width / 2 - 1,
-                articleToolbar.Bounds.Width / 2 + 1);
+                detailToolbar.Bounds.Width / 2 - 1,
+                detailToolbar.Bounds.Width / 2 + 1);
         }
         var articleActionHoverPoint = originalButton.TranslatePoint(
             new Point(originalButton.Bounds.Width / 2, originalButton.Bounds.Height / 2),
@@ -3751,7 +3751,7 @@ public sealed class MainWindowRenderTests
         Assert.Equal(7, categoryIcons.Count(icon => icon.IsEffectivelyVisible));
         var categoryDescriptions = settingsView.GetVisualDescendants()
             .OfType<TextBlock>()
-            .Where(text => text.Classes.Contains("settingsCategoryDescription"))
+            .Where(text => text.Classes.Contains("managerCategoryDescription"))
             .ToArray();
         Assert.Equal(7, categoryDescriptions.Length);
         Assert.Equal(7, categoryDescriptions.Count(description => description.IsEffectivelyVisible));
@@ -3767,7 +3767,7 @@ public sealed class MainWindowRenderTests
                 Assert.IsAssignableFrom<ISolidColorBrush>(title.Foreground).Color));
         var categoryButtons = settingsView.GetVisualDescendants()
             .OfType<Button>()
-            .Where(button => button.Classes.Contains("settingsRailCategory"))
+            .Where(button => button.Classes.Contains("managerRailCategory"))
             .ToArray();
         Assert.Equal(7, categoryButtons.Length);
         Assert.All(
@@ -3789,7 +3789,7 @@ public sealed class MainWindowRenderTests
                 Assert.IsAssignableFrom<ISolidColorBrush>(settingsRail.Background).Color);
             var selectedCategoryButton = settingsView.GetVisualDescendants()
                 .OfType<Button>()
-                .Single(button => button.Classes.Contains("settingsRailCategory") &&
+                .Single(button => button.Classes.Contains("managerRailCategory") &&
                                   button.Classes.Contains("selected"));
             await WaitForConditionAsync(
                 () => selectedCategoryButton.Background is ISolidColorBrush { Color.A: <= 1 },
@@ -3891,7 +3891,7 @@ public sealed class MainWindowRenderTests
                 .OfType<Visual>()
                 .Where(control =>
                     control.IsEffectivelyVisible &&
-                    (control is SettingsRow || (control is Border && control.Classes.Contains("uiSettingsRow"))))
+                    (control is FormRow || (control is Border && control.Classes.Contains("formRow"))))
                 .ToArray();
             if (rows.Length == 0)
                 return;
@@ -3900,13 +3900,13 @@ public sealed class MainWindowRenderTests
             {
                 var borderThickness = row switch
                 {
-                    SettingsRow settingsRow => settingsRow.BorderThickness,
+                    FormRow settingsRow => settingsRow.BorderThickness,
                     Border border => border.BorderThickness,
                     _ => default(Thickness)
                 };
                 var borderBrush = row switch
                 {
-                    SettingsRow settingsRow => settingsRow.BorderBrush,
+                    FormRow settingsRow => settingsRow.BorderBrush,
                     Border border => border.BorderBrush,
                     _ => null
                 };
@@ -3920,7 +3920,7 @@ public sealed class MainWindowRenderTests
             .Count(group => group.GetVisualDescendants()
                 .OfType<Visual>()
                 .Any(control => control.IsEffectivelyVisible &&
-                                (control is SettingsRow || (control is Border && control.Classes.Contains("uiSettingsRow")))));
+                                (control is FormRow || (control is Border && control.Classes.Contains("formRow")))));
         Assert.Equal(3, groupsWithRows);
         var visibleSettingsHeadings = settingsView.GetVisualDescendants()
             .OfType<TextBlock>()
@@ -4083,7 +4083,7 @@ public sealed class MainWindowRenderTests
 
             var generalCategoryButton = settingsView.GetVisualDescendants()
                 .OfType<Button>()
-                .Single(button => button.Classes.Contains("settingsRailCategory") &&
+                .Single(button => button.Classes.Contains("managerRailCategory") &&
                                   button.DataContext is SettingCategoryViewModel { Id: "general" });
             generalCategoryButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             Dispatcher.UIThread.RunJobs();
@@ -4105,7 +4105,7 @@ public sealed class MainWindowRenderTests
             var settingsMainTranslation = Assert.IsType<TranslateTransform>(settingsMain.RenderTransform);
             var downloadsCategory = settingsView.GetVisualDescendants()
                 .OfType<Button>()
-                .Single(button => button.Classes.Contains("settingsRailCategory") &&
+                .Single(button => button.Classes.Contains("managerRailCategory") &&
                                   button.DataContext is SettingCategoryViewModel { Id: "downloads" });
             var categoryPoint = downloadsCategory.TranslatePoint(
                 new Point(downloadsCategory.Bounds.Width / 2, downloadsCategory.Bounds.Height / 2),
@@ -4163,7 +4163,7 @@ public sealed class MainWindowRenderTests
 
             var settingsBack = settingsView.GetVisualDescendants()
                 .OfType<Button>()
-                .Single(button => button.IsEffectivelyVisible && button.Classes.Contains("articleBack"));
+                .Single(button => button.IsEffectivelyVisible && button.Classes.Contains("detailBack"));
             var backPoint = settingsBack.TranslatePoint(
                 new Point(settingsBack.Bounds.Width / 2, settingsBack.Bounds.Height / 2),
                 window);

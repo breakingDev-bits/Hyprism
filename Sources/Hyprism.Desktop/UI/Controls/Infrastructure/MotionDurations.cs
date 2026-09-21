@@ -4,7 +4,7 @@
 namespace Hyprism.Desktop.Controls;
 
 /// <summary>
-/// Defines semantic motion timings shared by desktop controls and feature views.
+/// Defines semantic motion timings shared by desktop controls and screens
 /// </summary>
 public static class MotionDurations
 {

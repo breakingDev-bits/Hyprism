@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 using Avalonia.Headless.XUnit;
-using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Screens.Settings;
 using Hyprism.Desktop.Platform;
 using Moq;
 using System.Net;

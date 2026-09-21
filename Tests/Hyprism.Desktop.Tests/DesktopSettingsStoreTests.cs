@@ -3,7 +3,7 @@
 
 using Hyprism.Core;
 using Hyprism.Core.Infrastructure;
-using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Screens.Settings;
 using Moq;
 using Xunit;
 

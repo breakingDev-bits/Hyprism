@@ -18,7 +18,7 @@ SPDX-License-Identifier: GPL-3.0-only
         <ResourceInclude Source="avares://Hyprism.Desktop/Assets/Brands/Hyprism.axaml" />
         <ResourceInclude Source="avares://Hyprism.Desktop/UI/Foundation/Tokens/Primitives.axaml" />
         <ResourceInclude Source="avares://Hyprism.Desktop/UI/Foundation/Tokens/Semantic.axaml" />
-        <ResourceInclude Source="avares://Hyprism.Desktop/UI/Foundation/Tokens/ControlTokens.axaml" />
+        <ResourceInclude Source="avares://Hyprism.Desktop/UI/Components/ControlThemes.axaml" />
         <ResourceInclude Source="avares://Hyprism.Desktop/Shell/WindowDecorations.axaml" />
       </ResourceDictionary.MergedDictionaries>
 
@@ -31,6 +31,6 @@ SPDX-License-Identifier: GPL-3.0-only
     <StyleInclude Source="avares://Hyprism.Desktop/UI/Foundation/Themes/HyprismTheme.axaml" />
     <StyleInclude Source="avares://Hyprism.Desktop/UI/Components/Components.axaml" />
     <StyleInclude Source="avares://Hyprism.Desktop/UI/Foundation/GlobalStyles.axaml" />
-    <StyleInclude Source="avares://Hyprism.Desktop/UI/FeatureStyles.axaml" />
+    <StyleInclude Source="avares://Hyprism.Desktop/UI/Components/ManagerStyles.axaml" />
   </Application.Styles>
 </Application>
