@@ -807,6 +807,61 @@ public sealed class MainWindowRenderTests
         block.Dispose();
     }
 
+    [Fact]
+    public void MixedMediaContainerKeepsInlineContentInOneParagraph()
+    {
+        var blocks = NewsArticleBlockViewModel.Create(
+        [
+            new NewsContentNode
+            {
+                Kind = "container",
+                Children =
+                [
+                    new NewsContentNode
+                    {
+                        Kind = "bold",
+                        Children =
+                        [new NewsContentNode { Kind = "text", Text = "Arcane Power" }]
+                    },
+                    new NewsContentNode { Kind = "text", Text = " (by Tayko_Dev)" },
+                    new NewsContentNode { Kind = "line-break" },
+                    new NewsContentNode
+                    {
+                        Kind = "link",
+                        Url = "https://www.curseforge.com/hytale/mods/arcane-power",
+                        Children =
+                        [new NewsContentNode
+                        {
+                            Kind = "text",
+                            Text = "https://www.curseforge.com/hytale/mods/arcane-power"
+                        }]
+                    },
+                    new NewsContentNode { Kind = "line-break" },
+                    new NewsContentNode
+                    {
+                        Kind = "image",
+                        ImageUrl = "https://cdn.hytale.com/arcane-power.png"
+                    }
+                ]
+            }
+        ]);
+
+        try
+        {
+            Assert.Equal(2, blocks.Count);
+            Assert.True(blocks[0].IsParagraph);
+            Assert.Contains(blocks[0].Nodes, node => node.Kind == "bold");
+            Assert.Contains(blocks[0].Nodes, node => node.Kind == "link");
+            Assert.True(blocks[1].IsImage);
+            Assert.DoesNotContain(blocks, block => block.Kind is "bold" or "link" or "line-break");
+        }
+        finally
+        {
+            foreach (var block in blocks)
+                block.Dispose();
+        }
+    }
+
     [AvaloniaFact]
     public async Task ArticleReleasesDecodedImagesWithoutDiscardingParsedContent()
     {
@@ -1294,6 +1349,39 @@ public sealed class MainWindowRenderTests
             Assert.Single(block.StickerBodyNodes).Text);
 
         block.Dispose();
+    }
+
+    [AvaloniaFact]
+    public void StickerParagraphKeepsLeadTextBeforeTheSticker()
+    {
+        var block = Assert.Single(NewsArticleBlockViewModel.Create(
+        [
+            new NewsContentNode
+            {
+                Kind = "paragraph",
+                Children =
+                [
+                    new NewsContentNode { Kind = "text", Text = "Hey, everyone! " },
+                    new NewsContentNode
+                    {
+                        Kind = "inline-image",
+                        ImageUrl = "https://cdn.hytale.com/emotes/kweeb-wave.png",
+                        ImagePresentation = "sticker"
+                    }
+                ]
+            }
+        ]));
+
+        try
+        {
+            Assert.True(block.IsStickerParagraph);
+            Assert.Equal("Hey, everyone!", Assert.Single(block.StickerLeadNodes).Text?.Trim());
+            Assert.Empty(block.StickerBodyNodes);
+        }
+        finally
+        {
+            block.Dispose();
+        }
     }
 
     [AvaloniaFact]
@@ -3017,7 +3105,9 @@ public sealed class MainWindowRenderTests
         {
             Assert.Equal(0, Assert.IsAssignableFrom<ISolidColorBrush>(item.Background).Color.A);
             Assert.Equal(new Thickness(0), item.BorderThickness);
-            Assert.Single(item.GetVisualDescendants().OfType<Avalonia.Controls.Shapes.Path>());
+            Assert.Contains(
+                item.GetVisualDescendants().OfType<Avalonia.Controls.Shapes.Path>(),
+                path => path.Classes.Contains("newsDateIcon"));
 
             var newsItem = Assert.IsType<NewsItemViewModel>(item.DataContext);
             var title = item.GetVisualDescendants()
@@ -3030,6 +3120,7 @@ public sealed class MainWindowRenderTests
             var dateTop = date.TranslatePoint(default, item);
             Assert.NotNull(titleTop);
             Assert.NotNull(dateTop);
+            Assert.Equal(new Thickness(0, 1, 0, 0), date.Margin);
             Assert.True(dateTop!.Value.Y > titleTop!.Value.Y);
         });
         if (width == 1280)

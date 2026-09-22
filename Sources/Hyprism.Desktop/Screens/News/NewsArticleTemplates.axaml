@@ -77,19 +77,21 @@ SPDX-License-Identifier: GPL-3.0-only
             <Setter Property="ContentTemplate">
               <DataTemplate x:DataType="news:NewsArticleBlockViewModel">
                 <StackPanel Spacing="8">
-                  <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                    <Image Width="64"
-                           Height="64"
-                           Source="{Binding StickerImage.Image}"
-                           VerticalAlignment="Center"
-                           Stretch="Uniform" />
-                    <news:NewsRichTextBlock Grid.Column="1"
-                                            Nodes="{Binding StickerLeadNodes}"
+                  <Grid ColumnDefinitions="Auto,Auto"
+                        ColumnSpacing="10"
+                        HorizontalAlignment="Left">
+                    <news:NewsRichTextBlock Nodes="{Binding StickerLeadNodes}"
                                             InlineImages="{Binding InlineImages}"
                                             LinkCommand="{Binding LinkCommand}"
                                             Classes="articleParagraph"
                                             VerticalAlignment="Center"
                                             TextWrapping="Wrap" />
+                    <Image Grid.Column="1"
+                           Width="64"
+                           Height="64"
+                           Source="{Binding StickerImage.Image}"
+                           VerticalAlignment="Center"
+                           Stretch="Uniform" />
                   </Grid>
                   <news:NewsRichTextBlock Nodes="{Binding StickerBodyNodes}"
                                           InlineImages="{Binding InlineImages}"
@@ -404,10 +406,17 @@ SPDX-License-Identifier: GPL-3.0-only
                          TextTrimming="CharacterEllipsis" />
             </StackPanel>
 
-            <TextBlock Grid.Row="1"
-                       Text="{Binding Date}"
-                       Foreground="{DynamicResource TextSecondaryBrush}"
-                       FontSize="10" />
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        Spacing="4">
+              <Path Classes="newsDateIcon"
+                    Data="{StaticResource CalendarMonthRoundedIcon}" />
+              <TextBlock Text="{Binding Date}"
+                         Foreground="{DynamicResource TextSecondaryBrush}"
+                         FontSize="10"
+                         VerticalAlignment="Center"
+                         Margin="0,1,0,0" />
+            </StackPanel>
           </Grid>
         </Grid>
       </Button>
