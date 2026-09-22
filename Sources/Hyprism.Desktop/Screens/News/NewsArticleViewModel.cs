@@ -394,9 +394,10 @@ public sealed partial class NewsArticleBlockViewModel : ObservableObject, IDispo
         ICommand? linkCommand,
         StringLocalizer localizer)
     {
-        if (node.Kind == "paragraph" && node.Children.Any(child =>
+        if (node.Kind is ("paragraph" or "container") && node.Children.Any(child =>
                 child.Kind is "image" or "youtube"))
         {
+            // Hytale can wrap an image or video together with its inline text in a generic container
             var inlineNodes = new List<NewsContentNode>();
             foreach (var child in node.Children)
             {
@@ -531,7 +532,7 @@ public sealed partial class NewsArticleBlockViewModel : ObservableObject, IDispo
             return;
 
         var lineBreakIndex = -1;
-        for (var index = stickerIndex + 1; index < Nodes.Count; index++)
+        for (var index = 0; index < Nodes.Count; index++)
         {
             if (Nodes[index].Kind == "line-break")
             {
@@ -542,8 +543,8 @@ public sealed partial class NewsArticleBlockViewModel : ObservableObject, IDispo
 
         var leadEnd = lineBreakIndex >= 0 ? lineBreakIndex : Nodes.Count;
         StickerLeadNodes = Nodes
-            .Skip(stickerIndex + 1)
-            .Take(leadEnd - stickerIndex - 1)
+            .Take(leadEnd)
+            .Where((_, index) => index != stickerIndex)
             .ToList();
         StickerBodyNodes = lineBreakIndex >= 0
             ? Nodes.Skip(lineBreakIndex + 1).ToList()
