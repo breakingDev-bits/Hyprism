@@ -23,9 +23,9 @@ using Hyprism.Core.Game.Launch;
 using Hyprism.Core.Game.Mods;
 using Hyprism.Core.Models;
 using Hyprism.Desktop.Controls;
-using Hyprism.Desktop.Features.Instances;
-using Hyprism.Desktop.Features.News;
-using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Screens.Instances;
+using Hyprism.Desktop.Screens.News;
+using Hyprism.Desktop.Screens.Settings;
 using Hyprism.Desktop.Localization;
 using Hyprism.Desktop.Platform;
 using Hyprism.Desktop.Shell;
@@ -359,9 +359,9 @@ public sealed class InstanceSectionRenderTests
             catalogTopInstall.GetVisualDescendants().OfType<Button>(),
             button => button.Classes.Contains("catalogInstallTopBarAction"));
         Assert.Contains("visible", catalogTopInstall.Classes);
-        Assert.Contains("compactInstanceSplitAction", catalogTopInstall.Classes);
+        Assert.Contains("managerCompactSplitAction", catalogTopInstall.Classes);
         Assert.True(catalogTopInstall.IsHitTestVisible);
-        Assert.Contains("compactInstanceActionPart", catalogTopInstallAction.Classes);
+        Assert.Contains("managerCompactActionPart", catalogTopInstallAction.Classes);
         Assert.Contains("main", catalogTopInstallAction.Classes);
         Assert.Equal(36, catalogTopInstallAction.Height);
         Assert.Same(viewModel.OpenModCatalogInstallConfirmationCommand, catalogTopInstallAction.Command);
@@ -481,7 +481,7 @@ public sealed class InstanceSectionRenderTests
             element => element is ItemsControl items && items.Classes.Contains("instancePreviewFiles"));
         Assert.Contains(
             preview.GetVisualDescendants(),
-            element => element is Border border && border.Classes.Contains("sourceTableHeader"));
+            element => element is Border border && border.Classes.Contains("dataTableHeader"));
         Assert.DoesNotContain(
             preview.GetVisualDescendants().OfType<Border>(),
             border => border.Classes.Contains("instanceCompatibilitySummary"));
@@ -526,7 +526,7 @@ public sealed class InstanceSectionRenderTests
         Assert.Contains(
             installAction.GetVisualDescendants(),
             element => element is Avalonia.Controls.Shapes.Path path &&
-                path.Classes.Contains("compactInstanceActionIcon"));
+                path.Classes.Contains("managerCompactActionIcon"));
         Assert.Contains(
             installAction.GetVisualDescendants(),
             element => element is Grid grid && grid.Classes.Contains("managedActionContent"));

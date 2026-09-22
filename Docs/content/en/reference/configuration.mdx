@@ -5,7 +5,7 @@ description: Config.json fields, defaults, and environment overrides
 
 # Configuration
 
-`JsonConfigStore` reads and writes `Config.json` in the [application directory](/docs/architecture/data-and-cache). JSON properties use PascalCase and are read case-insensitively
+`JsonConfigStore` reads and writes `Config.json` in the [application directory](/architecture/data-and-cache). JSON properties use PascalCase and are read case-insensitively
 
 Close the launcher before editing the file manually and preserve unrelated fields. The following fragment illustrates common preferences, not a complete replacement file
 
@@ -75,8 +75,8 @@ Profile names, UUIDs, and sessions belong in `Profiles`, not `Config.json`. Load
 | --- | --- |
 | `HYPRISM_DATA` | Existing directory used as the full application data root |
 | `XDG_DATA_HOME` | Linux default data root when `HYPRISM_DATA` is absent |
-| `HYPRISM_WIN32_COMPOSITION` | Windows rendering diagnostic override, see [performance](/docs/development/avalonia-performance) |
-| `HYPRISM_DOCS_SCREENSHOTS` | Opt-in output directory for [documentation captures](/docs/development/documentation#screenshots) |
+| `HYPRISM_WIN32_COMPOSITION` | Windows rendering diagnostic override, see [performance](/development/avalonia-performance) |
+| `HYPRISM_DOCS_SCREENSHOTS` | Opt-in output directory for [documentation captures](/development/documentation#screenshots) |
 
 The managed launch also supplies Java, DualAuth, GPU, and local certificate variables to child processes. Those runtime values are not independent launcher settings
 

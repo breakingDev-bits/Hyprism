@@ -11,7 +11,7 @@ using Hyprism.Core.Game.Sources;
 using Hyprism.Core.Game.Versions;
 using Hyprism.Core.Models;
 using Hyprism.Desktop.Controls;
-using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Screens.Settings;
 using Hyprism.Desktop.Shell;
 using Moq;
 using Xunit;

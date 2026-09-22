@@ -229,7 +229,7 @@ function assertParity(pages: Record<Locale, Record<string, Page>>): void {
 }
 
 function publicRoute(route: string): string {
-  return route ? `/docs/${route}/` : '/docs/'
+  return route ? `/${route}/` : '/'
 }
 
 export default async function localizedDocsPlugin(
@@ -290,11 +290,6 @@ export default async function localizedDocsPlugin(
         })
       }
 
-      actions.addRoute({
-        path: context.baseUrl,
-        exact: true,
-        component: '@site/src/components/HomeRedirect'
-      })
     },
     async postBuild({ outDir }) {
       await fs.rm(path.join(outDir, '__source'), { recursive: true, force: true })

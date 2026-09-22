@@ -16,7 +16,7 @@ using Hyprism.Core.Game.Instances;
 using Hyprism.Core.Game.Launch;
 using Hyprism.Core.Models;
 using Hyprism.Desktop.Controls;
-using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Screens.Settings;
 using Hyprism.Desktop.Localization;
 using Hyprism.Desktop.Platform;
 using Moq;

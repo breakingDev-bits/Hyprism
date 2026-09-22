@@ -4,7 +4,7 @@
 using Avalonia.Headless.XUnit;
 using Hyprism.Core.Application.Ports;
 using Hyprism.Core.Game.Launch;
-using Hyprism.Desktop.Features.Settings;
+using Hyprism.Desktop.Screens.Settings;
 using Hyprism.Desktop.Localization;
 using Hyprism.Desktop.Platform;
 using Moq;

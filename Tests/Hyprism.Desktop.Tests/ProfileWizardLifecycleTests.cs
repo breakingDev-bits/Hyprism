@@ -8,7 +8,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using Hyprism.Core.Accounts;
 using Hyprism.Core.Models;
-using Hyprism.Desktop.Features.Profiles;
+using Hyprism.Desktop.Screens.Profiles;
 using Hyprism.Desktop.Localization;
 using Hyprism.Desktop.Platform;
 using Moq;

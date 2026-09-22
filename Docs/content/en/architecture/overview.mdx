@@ -26,11 +26,11 @@ Desktop references Core and Local Node. Local Node references Core. Core has no 
 
 | Boundary | Owner | Details |
 | --- | --- | --- |
-| Domain services and persisted state | Core | [Core responsibilities](/docs/architecture/core) |
-| Views, commands, native dialogs, browser links | Desktop | [Desktop composition](/docs/architecture/desktop) |
-| Autonomous authentication and local compatibility API | Local Node | [Protocol and lifecycle](/docs/reference/local-node) |
-| Installation and game processes | Core with host capabilities | [Launch workflow](/docs/architecture/game-lifecycle) |
-| Storage, migrations, and diagnostics | Each owning service | [Data and cache](/docs/architecture/data-and-cache) |
+| Domain services and persisted state | Core | [Core responsibilities](/architecture/core) |
+| Views, commands, native dialogs, browser links | Desktop | [Desktop composition](/architecture/desktop) |
+| Autonomous authentication and local compatibility API | Local Node | [Protocol and lifecycle](/reference/local-node) |
+| Installation and game processes | Core with host capabilities | [Launch workflow](/architecture/game-lifecycle) |
+| Storage, migrations, and diagnostics | Each owning service | [Data and cache](/architecture/data-and-cache) |
 
 There is no Electron host, web frontend, IPC bridge, or generated TypeScript API in the launcher. Desktop calls C# interfaces directly
 
@@ -48,6 +48,6 @@ A Local Node already attached to a game has a separate lifetime and continues un
 
 Put game, account, download, or persistence rules in Core. Put presentation state and operating-system UI in Desktop. Extend Local Node only for its loopback service or companion process lifecycle
 
-Use the [contract reference](/docs/reference/services) before adding another service, and cover changes with the matching [test suite](/docs/development/testing)
+Use the [contract reference](/reference/services) before adding another service, and cover changes with the matching [test suite](/development/testing)
 
 Source: [Bootstrapper](../../../../Sources/Hyprism.Core/Application/Composition/Bootstrapper.cs), [Desktop startup](../../../../Sources/Hyprism.Desktop/Program.cs), [Local Node host](../../../../Sources/Hyprism.LocalNode/LocalNodeApplication.cs)

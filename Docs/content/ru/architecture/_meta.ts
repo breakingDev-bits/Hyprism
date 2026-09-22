@@ -6,6 +6,7 @@ export default {
   overview: 'Обзор',
   core: 'Core',
   desktop: 'Desktop',
+  'desktop-ui': 'UI Desktop',
   'game-lifecycle': 'Жизненный цикл игры',
   'data-and-cache': 'Данные и кеш'
 }
